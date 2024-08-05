@@ -9,10 +9,15 @@ import { useLocation } from "react-router-dom";
 import useAxios from "../hooks/useAxios";
 import Loader from "../components/Loader";
 import calculateMinutesToTargetDate from "../utils/calculateMinutesToTargetDate";
+import dayjs from "dayjs";
 
 function convertMinutes(totalMinutes) {
-  if (typeof totalMinutes !== "number" || totalMinutes < 0) {
+  if (typeof totalMinutes !== "number") {
     throw new Error("Input must be a non-negative number");
+  }
+
+  if (totalMinutes <= 0) {
+    return { days: 0, hours: 0, minutes: 0 };
   }
 
   const days = Math.floor(totalMinutes / (60 * 24));
@@ -265,7 +270,10 @@ const EventDetails = () => {
             <ShareCode eventCode={eventData?.eventCode} />
           </div>
           <div className="mt-10 flex justify-between">
-            <EventStartsIn startDate={eventData?.startDate} />
+            <EventStartsIn
+              startDate={eventData?.startDate}
+              endDate={eventData?.endDate}
+            />
             <Earnings />
           </div>
           <div className="flex mt-10">
@@ -442,20 +450,63 @@ const EventBasicDetails = ({ showModal, eventBasicDetails }) => {
   );
 };
 
-const EventStartsIn = ({ startDate }) => {
-  const { days, hours, minutes } = convertMinutes(
+const EventStartsIn = ({ startDate, endDate }) => {
+  const startsInMinutes = convertMinutes(
     calculateMinutesToTargetDate(startDate)
   );
 
+  const endsInMinutes = convertMinutes(calculateMinutesToTargetDate(endDate));
+
+  const status =
+    startsInMinutes.days > 0 &&
+    startsInMinutes.hours > 0 &&
+    startsInMinutes.minutes > 0
+      ? "Upcoming"
+      : endsInMinutes.days == 0 &&
+        endsInMinutes.hours == 0 &&
+        endsInMinutes.minutes == 0
+      ? "Ended"
+      : "Ongoing";
+
   return (
-    <div className="p-4 rounded-xl">
-      <div className="text-xl">Event Starts in</div>
-      <div className="text-3xl">
-        {days} <span className="text-gray-500 text-2xl">Days</span> {hours}{" "}
-        <span className="text-gray-500 text-2xl">Hours</span> {minutes}{" "}
-        <span className="text-gray-500 text-2xl">Minutes</span>{" "}
-      </div>
-    </div>
+    <>
+      {status === "Upcoming" && (
+        <div className="p-4 rounded-xl">
+          <div className="text-xl">Event Starts in</div>
+          <div className="text-3xl">
+            {startsInMinutes.days}{" "}
+            <span className="text-gray-500 text-2xl">Days</span>{" "}
+            {startsInMinutes.hours}{" "}
+            <span className="text-gray-500 text-2xl">Hours</span>{" "}
+            {startsInMinutes.minutes}{" "}
+            <span className="text-gray-500 text-2xl">Minutes</span>{" "}
+          </div>
+        </div>
+      )}
+
+      {status === "Ongoing" && (
+        <div className="p-4 rounded-xl">
+          <div className="text-2xl text-green-600">Event is Ongoing</div>
+          <div className="text-xl">Event Ends in</div>
+          <div className="text-3xl">
+            {endsInMinutes.days}{" "}
+            <span className="text-gray-500 text-2xl">Days</span>{" "}
+            {endsInMinutes.hours}{" "}
+            <span className="text-gray-500 text-2xl">Hours</span>{" "}
+            {endsInMinutes.minutes}{" "}
+            <span className="text-gray-500 text-2xl">Minutes</span>{" "}
+          </div>
+        </div>
+      )}
+
+      {status === "Ended" && (
+        <div className="p-4 rounded-xl text-red-600">
+          <div className="text-3xl">
+            Event Ended on {dayjs(endDate).format("MMM D YYYY")}
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 
