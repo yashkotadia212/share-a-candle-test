@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Jua";
+  src: url("../src//assets//fonts/jua/Jua-Regular.ttf");
+}
+
+#root {
+  font-size: 16px;
+}
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+.ant-btn {
+  padding: 18px 25px!important;
+}

@@ -1,0 +1,54 @@
+/* Base styling for the candle */
+.candle {
+  height: 150px; /* Increased height for the larger candle */
+  position: relative;
+}
+
+/* Flame styling and animation */
+.flame {
+  width: 36px; /* Larger flame width */
+  height: 36px; /* Larger flame height */
+  position: absolute;
+  top: -36px; /* Adjust position above the candle */
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  animation: flicker 0.7s infinite;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5); /* Add a glow effect */
+}
+
+.flame {
+  position: absolute;
+  top: -40px; /* Position above the candle */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 40px;
+  background: radial-gradient(circle, #1f2937 0%, #1f2937 50%, transparent 90%);
+  border-radius: 50% 50% 0 0;
+  animation: flicker 1s infinite;
+}
+
+/* Base of the candle */
+.base {
+  position: absolute;
+  bottom: 0vh;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Flickering animation for the flame */
+@keyframes flicker {
+  0% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: translateX(-50%) scale(1.2);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+}
