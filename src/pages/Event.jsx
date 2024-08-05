@@ -54,7 +54,7 @@ const Event = () => {
           <div className="text-4xl font-semibold">Fundraising</div>
           <div className="text-3xl font-semibold mt-10">My Events</div>
 
-          <div className="flex flex-wrap gap-4">
+          <div className="flex justify-center flex-wrap gap-4">
             {getAllEventsData?.data?.length === 0 && (
               <EventCard
                 ev={{
@@ -79,8 +79,12 @@ const EventCard = ({ ev }) => {
   return (
     <>
       <div
-        className="border p-4 mt-4 w-64 h-80 rounded-xl flex justify-start bg-gray-200 cursor-pointer"
-        onClick={() => navigate(ev.url || `/event-details`)}
+        className="border p-4 mt-4 w-64 h-80 rounded-xl flex justify-start bg-gray-200 cursor-pointer hover:shadow-xl hover:scale-[101%] transition"
+        onClick={() =>
+          navigate(ev.url || `/event-details`, {
+            state: { eventId: ev.id },
+          })
+        }
       >
         <div className="mt-auto">
           <div className="flex">

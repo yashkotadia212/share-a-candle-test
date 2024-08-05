@@ -12,18 +12,26 @@ const useAxios = (url) => {
   const [error, setError] = useState(null);
 
   // Function for GET request
-  const getData = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await axios.get(url);
-      setData(response.data);
-    } catch (err) {
-      setError(err);
-    } finally {
-      setLoading(false);
-    }
-  }, [url]);
+  const getData = useCallback(
+    async (params = {}) => {
+      setLoading(true);
+      setError(null);
+
+      // Construct URL with optional parameters
+      const queryParams = new URLSearchParams(params).toString();
+      const finalUrl = `${url}${queryParams ? `?${queryParams}` : ""}`;
+
+      try {
+        const response = await axios.get(finalUrl);
+        setData(response.data);
+      } catch (err) {
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [url]
+  );
 
   // Function for POST request
   const postData = useCallback(

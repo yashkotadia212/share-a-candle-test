@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import copy from "copy-text-to-clipboard";
 import { BsCopy } from "react-icons/bs";
 import TopHeader from "../components/TopHeader";
-import { message, Modal, Form, Select, Input, Button } from "antd";
+import { message, Modal, Form, Select, Input } from "antd";
 import { Divider, List } from "antd";
 import { MdOutlineModeEdit } from "react-icons/md";
+import { useLocation } from "react-router-dom";
+import useAxios from "../hooks/useAxios";
+import Loader from "../components/Loader";
+import calculateMinutesToTargetDate from "../utils/calculateMinutesToTargetDate";
 
 function convertMinutes(totalMinutes) {
   if (typeof totalMinutes !== "number" || totalMinutes < 0) {
@@ -199,9 +203,15 @@ const subCategories = [
 
 const { Option } = Select;
 
+const getEventByIdUrl =
+  "https://nbg6jhqi7scugaz3mhtxcscbdy0msbuv.lambda-url.us-east-2.on.aws/";
+
 const EventDetails = () => {
+  const { state } = useLocation();
+  const getEventById = useAxios(getEventByIdUrl);
   const [eventBasicDetailsForm] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [eventData, setEventData] = useState({});
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -217,134 +227,180 @@ const EventDetails = () => {
   };
 
   const onFinish = (values) => {
-    console.log("Form values:", values);
+    // console.log("Form values:", values);
     setIsModalOpen(false);
   };
 
+  useEffect(() => {
+    // console.log("EVENT ID:", { id: state.eventId });
+    getEventById.getData({ id: state.eventId });
+  }, [state]);
+
+  useEffect(() => {
+    if (getEventById.error) {
+      message.error(
+        "An error occurred. Please try again later. " + getEventById.error
+      );
+    }
+    setEventData(getEventById.data);
+  }, [getEventById]);
+
   return (
-    <div>
-      <TopHeader />
-      <div className="flex justify-between mt-10">
-        <EventBasicDetails showModal={showModal} />
-        <ShareCode />
-      </div>
-      <div className="mt-10 flex justify-between">
-        <EventStartsIn />
-        <Earnings />
-      </div>
-      <div className="flex mt-10">
-        <div className="w-1/2">
-          <SupportersList />
-        </div>
-        <div className="w-1/2">
-          <LeaderboardList />
-        </div>
-      </div>
-      <div className="mt-14">
-        <div className="text-2xl font-semibold">Products</div>
-        <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 mt-3 max-w-[3500px]">
-          {productNumbers.map((productNumber) => (
-            <div key={productNumber} className="p-3 flex justify-center">
-              <ProductCard productIndex={productNumber} />
+    <>
+      {getEventById.loading ? (
+        <Loader />
+      ) : (
+        <div>
+          <TopHeader />
+          <div className="flex justify-between mt-10">
+            <EventBasicDetails
+              eventBasicDetails={{
+                eventName: eventData?.eventName,
+                organizationType: eventData?.organizationType,
+                subCategory: eventData?.category,
+                organizationName: eventData?.organizationName,
+              }}
+              showModal={showModal}
+            />
+            <ShareCode eventCode={eventData?.eventCode} />
+          </div>
+          <div className="mt-10 flex justify-between">
+            <EventStartsIn startDate={eventData?.startDate} />
+            <Earnings />
+          </div>
+          <div className="flex mt-10">
+            <div className="w-1/2">
+              <SupportersList />
             </div>
-          ))}
+            <div className="w-1/2">
+              <LeaderboardList />
+            </div>
+          </div>
+          <div className="mt-14">
+            <div className="text-2xl font-semibold">Products</div>
+            <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 mt-3 max-w-[3500px]">
+              {productNumbers.map((productNumber) => (
+                <div key={productNumber} className="p-3 flex justify-center">
+                  <ProductCard productIndex={productNumber} />
+                </div>
+              ))}
+            </div>
+          </div>
+          <Modal
+            centered
+            title="Event Details"
+            open={isModalOpen}
+            onOk={handleOk}
+            onCancel={handleCancel}
+          >
+            <Form
+              form={eventBasicDetailsForm}
+              name="basic"
+              initialValues={{ remember: true }}
+              onFinish={onFinish}
+              layout="vertical"
+            >
+              {/* Event Name */}
+              <Form.Item
+                label="Event Name"
+                name="eventName"
+                rules={[
+                  { required: true, message: "Please input the event name!" },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+
+              {/* Organization Type */}
+              <Form.Item
+                label="Organization Type"
+                name="organizationType"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please select the organization type!",
+                  },
+                ]}
+              >
+                <Select placeholder="Select an organization type">
+                  {organizationTypes.map((type) => (
+                    <Option key={type.value} value={type.value}>
+                      {type.label}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
+
+              {/* Sub Category */}
+              <Form.Item
+                label="Sub Category"
+                name="subCategory"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please select the sub category!",
+                  },
+                ]}
+              >
+                <Select placeholder="Select a sub category">
+                  {subCategories.map((category) => (
+                    <Option key={category.value} value={category.value}>
+                      {category.label}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
+
+              {/* Organization Name */}
+              <Form.Item
+                label="Organization Name"
+                name="organizationName"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input the organization name!",
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Form>
+          </Modal>
         </div>
-      </div>
-      <Modal
-        centered
-        title="Event Details"
-        open={isModalOpen}
-        onOk={handleOk}
-        onCancel={handleCancel}
-      >
-        <Form
-          form={eventBasicDetailsForm}
-          name="basic"
-          initialValues={{ remember: true }}
-          onFinish={onFinish}
-          layout="vertical"
-        >
-          {/* Event Name */}
-          <Form.Item
-            label="Event Name"
-            name="eventName"
-            rules={[
-              { required: true, message: "Please input the event name!" },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-
-          {/* Organization Type */}
-          <Form.Item
-            label="Organization Type"
-            name="organizationType"
-            rules={[
-              {
-                required: true,
-                message: "Please select the organization type!",
-              },
-            ]}
-          >
-            <Select placeholder="Select an organization type">
-              {organizationTypes.map((type) => (
-                <Option key={type.value} value={type.value}>
-                  {type.label}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
-
-          {/* Sub Category */}
-          <Form.Item
-            label="Sub Category"
-            name="subCategory"
-            rules={[
-              { required: true, message: "Please select the sub category!" },
-            ]}
-          >
-            <Select placeholder="Select a sub category">
-              {subCategories.map((category) => (
-                <Option key={category.value} value={category.value}>
-                  {category.label}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
-
-          {/* Organization Name */}
-          <Form.Item
-            label="Organization Name"
-            name="organizationName"
-            rules={[
-              {
-                required: true,
-                message: "Please input the organization name!",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-        </Form>
-      </Modal>
-    </div>
+      )}
+    </>
   );
 };
 
-const ShareCode = () => {
+// {
+//   "id": "d0087d86-1bc3-4b64-b400-4a34aea254cb",
+//   "eventName": "room spray",
+//   "organizationType": "room spray",
+//   "category": "room spray",
+//   "organizationName": "room spray",
+//   "zipcode": "777",
+//   "minTeamSize": 5,
+//   "maxTeamSize": 54,
+//   "productType": "room spray",
+//   "startDate": "2024-08-15",
+//   "endDate": "2024-08-30",
+//   "eventCode": "F0UHGE"
+// }
+
+const ShareCode = ({ eventCode }) => {
   return (
     <div className="w-80 bg-black text-white p-4 py-5 rounded-xl">
       <div className="flex justify-between">
         <div>
           <div>Share Code</div>
-          <div className="mt-2 text-2xl">123456</div>
+          <div className="mt-2 text-2xl">{eventCode}</div>
         </div>
         <div className="flex items-center">
           <button>
             <BsCopy
               className="text-2xl hover:text-gray-400 transition"
               onClick={() => {
-                copy("123456");
+                copy(eventCode);
                 message.success("Code copied to clipboard");
               }}
             />
@@ -355,42 +411,48 @@ const ShareCode = () => {
   );
 };
 
-const EventBasicDetails = ({ showModal }) => {
+const EventBasicDetails = ({ showModal, eventBasicDetails }) => {
   return (
     <div className="flex items-center gap-4">
       <div>
         <img
           alt="name placeholder"
-          src="https://ui-avatars.com/api/?name=John+Doe&font-size=0.33&size=45&color=fff"
+          src={`https://ui-avatars.com/api/?name=${eventBasicDetails.eventName
+            ?.toLowerCase()
+            .replace(/\s+/g, "+")}&font-size=0.33&size=45&color=fff`}
           className="rounded-full"
         />
       </div>
       <div className="flex flex-col">
         <div>
           <div className="text-gray-400">
-            Sports - Track and Field
+            {eventBasicDetails.organizationType} -{" "}
+            {eventBasicDetails.subCategory}
             <button className="ml-2" onClick={() => showModal()}>
               <MdOutlineModeEdit className="text-lg" />
             </button>
           </div>
         </div>
-        <div className="text-xl">Avengers Rocks</div>
-        <div className="text-gray-800">North West School</div>
+        <div className="text-xl">{eventBasicDetails.eventName}</div>
+        <div className="text-gray-800">
+          {eventBasicDetails.organizationName}
+        </div>
       </div>
     </div>
   );
 };
 
-const EventStartsIn = () => {
+const EventStartsIn = ({ startDate }) => {
+  const { days, hours, minutes } = convertMinutes(
+    calculateMinutesToTargetDate(startDate)
+  );
+
   return (
     <div className="p-4 rounded-xl">
       <div className="text-xl">Event Starts in</div>
       <div className="text-3xl">
-        {convertMinutes(12546).days}{" "}
-        <span className="text-gray-500 text-2xl">Days</span>{" "}
-        {convertMinutes(12546).hours}{" "}
-        <span className="text-gray-500 text-2xl">Hours</span>{" "}
-        {convertMinutes(12546).minutes}{" "}
+        {days} <span className="text-gray-500 text-2xl">Days</span> {hours}{" "}
+        <span className="text-gray-500 text-2xl">Hours</span> {minutes}{" "}
         <span className="text-gray-500 text-2xl">Minutes</span>{" "}
       </div>
     </div>
