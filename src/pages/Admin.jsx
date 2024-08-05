@@ -195,7 +195,7 @@ const AdminStatsCard = ({ statsArray }) => {
               <div className="text-5xl">{stat.value}</div>
             </div>
             {index !== statsArray.length - 1 && (
-              <VerticalSeparator height="100px" margin={16} />
+              <VerticalSeparator height="100px" margin={35} />
             )}
           </React.Fragment>
         );

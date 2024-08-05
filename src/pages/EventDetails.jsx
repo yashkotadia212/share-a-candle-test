@@ -380,21 +380,6 @@ const EventDetails = () => {
   );
 };
 
-// {
-//   "id": "d0087d86-1bc3-4b64-b400-4a34aea254cb",
-//   "eventName": "room spray",
-//   "organizationType": "room spray",
-//   "category": "room spray",
-//   "organizationName": "room spray",
-//   "zipcode": "777",
-//   "minTeamSize": 5,
-//   "maxTeamSize": 54,
-//   "productType": "room spray",
-//   "startDate": "2024-08-15",
-//   "endDate": "2024-08-30",
-//   "eventCode": "F0UHGE"
-// }
-
 const ShareCode = ({ eventCode }) => {
   return (
     <div className="w-80 bg-black text-white p-4 py-5 rounded-xl">
@@ -403,7 +388,7 @@ const ShareCode = ({ eventCode }) => {
           <div>Share Code</div>
           <div className="mt-2 text-2xl">{eventCode}</div>
         </div>
-        <div className="flex items-center">
+        <div className="flex items-center me-1">
           <button>
             <BsCopy
               className="text-2xl hover:text-gray-400 transition"

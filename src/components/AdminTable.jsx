@@ -168,7 +168,7 @@ const AdminTable = () => {
         return (
           <Tag
             color={getEventStatusColor(status)}
-            className="!text-black rounded-xl px-3"
+            className="!text-black rounded-xl w-20 text-center"
           >
             {status}
           </Tag>

@@ -32,6 +32,16 @@ const navData = [
     title: "Careers",
     url: "/careers",
   },
+  {
+    id: 7,
+    title: "Organize an Event",
+    url: "/organize-event",
+  },
+  {
+    id: 8,
+    title: "Admin",
+    url: "/admin",
+  },
 ];
 
 const Navbar = () => {
@@ -44,7 +54,7 @@ const Navbar = () => {
         <div>
           <ul className="flex pt-4">
             {navData.map((item) => (
-              <li key={item.id} className="px-2">
+              <li key={item.id} className="px-2 cursor-pointer">
                 <a
                   className={`${
                     location.pathname === item.url
