@@ -4,6 +4,7 @@ import { Form, Radio, DatePicker, Select } from "antd";
 import AdminTable from "../components/AdminTable";
 // import AdminChart from "../components/AdminChart";
 import AGAdminChart from "../components/AGAdminChart";
+import VerticalSeparator from "../components/VerticalSeparator";
 
 const stat1Array = [
   { title: "Total Sales", value: "$22,000" },
@@ -194,21 +195,12 @@ const AdminStatsCard = ({ statsArray }) => {
               <div className="text-5xl">{stat.value}</div>
             </div>
             {index !== statsArray.length - 1 && (
-              <VerticalSeparator height="100px" />
+              <VerticalSeparator height="100px" margin={16} />
             )}
           </React.Fragment>
         );
       })}
     </div>
-  );
-};
-
-const VerticalSeparator = ({ height }) => {
-  return (
-    <div
-      className={`bg-gray-200 mx-16`} // Default to a light gray color
-      style={{ height: height || "100%", width: "2px" }} // Apply height and fixed width
-    />
   );
 };
 

@@ -3,6 +3,7 @@ import Navbar from "./Navbar";
 import { LuUser2, LuShoppingCart } from "react-icons/lu";
 import { IoLocationOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
+import VerticalSeparator from "../components/VerticalSeparator";
 
 const TopHeader = () => {
   const navigate = useNavigate();
@@ -21,10 +22,11 @@ const TopHeader = () => {
         <button>
           <IoLocationOutline className="text-2xl" />
         </button>
+        <VerticalSeparator height="35px" margin={1} />
         <button>
           <LuShoppingCart className="text-2xl" />
         </button>
-
+        <VerticalSeparator height="35px" margin={1} />
         <button>
           <LuUser2 className="text-2xl" onClick={() => navigate("/login")} />
         </button>
