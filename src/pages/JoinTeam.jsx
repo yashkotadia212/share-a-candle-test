@@ -35,7 +35,7 @@ const JoinTeam = () => {
   return (
     <div>
       <TopHeader />
-      <div style={{ maxWidth: 400, margin: "0 auto", padding: 20 }}>
+      <div className="max-w-96 m-auto p-4 h-[80vh] flex items-center">
         <Form
           form={joinTeamFormRef}
           name="joinTeamForm"

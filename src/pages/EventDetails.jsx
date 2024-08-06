@@ -224,10 +224,10 @@ const EventDetails = () => {
 
   const showModal = () => {
     eventBasicDetailsForm.setFieldsValue({
-      eventName: eventData?.eventName,
-      organizationType: eventData?.organizationType,
-      subCategory: eventData?.category,
-      organizationName: eventData?.organizationName,
+      eventName: eventData?.event?.eventName,
+      organizationType: eventData?.event?.organizationType,
+      subCategory: eventData?.event?.category,
+      organizationName: eventData?.event?.organizationName,
     });
     setIsModalOpen(true);
   };
@@ -261,7 +261,10 @@ const EventDetails = () => {
   }, [getEventById]);
 
   const showTimeModal = () => {
-    // setSelectedRange([dayjs(eventData?.startDate), dayjs(eventData?.endDate)]);
+    setSelectedRange([
+      dayjs(eventData?.event?.startDate),
+      dayjs(eventData?.event?.endDate),
+    ]);
     setIsTimeModalVisible(true);
   };
 
@@ -292,19 +295,19 @@ const EventDetails = () => {
           <div className="flex justify-between mt-10">
             <EventBasicDetails
               eventBasicDetails={{
-                eventName: eventData?.eventName,
-                organizationType: eventData?.organizationType,
-                subCategory: eventData?.category,
-                organizationName: eventData?.organizationName,
+                eventName: eventData?.event?.eventName,
+                organizationType: eventData?.event?.organizationType,
+                subCategory: eventData?.event?.category,
+                organizationName: eventData?.event?.organizationName,
               }}
               showModal={showModal}
             />
-            <ShareCode eventCode={eventData?.eventCode} />
+            <ShareCode eventCode={eventData?.event?.eventCode} />
           </div>
           <div className="mt-10 flex justify-between">
             <EventStartsIn
-              startDate={eventData?.startDate}
-              endDate={eventData?.endDate}
+              startDate={eventData?.event?.startDate}
+              endDate={eventData?.event?.endDate}
               showTimeModal={showTimeModal}
             />
             <Earnings />
