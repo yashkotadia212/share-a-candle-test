@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import copy from "copy-text-to-clipboard";
 import { BsCopy } from "react-icons/bs";
 import TopHeader from "../components/TopHeader";
-import { message, Modal, Form, Select, Input, DatePicker } from "antd";
+import { message, Modal, Form, Select, Input, DatePicker, Button } from "antd";
 import { Divider, List } from "antd";
 import { MdOutlineModeEdit } from "react-icons/md";
 import { useLocation } from "react-router-dom";
@@ -10,6 +10,7 @@ import useAxios from "../hooks/useAxios";
 import Loader from "../components/Loader";
 import calculateMinutesToTargetDate from "../utils/calculateMinutesToTargetDate";
 import dayjs from "dayjs";
+import normaliseWorddCase from "../utils/normaliseWordsCase";
 
 function convertMinutes(totalMinutes) {
   if (typeof totalMinutes !== "number") {
@@ -285,6 +286,8 @@ const EventDetails = () => {
     setSelectedRange(dates);
   };
 
+  console.log("PRODUCTS", eventData?.products);
+
   return (
     <>
       {getEventById.loading ? (
@@ -323,9 +326,9 @@ const EventDetails = () => {
           <div className="mt-14">
             <div className="text-2xl font-semibold">Products</div>
             <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 mt-3 max-w-[3500px]">
-              {productNumbers.map((productNumber) => (
-                <div key={productNumber} className="p-3 flex justify-center">
-                  <ProductCard productIndex={productNumber} />
+              {eventData?.products?.map((product) => (
+                <div key={product.id} className="p-3 flex justify-center">
+                  <ProductCard product={product} />
                 </div>
               ))}
             </div>
@@ -699,12 +702,94 @@ const LeaderboardList = () => {
   );
 };
 
-const ProductCard = ({ productIndex }) => {
+const ProductCard = ({ product }) => {
   return (
-    <div className="w-full h-96 rounded-xl border flex justify-center items-end pb-3 bg-gradient-to-b from-gray-100 to-white">
-      <div className="text-xl">Product {productIndex + 1}</div>
+    <div className="w-full h-[400px] rounded-xl border border-gray-200 shadow-xl p-3 bg-gray-50">
+      <div
+        className="w-full h-52 rounded-lg"
+        style={{
+          backgroundImage: `url(${product.image.src})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      ></div>
+      <div className="m-1">
+        <div className="text-2xl font-semibold">
+          {product.title.replace(/-/g, " ")}
+        </div>
+        <div className="text-xl">
+          ${Math.floor(Math.random() * (20 - 10 + 1)) + 10}
+        </div>
+
+        <div>
+          <span className="text-sm normal-case font-semibold">
+            <span>product by </span>
+            <span className="font-jua">
+              {normaliseWorddCase(product.vendor)}
+            </span>
+          </span>
+        </div>
+        <div className="text-xs text-gray-400">
+          {product.body_html.replace(/<\/?[^>]+(>|$)/g, "").substring(0, 100)}
+        </div>
+        <div className="my-2">
+          <Button type="primary">Buy Now</Button>
+        </div>
+      </div>
     </div>
   );
 };
 
 export default EventDetails;
+
+// product object
+// {
+//   "id": 8977686167783,
+//   "title": "16-OZ.-ROOM-SPRAY",
+//   "body_html": "<p><span>*Price includes Standard Jar + Candle Wax Fill* Choose from one of our in-house fragrances. Premium fragrances are available at an additional cost. Check the Pick your scent tab for a full list of fragrances.</span></p>\n<!---->",
+//   "vendor": "SHARE A CANDLE",
+//   "product_type": "",
+//   "created_at": "2024-08-01T08:23:38-04:00",
+//   "handle": "16-oz-room-spray-1",
+//   "updated_at": "2024-08-01T08:23:42-04:00",
+//   "published_at": "2024-08-01T08:23:38-04:00",
+//   "template_suffix": "",
+//   "published_scope": "global",
+//   "tags": "",
+//   "status": "active",
+//   "admin_graphql_api_id": "gid://shopify/Product/8977686167783",
+//   "options": [
+//       {
+//           "id": 11219152371943,
+//           "product_id": 8977686167783,
+//           "name": "Title",
+//           "position": 1
+//       }
+//   ],
+//   "images": [
+//       {
+//           "id": 42795880120551,
+//           "alt": null,
+//           "position": 1,
+//           "product_id": 8977686167783,
+//           "created_at": "2024-08-01T08:23:19-04:00",
+//           "updated_at": "2024-08-01T08:23:39-04:00",
+//           "admin_graphql_api_id": "gid://shopify/ProductImage/42795880120551",
+//           "width": 214,
+//           "height": 239,
+//           "src": "https://cdn.shopify.com/s/files/1/0699/7403/2615/files/16-OZ.-ROOM-SPRAY.jpg?v=1722515000"
+//       }
+//   ],
+//   "image": {
+//       "id": 42795880120551,
+//       "alt": null,
+//       "position": 1,
+//       "product_id": 8977686167783,
+//       "created_at": "2024-08-01T08:23:19-04:00",
+//       "updated_at": "2024-08-01T08:23:39-04:00",
+//       "admin_graphql_api_id": "gid://shopify/ProductImage/42795880120551",
+//       "width": 214,
+//       "height": 239,
+//       "src": "https://cdn.shopify.com/s/files/1/0699/7403/2615/files/16-OZ.-ROOM-SPRAY.jpg?v=1722515000"
+//   }
+// }
