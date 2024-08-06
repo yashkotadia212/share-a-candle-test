@@ -52,17 +52,37 @@ const Event = () => {
           <TopHeader />
 
           <div className="text-4xl font-semibold">Fundraising</div>
+
+          <div className="text-3xl font-semibold mt-10">
+            Create Event or Join Team
+          </div>
+
+          <div className="flex justify-start flex-wrap gap-4 pt-2 pb-10">
+            <EventCard
+              ev={{
+                eventName: "Organize an Event",
+                url: "/organize-event",
+              }}
+            />
+            <EventCard
+              ev={{
+                eventName: "Join Team",
+                url: "/join-team",
+              }}
+            />
+          </div>
+
           <div className="text-3xl font-semibold mt-10">My Events</div>
 
-          <div className="flex justify-center flex-wrap gap-4">
-            {getAllEventsData?.data?.length === 0 && (
+          <div className="flex justify-center flex-wrap gap-4 pt-2 pb-10">
+            {/* {getAllEventsData?.data?.length === 0 && (
               <EventCard
                 ev={{
                   eventName: "Organize an Event",
                   url: "/organize-event",
                 }}
               />
-            )}
+            )} */}
             {getAllEventsData?.data?.map((event) => (
               <EventCard ev={event} key={event.id} />
             ))}

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Form, Input, Button, message } from "antd";
 import "antd/dist/reset.css";
 import { useNavigate } from "react-router-dom";
+import TopHeader from "../components/TopHeader";
 
 const Login = () => {
   const [step, setStep] = useState(1);
@@ -9,8 +10,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
 
-  const centerFormClasses =
-    "flex flex-col justify-center items-center h-screen";
+  const centerFormClasses = "flex flex-col justify-center items-center h-full";
 
   const handleSendMobileCode = (values) => {
     // Here you would send the mobile number to your backend to request a verification code
@@ -51,124 +51,127 @@ const Login = () => {
   }, [step, navigate]);
 
   return (
-    <div style={{ padding: "20px" }}>
-      {step === 1 && (
-        <Form
-          name="mobile"
-          onFinish={handleSendMobileCode}
-          style={{ maxWidth: "400px", margin: "0 auto" }}
-          className={centerFormClasses}
-        >
-          <Form.Item
+    <>
+      <TopHeader />
+      <div className="p-5 h-[85vh]">
+        {step === 1 && (
+          <Form
             name="mobile"
-            rules={[
-              { required: true, message: "Please input your mobile number!" },
-              {
-                pattern: new RegExp(/^\d{10}$/),
-                message: "Mobile number must be a number!",
-              },
-            ]}
+            onFinish={handleSendMobileCode}
+            style={{ maxWidth: "400px", margin: "0 auto" }}
+            className={centerFormClasses}
           >
-            <Input placeholder="Enter mobile number" />
-          </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Send Verification Code
-            </Button>
-          </Form.Item>
-        </Form>
-      )}
+            <Form.Item
+              name="mobile"
+              rules={[
+                { required: true, message: "Please input your mobile number!" },
+                {
+                  pattern: new RegExp(/^\d{10}$/),
+                  message: "Mobile number must be a number!",
+                },
+              ]}
+            >
+              <Input placeholder="Enter mobile number" />
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Send Verification Code
+              </Button>
+            </Form.Item>
+          </Form>
+        )}
 
-      {step === 2 && (
-        <Form
-          name="verify-mobile"
-          onFinish={handleVerifyMobileCode}
-          style={{ maxWidth: "400px", margin: "0 auto" }}
-          className={centerFormClasses}
-        >
-          <Form.Item
-            name="code"
-            rules={[
-              {
-                required: true,
-                message: "Please input the verification code!",
-              },
-            ]}
+        {step === 2 && (
+          <Form
+            name="verify-mobile"
+            onFinish={handleVerifyMobileCode}
+            style={{ maxWidth: "400px", margin: "0 auto" }}
+            className={centerFormClasses}
           >
-            <Input placeholder="Enter verification code" />
-          </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Verify Code
-            </Button>
-          </Form.Item>
-        </Form>
-      )}
+            <Form.Item
+              name="code"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input the verification code!",
+                },
+              ]}
+            >
+              <Input placeholder="Enter verification code" />
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Verify Code
+              </Button>
+            </Form.Item>
+          </Form>
+        )}
 
-      {step === 3 && (
-        <Form
-          name="email"
-          onFinish={handleSendEmailCode}
-          style={{ maxWidth: "400px", margin: "0 auto" }}
-          className={centerFormClasses}
-        >
-          <Form.Item
+        {step === 3 && (
+          <Form
             name="email"
-            rules={[
-              {
-                required: true,
-                type: "email",
-                message: "Please input a valid email address!",
-              },
-            ]}
+            onFinish={handleSendEmailCode}
+            style={{ maxWidth: "400px", margin: "0 auto" }}
+            className={centerFormClasses}
           >
-            <Input placeholder="Enter email address" />
-          </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Send Verification Code
-            </Button>
-          </Form.Item>
-        </Form>
-      )}
+            <Form.Item
+              name="email"
+              rules={[
+                {
+                  required: true,
+                  type: "email",
+                  message: "Please input a valid email address!",
+                },
+              ]}
+            >
+              <Input placeholder="Enter email address" />
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Send Verification Code
+              </Button>
+            </Form.Item>
+          </Form>
+        )}
 
-      {step === 4 && (
-        <Form
-          name="verify-email"
-          onFinish={handleVerifyEmailCode}
-          style={{ maxWidth: "400px", margin: "0 auto" }}
-          className={centerFormClasses}
-        >
-          <Form.Item
-            name="code"
-            rules={[
-              {
-                required: true,
-                message: "Please input the verification code!",
-              },
-            ]}
+        {step === 4 && (
+          <Form
+            name="verify-email"
+            onFinish={handleVerifyEmailCode}
+            style={{ maxWidth: "400px", margin: "0 auto" }}
+            className={centerFormClasses}
           >
-            <Input placeholder="Enter verification code" />
-          </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Verify Code
-            </Button>
-          </Form.Item>
-        </Form>
-      )}
+            <Form.Item
+              name="code"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input the verification code!",
+                },
+              ]}
+            >
+              <Input placeholder="Enter verification code" />
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Verify Code
+              </Button>
+            </Form.Item>
+          </Form>
+        )}
 
-      {step === 5 && (
-        <div className={centerFormClasses}>
-          <h1>Success!</h1>
-          <p>
-            Mobile number: {mobile} <br />
-            Email address: {email}
-          </p>
-          <p> Redirecting to Events Page...</p>
-        </div>
-      )}
-    </div>
+        {step === 5 && (
+          <div className={centerFormClasses}>
+            <h1>Success!</h1>
+            <p>
+              Mobile number: {mobile} <br />
+              Email address: {email}
+            </p>
+            <p> Redirecting to Events Page...</p>
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 

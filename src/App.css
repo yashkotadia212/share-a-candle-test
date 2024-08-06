@@ -43,3 +43,12 @@ body {
 .ant-btn {
   padding: 18px 25px!important;
 }
+
+.ant-input-number-group-addon{
+  padding: 0px 0px!important;
+}
+
+.fundraining-custom-number-input > .ant-input-number-wrapper > .ant-input-number-in-form-item > .ant-input-number-input-wrap > input {
+  font-size: 25px !important;
+  text-align: center;
+}

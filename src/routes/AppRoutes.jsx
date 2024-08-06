@@ -7,6 +7,7 @@ import OrganizeEvent from "../pages/OrganizeEvent";
 import EventDetails from "../pages/EventDetails";
 import Admin from "../pages/Admin";
 import PageNotFound from "../pages/PageNotFound";
+import JoinTeam from "../pages/JoinTeam";
 
 const AppRoutes = () => {
   return (
@@ -14,6 +15,7 @@ const AppRoutes = () => {
       <Route path="/" element={<Home />} />
       <Route path="/events" element={<Event />} />
       <Route path="/organize-event" element={<OrganizeEvent />} />
+      <Route path="/join-team" element={<JoinTeam />} />
       <Route path="/event-details" element={<EventDetails />} />
       <Route path="/admin" element={<Admin />} />
       <Route path="/login" element={<Login />} />

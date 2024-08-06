@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import copy from "copy-text-to-clipboard";
 import { BsCopy } from "react-icons/bs";
 import TopHeader from "../components/TopHeader";
-import { message, Modal, Form, Select, Input } from "antd";
+import { message, Modal, Form, Select, Input, DatePicker } from "antd";
 import { Divider, List } from "antd";
 import { MdOutlineModeEdit } from "react-icons/md";
 import { useLocation } from "react-router-dom";
@@ -207,6 +207,7 @@ const subCategories = [
 ];
 
 const { Option } = Select;
+const { RangePicker } = DatePicker;
 
 const getEventByIdUrl =
   "https://nbg6jhqi7scugaz3mhtxcscbdy0msbuv.lambda-url.us-east-2.on.aws/";
@@ -215,10 +216,19 @@ const EventDetails = () => {
   const { state } = useLocation();
   const getEventById = useAxios(getEventByIdUrl);
   const [eventBasicDetailsForm] = Form.useForm();
+  const [eventStartsInForm] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [eventData, setEventData] = useState({});
+  const [isTimeModalVisible, setIsTimeModalVisible] = useState(false);
+  const [selectedRange, setSelectedRange] = useState(null);
 
   const showModal = () => {
+    eventBasicDetailsForm.setFieldsValue({
+      eventName: eventData?.eventName,
+      organizationType: eventData?.organizationType,
+      subCategory: eventData?.category,
+      organizationName: eventData?.organizationName,
+    });
     setIsModalOpen(true);
   };
 
@@ -250,6 +260,28 @@ const EventDetails = () => {
     setEventData(getEventById.data);
   }, [getEventById]);
 
+  const showTimeModal = () => {
+    // setSelectedRange([dayjs(eventData?.startDate), dayjs(eventData?.endDate)]);
+    setIsTimeModalVisible(true);
+  };
+
+  const handleOkOfTimeModal = () => {
+    if (selectedRange) {
+      console.log("Selected range:", selectedRange);
+    } else {
+      message.error("Please select a date range");
+    }
+    setIsTimeModalVisible(false);
+  };
+
+  const handleCancelOfTimeModaal = () => {
+    setIsTimeModalVisible(false);
+  };
+
+  const onRangeChangeOfTimeModal = (dates, dateStrings) => {
+    setSelectedRange(dates);
+  };
+
   return (
     <>
       {getEventById.loading ? (
@@ -273,6 +305,7 @@ const EventDetails = () => {
             <EventStartsIn
               startDate={eventData?.startDate}
               endDate={eventData?.endDate}
+              showTimeModal={showTimeModal}
             />
             <Earnings />
           </div>
@@ -374,6 +407,25 @@ const EventDetails = () => {
               </Form.Item>
             </Form>
           </Modal>
+          <Modal
+            width={505}
+            height={600}
+            centered
+            title="Edit Event Dates"
+            open={isTimeModalVisible}
+            onOk={handleOkOfTimeModal}
+            onCancel={handleCancelOfTimeModaal}
+            okButtonProps={{
+              disabled: !selectedRange,
+            }}
+          >
+            <RangePicker
+              value={selectedRange}
+              className="mb-80 w-full"
+              showTime
+              onChange={onRangeChangeOfTimeModal}
+            />
+          </Modal>
         </div>
       )}
     </>
@@ -422,7 +474,7 @@ const EventBasicDetails = ({ showModal, eventBasicDetails }) => {
             {eventBasicDetails.organizationType} -{" "}
             {eventBasicDetails.subCategory}
             <button className="ml-2" onClick={() => showModal()}>
-              <MdOutlineModeEdit className="text-lg" />
+              <MdOutlineModeEdit className="text-lg text-gray-500" />
             </button>
           </div>
         </div>
@@ -435,7 +487,7 @@ const EventBasicDetails = ({ showModal, eventBasicDetails }) => {
   );
 };
 
-const EventStartsIn = ({ startDate, endDate }) => {
+const EventStartsIn = ({ startDate, endDate, showTimeModal }) => {
   const startsInMinutes = convertMinutes(
     calculateMinutesToTargetDate(startDate)
   );
@@ -457,7 +509,17 @@ const EventStartsIn = ({ startDate, endDate }) => {
     <>
       {status === "Upcoming" && (
         <div className="p-4 rounded-xl">
-          <div className="text-xl">Event Starts in</div>
+          <div className="flex">
+            <div className="text-xl">Event Starts in</div>
+            <button
+              className="ml-2"
+              onClick={() => {
+                showTimeModal();
+              }}
+            >
+              <MdOutlineModeEdit className="text-lg text-gray-500" />
+            </button>
+          </div>
           <div className="text-3xl">
             {startsInMinutes.days}{" "}
             <span className="text-gray-500 text-2xl">Days</span>{" "}

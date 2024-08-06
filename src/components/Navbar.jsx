@@ -39,6 +39,11 @@ const navData = [
   },
   {
     id: 8,
+    title: "Join Team",
+    url: "/join-team",
+  },
+  {
+    id: 9,
     title: "Admin",
     url: "/admin",
   },
