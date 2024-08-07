@@ -5,7 +5,7 @@ import TopHeader from "../components/TopHeader";
 import { message, Modal, Form, Select, Input, DatePicker, Button } from "antd";
 import { Divider, List } from "antd";
 import { MdOutlineModeEdit } from "react-icons/md";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import useAxios from "../hooks/useAxios";
 import Loader from "../components/Loader";
 import calculateMinutesToTargetDate from "../utils/calculateMinutesToTargetDate";
@@ -190,8 +190,6 @@ const leaderboardListData = [
   { rank: 20, teamMemberName: "Ursula White", donation: 150 },
 ];
 
-const productNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-
 // Option data for Select components
 const organizationTypes = [
   { value: "non-profit", label: "Non-Profit" },
@@ -213,11 +211,15 @@ const { RangePicker } = DatePicker;
 const getEventByIdUrl =
   "https://nbg6jhqi7scugaz3mhtxcscbdy0msbuv.lambda-url.us-east-2.on.aws/";
 
+const editEventDetailUrl =
+  "https://nbg6jhqi7scugaz3mhtxcscbdy0msbuv.lambda-url.us-east-2.on.aws/";
+
 const EventDetails = () => {
   const { state } = useLocation();
+  const navigate = useNavigate();
   const getEventById = useAxios(getEventByIdUrl);
+  const editEventDetail = useAxios(editEventDetailUrl);
   const [eventBasicDetailsForm] = Form.useForm();
-  const [eventStartsInForm] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [eventData, setEventData] = useState({});
   const [isTimeModalVisible, setIsTimeModalVisible] = useState(false);
@@ -244,12 +246,26 @@ const EventDetails = () => {
 
   const onFinish = (values) => {
     // console.log("Form values:", values);
+    values.id = state.eventId;
+    editEventDetail.putData(values);
     setIsModalOpen(false);
   };
 
   useEffect(() => {
-    // console.log("EVENT ID:", { id: state.eventId });
-    getEventById.getData({ id: state.eventId });
+    if (editEventDetail.error) {
+      message.error(
+        "An error occurred. Please try again later. " + editEventDetail.error
+      );
+    } else if (editEventDetail.data) {
+      message.success("Event details updated successfully");
+      setTimeout(() => {
+        window.location.reload();
+      }, 200);
+    }
+  }, [editEventDetail]);
+
+  useEffect(() => {
+    getEventById.getData({ id: state?.eventId });
   }, [state]);
 
   useEffect(() => {
@@ -257,8 +273,9 @@ const EventDetails = () => {
       message.error(
         "An error occurred. Please try again later. " + getEventById.error
       );
+    } else if (getEventById.data) {
+      setEventData(getEventById.data);
     }
-    setEventData(getEventById.data);
   }, [getEventById]);
 
   const showTimeModal = () => {
@@ -272,6 +289,14 @@ const EventDetails = () => {
   const handleOkOfTimeModal = () => {
     if (selectedRange) {
       console.log("Selected range:", selectedRange);
+      let startDate = selectedRange[0].format("YYYY-MM-DD HH:mm:ss");
+      let endDate = selectedRange[1].format("YYYY-MM-DD HH:mm:ss");
+
+      editEventDetail.putData({
+        id: state.eventId,
+        startDate: startDate,
+        endDate: endDate,
+      });
     } else {
       message.error("Please select a date range");
     }
@@ -285,8 +310,6 @@ const EventDetails = () => {
   const onRangeChangeOfTimeModal = (dates, dateStrings) => {
     setSelectedRange(dates);
   };
-
-  console.log("PRODUCTS", eventData?.products);
 
   return (
     <>

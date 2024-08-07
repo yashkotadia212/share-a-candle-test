@@ -50,12 +50,30 @@ const useAxios = (url) => {
     [url]
   );
 
+  // Function for PUT request
+  const putData = useCallback(
+    async (putData) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await axios.put(url, putData);
+        setData(response.data);
+      } catch (err) {
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [url]
+  );
+
   return {
     data,
     loading,
     error,
     getData,
     postData,
+    putData,
   };
 };
 
