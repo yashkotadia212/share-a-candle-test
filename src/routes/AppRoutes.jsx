@@ -9,6 +9,7 @@ import Admin from "../pages/Admin";
 import PageNotFound from "../pages/PageNotFound";
 import JoinTeam from "../pages/JoinTeam";
 import PrivateRoutes from "./PrivateRoutes";
+import TeamMemberDetails from "../pages/TeamMemberDetails";
 
 const AppRoutes = () => {
   return (
@@ -17,9 +18,10 @@ const AppRoutes = () => {
 
       <Route path="/login" element={<Login />} />
       <Route path="*" element={<PageNotFound />} />
-      <Route path="/events" element={<Event />} />
+      <Route path="/team-member-details" element={<TeamMemberDetails />} />
 
       <Route element={<PrivateRoutes />}>
+        <Route path="/events" element={<Event />} />
         <Route path="/organize-event" element={<OrganizeEvent />} />
         <Route path="/join-team" element={<JoinTeam />} />
         <Route path="/event-details" element={<EventDetails />} />

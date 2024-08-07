@@ -67,6 +67,23 @@ const useAxios = (url) => {
     [url]
   );
 
+  //Function for DELETE request
+  const deleteData = useCallback(
+    async (id) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await axios.delete(`${url}?id=${id}`);
+        setData(response.data);
+      } catch (err) {
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [url]
+  );
+
   return {
     data,
     loading,
@@ -74,6 +91,7 @@ const useAxios = (url) => {
     getData,
     postData,
     putData,
+    deleteData,
   };
 };
 

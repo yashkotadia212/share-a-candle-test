@@ -2,7 +2,16 @@ import React, { useState, useEffect } from "react";
 import copy from "copy-text-to-clipboard";
 import { BsCopy } from "react-icons/bs";
 import TopHeader from "../components/TopHeader";
-import { message, Modal, Form, Select, Input, DatePicker, Button } from "antd";
+import {
+  message,
+  Modal,
+  Form,
+  Select,
+  Input,
+  DatePicker,
+  Button,
+  Popconfirm,
+} from "antd";
 import { Divider, List } from "antd";
 import { MdOutlineModeEdit } from "react-icons/md";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -214,11 +223,19 @@ const getEventByIdUrl =
 const editEventDetailUrl =
   "https://nbg6jhqi7scugaz3mhtxcscbdy0msbuv.lambda-url.us-east-2.on.aws/";
 
+const approveTeamMemberUrl =
+  "https://nbg6jhqi7scugaz3mhtxcscbdy0msbuv.lambda-url.us-east-2.on.aws/";
+
+const deleteEventbyIdUrl =
+  "https://nbg6jhqi7scugaz3mhtxcscbdy0msbuv.lambda-url.us-east-2.on.aws/";
+
 const EventDetails = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
   const getEventById = useAxios(getEventByIdUrl);
   const editEventDetail = useAxios(editEventDetailUrl);
+  const approveTeamMember = useAxios(approveTeamMemberUrl);
+  const deleteEventById = useAxios(deleteEventbyIdUrl);
   const [eventBasicDetailsForm] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [eventData, setEventData] = useState({});
@@ -311,6 +328,41 @@ const EventDetails = () => {
     setSelectedRange(dates);
   };
 
+  const handleApproveTeamMember = (teamMemberPutData, ev) => {
+    ev.stopPropagation(); // Prevents the event from bubbling up to the parent
+    approveTeamMember.putData(teamMemberPutData);
+  };
+
+  useEffect(() => {
+    if (approveTeamMember.error) {
+      message.error(
+        "An error occurred while approving Team Member. Please try again later. " +
+          approveTeamMember.error
+      );
+    } else if (approveTeamMember.data) {
+      message.success("Team member approved successfully");
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    }
+  }, [approveTeamMember]);
+
+  const handleDeleteEventById = () => {
+    deleteEventById.deleteData(eventData?.event?.id);
+  };
+
+  useEffect(() => {
+    if (deleteEventById.error) {
+      message.error(
+        "An error occurred while deleting Event. Please try again later. " +
+          deleteEventById.error
+      );
+    } else if (deleteEventById.data) {
+      message.success("Event deleted successfully");
+      navigate("/events");
+    }
+  }, [deleteEventById]);
+
   return (
     <>
       {getEventById.loading ? (
@@ -343,7 +395,12 @@ const EventDetails = () => {
               <SupportersList />
             </div>
             <div className="w-1/2">
-              <LeaderboardList />
+              {/* <LeaderboardList /> */}
+              <TeamMembersList
+                teamMembersList={eventData?.teamMembers}
+                handleApproveTeamMember={handleApproveTeamMember}
+                eventCode={eventData?.event?.eventCode}
+              />
             </div>
           </div>
           <div className="mt-14">
@@ -355,6 +412,19 @@ const EventDetails = () => {
                 </div>
               ))}
             </div>
+          </div>
+          <div className="w-full border py-10 flex justify-center">
+            <Popconfirm
+              title="Delete Event"
+              description="Are you sure to delete this event?"
+              onConfirm={() => handleDeleteEventById()}
+              okText="Delete"
+              cancelText="Cancel"
+            >
+              <Button danger size="large" type="primary">
+                Delete Event{" "}
+              </Button>{" "}
+            </Popconfirm>
           </div>
           <Modal
             centered
@@ -763,56 +833,99 @@ const ProductCard = ({ product }) => {
   );
 };
 
+const TeamMembersList = ({
+  teamMembersList,
+  handleApproveTeamMember,
+  eventCode,
+}) => {
+  const navigate = useNavigate();
+
+  return (
+    <div>
+      <div className="text-xl font-semibold">Team Members</div>
+      <Divider
+        orientation="left"
+        style={{ color: "#333", fontWeight: "normal" }}
+      />
+      <div className="px-4 h-[500px] overflow-scroll">
+        <List
+          dataSource={teamMembersList}
+          renderItem={(teamMember) => (
+            <List.Item
+              className="cursor-pointer mb-1 hover:shadow-md transition"
+              onClick={() => {
+                const queryParams = new URLSearchParams({
+                  eventCode: eventCode,
+                  teamMemberId: teamMember.id,
+                }).toString();
+                navigate(`/team-member-details?${queryParams}`);
+              }}
+            >
+              <TeamMemberCard
+                teamMember={teamMember}
+                handleApproveTeamMember={handleApproveTeamMember}
+              />
+            </List.Item>
+          )}
+        />
+      </div>
+    </div>
+  );
+};
+
+const TeamMemberCard = ({ teamMember, handleApproveTeamMember }) => {
+  return (
+    <div
+      className="flex gap-4 w-full items-center px-2"
+      title={teamMember.description}
+    >
+      <div>
+        <img
+          alt="name placeholder"
+          src={`https://ui-avatars.com/api/?name=${teamMember.email
+            .split("@")[0]
+            .replace(" ", "+")}&font-size=0.33&size=40&color=fff`}
+          className="rounded-full"
+        />
+      </div>
+      <div>
+        <div>{teamMember.name}</div>
+        <div>
+          <span className="text-gray-400">Fundraising Goal: </span>
+          <span className="font-semibold">${teamMember.fundraisingGoal}</span>
+        </div>
+      </div>
+      {teamMember.status !== "approved" && (
+        <div className="ms-auto">
+          <button
+            className="bg-green-100 hover:bg-green-800 text-green-800 hover:text-white px-2 py-1 rounded-md transition"
+            type="primary"
+            onClick={(evnt) =>
+              handleApproveTeamMember(
+                {
+                  id: teamMember.id,
+                  status: "approved",
+                },
+                evnt
+              )
+            }
+          >
+            Approve
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
+
 export default EventDetails;
 
-// product object
 // {
-//   "id": 8977686167783,
-//   "title": "16-OZ.-ROOM-SPRAY",
-//   "body_html": "<p><span>*Price includes Standard Jar + Candle Wax Fill* Choose from one of our in-house fragrances. Premium fragrances are available at an additional cost. Check the Pick your scent tab for a full list of fragrances.</span></p>\n<!---->",
-//   "vendor": "SHARE A CANDLE",
-//   "product_type": "",
-//   "created_at": "2024-08-01T08:23:38-04:00",
-//   "handle": "16-oz-room-spray-1",
-//   "updated_at": "2024-08-01T08:23:42-04:00",
-//   "published_at": "2024-08-01T08:23:38-04:00",
-//   "template_suffix": "",
-//   "published_scope": "global",
-//   "tags": "",
-//   "status": "active",
-//   "admin_graphql_api_id": "gid://shopify/Product/8977686167783",
-//   "options": [
-//       {
-//           "id": 11219152371943,
-//           "product_id": 8977686167783,
-//           "name": "Title",
-//           "position": 1
-//       }
-//   ],
-//   "images": [
-//       {
-//           "id": 42795880120551,
-//           "alt": null,
-//           "position": 1,
-//           "product_id": 8977686167783,
-//           "created_at": "2024-08-01T08:23:19-04:00",
-//           "updated_at": "2024-08-01T08:23:39-04:00",
-//           "admin_graphql_api_id": "gid://shopify/ProductImage/42795880120551",
-//           "width": 214,
-//           "height": 239,
-//           "src": "https://cdn.shopify.com/s/files/1/0699/7403/2615/files/16-OZ.-ROOM-SPRAY.jpg?v=1722515000"
-//       }
-//   ],
-//   "image": {
-//       "id": 42795880120551,
-//       "alt": null,
-//       "position": 1,
-//       "product_id": 8977686167783,
-//       "created_at": "2024-08-01T08:23:19-04:00",
-//       "updated_at": "2024-08-01T08:23:39-04:00",
-//       "admin_graphql_api_id": "gid://shopify/ProductImage/42795880120551",
-//       "width": 214,
-//       "height": 239,
-//       "src": "https://cdn.shopify.com/s/files/1/0699/7403/2615/files/16-OZ.-ROOM-SPRAY.jpg?v=1722515000"
-//   }
+//   "id": "45658d2f-82f0-425d-b5cf-90b955eeca05",
+//   "eventCode": "NJUNNX",
+//   "fundraisingGoal": 15000,
+//   "email": "yashk@hexacoder.com",
+//   "status": "not-approved",
+//   "description": "In this example, handleDelete calls deleteData with an id and optional parameters, triggering the DELETE request. The component renders the loading state, data, or error message based on the request's outcome.",
+//   "name": "Yash Kotadia"
 // }

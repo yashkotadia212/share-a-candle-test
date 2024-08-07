@@ -1,23 +1,50 @@
 import React, { useEffect, useState } from "react";
 import TopHeader from "../components/TopHeader";
-import { Form, Input, InputNumber, Button } from "antd";
+import { Form, Input, InputNumber, Button, message, Checkbox } from "antd";
 import { FaMinus, FaPlus } from "react-icons/fa";
+import useAuthStore from "../zustand/authStore";
+import useAxios from "../hooks/useAxios";
+
+const INITIAL_FUNDRAISING_GOAL = 2000;
+const STEP_AMOUNT = 100;
+const joinTeamUrl =
+  "https://ixmiyncibu2bfpr4wt64zbsz2y0rtczr.lambda-url.us-east-2.on.aws/";
 
 const JoinTeam = () => {
   const [joinTeamFormRef] = Form.useForm();
-  const [internalValue, setInternalValue] = useState(2000);
+  const [internalValue, setInternalValue] = useState(INITIAL_FUNDRAISING_GOAL);
+  const { auth } = useAuthStore();
+  const joinTeam = useAxios(joinTeamUrl);
 
   const onFinish = (values) => {
     console.log("Form Values:", values);
+    joinTeam.postData({
+      eventCode: values.teamCode.replace(/\s/g, ""),
+      fundraisingGoal: values.fundraisingGoal,
+      email: auth.email,
+      name: values.name,
+      description: values.description,
+      isDiscoverable: values.isDiscoverable.toString(),
+    });
   };
 
+  useEffect(() => {
+    if (joinTeam?.error) {
+      message.error("An error occurred joining team. Please try again later.");
+    }
+    if (joinTeam?.data) {
+      message.success("Successfully joined team!");
+      console.log("Join Team Response:", joinTeam.data);
+    }
+  }, [joinTeam]);
+
   const increment = () => {
-    const newValue = internalValue + 100;
+    const newValue = internalValue + STEP_AMOUNT;
     setInternalValue(newValue);
   };
 
   const decrement = () => {
-    const newValue = internalValue - 100;
+    const newValue = internalValue - STEP_AMOUNT;
     setInternalValue(newValue);
   };
 
@@ -70,6 +97,32 @@ const JoinTeam = () => {
           </Form.Item>
 
           <Form.Item
+            label="Name"
+            name="name"
+            rules={[
+              {
+                required: true,
+                message: "Please input the name!",
+              },
+            ]}
+          >
+            <Input size="large" />
+          </Form.Item>
+
+          <Form.Item
+            label="Why are you raising funds?"
+            name="description"
+            rules={[
+              {
+                required: true,
+                message: "Please input the description!",
+              },
+            ]}
+          >
+            <Input.TextArea rows={4} />
+          </Form.Item>
+
+          <Form.Item
             label="Fundraising Goal"
             name="fundraisingGoal"
             rules={[
@@ -109,8 +162,18 @@ const JoinTeam = () => {
             />
           </Form.Item>
 
+          <Form.Item name="isDiscoverable" valuePropName="checked">
+            <Checkbox size="large">
+              Make my store discoverable on shareacandle.com
+            </Checkbox>
+          </Form.Item>
+
           <Form.Item className="w-full flex justify-center">
-            <Button type="primary" htmlType="submit">
+            <Button
+              loading={joinTeam?.loading}
+              type="primary"
+              htmlType="submit"
+            >
               Create My Store
             </Button>
           </Form.Item>
