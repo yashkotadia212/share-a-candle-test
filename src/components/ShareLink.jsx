@@ -2,10 +2,31 @@ import React from "react";
 import copy from "copy-text-to-clipboard";
 import { BsCopy } from "react-icons/bs";
 import { message } from "antd";
+
 // social icons
-import { CiTwitter, CiInstagram } from "react-icons/ci";
+import { CiTwitter, CiLinkedin } from "react-icons/ci";
 import { SlSocialFacebook } from "react-icons/sl";
 import { BiLogoWhatsapp } from "react-icons/bi";
+
+function returnSocialLinks(name, url) {
+  switch (name) {
+    case "Facebook":
+      return `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+        url
+      )}`;
+
+    case "Whatsapp":
+      return `https://api.whatsapp.com/send?text=${encodeURIComponent(url)}`;
+
+    case "LinkedIn":
+      return `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
+        url
+      )}`;
+
+    case "Twitter":
+      return `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}`;
+  }
+}
 
 const ShareLink = ({ link }) => {
   return (
@@ -31,16 +52,16 @@ const ShareLink = ({ link }) => {
         </button>
       </div>
       <div className="flex justify-around w-8/12 mt-5 mb-8">
-        <CopySocialButton>
+        <CopySocialButton name="Facebook" link={link}>
           <SlSocialFacebook className="text-xl" />
         </CopySocialButton>
-        <CopySocialButton>
+        <CopySocialButton name="Whatsapp" link={link}>
           <BiLogoWhatsapp className="text-xl" />
         </CopySocialButton>
-        <CopySocialButton>
-          <CiInstagram className="text-xl" />
+        <CopySocialButton name="LinkedIn" link={link}>
+          <CiLinkedin className="text-xl" />
         </CopySocialButton>
-        <CopySocialButton>
+        <CopySocialButton name="Twitter" link={link}>
           <CiTwitter className="text-xl" />
         </CopySocialButton>
       </div>
@@ -48,13 +69,18 @@ const ShareLink = ({ link }) => {
   );
 };
 
-const CopySocialButton = ({ children }) => {
+const CopySocialButton = ({ children, name, link }) => {
   return (
     <div className="flex flex-col justify-center items-center">
-      <button className="w-12 h-12 flex justify-center items-center border border-gray-300 rounded-full bg-white">
+      <a
+        href={returnSocialLinks(name, link)}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="w-12 h-12 flex justify-center items-center border border-gray-300 rounded-full bg-white"
+      >
         {children}
-      </button>
-      <div className="text-xs text-gray-500">Facebook</div>
+      </a>
+      <div className="text-xs text-gray-500 mt-1">{name}</div>
     </div>
   );
 };
