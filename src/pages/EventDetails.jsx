@@ -37,144 +37,144 @@ function convertMinutes(totalMinutes) {
   return { days, hours, minutes };
 }
 
-const supportersListData = [
-  {
-    supporterName: "Alice Johnson",
-    donationHoursAgo: 5,
-    city: "New York",
-    state: "NY",
-    amountInDollars: 100,
-    message: "Keep up the great work!",
-  },
-  {
-    supporterName: "Bob Smith",
-    donationHoursAgo: 2,
-    city: "Los Angeles",
-    state: "CA",
-    amountInDollars: 250,
-    // No message provided
-  },
-  {
-    supporterName: "Carol Davis",
-    donationHoursAgo: 8,
-    city: "Chicago",
-    state: "IL",
-    amountInDollars: 150,
-    message: "Proud to support this cause!",
-  },
-  {
-    supporterName: "David Lee",
-    donationHoursAgo: 12,
-    city: "Houston",
-    state: "TX",
-    amountInDollars: 200,
-    // No message provided
-  },
-  {
-    supporterName: "Eva Martinez",
-    donationHoursAgo: 1,
-    city: "San Francisco",
-    state: "CA",
-    amountInDollars: 75,
-    message: "Happy to contribute!",
-  },
-  {
-    supporterName: "Frank Wilson",
-    donationHoursAgo: 3,
-    city: "Seattle",
-    state: "WA",
-    amountInDollars: 125,
-    message: "Glad to help out!",
-  },
-  {
-    supporterName: "Grace Taylor",
-    donationHoursAgo: 7,
-    city: "Denver",
-    state: "CO",
-    amountInDollars: 90,
-    message: "Supporting a great cause!",
-  },
-  {
-    supporterName: "Hank Green",
-    donationHoursAgo: 6,
-    city: "Phoenix",
-    state: "AZ",
-    amountInDollars: 110,
-    message: "Keep making a difference!",
-  },
-  {
-    supporterName: "Ivy Brown",
-    donationHoursAgo: 4,
-    city: "Philadelphia",
-    state: "PA",
-    amountInDollars: 180,
-    message: "Thank you for all you do!",
-  },
-  {
-    supporterName: "Jack White",
-    donationHoursAgo: 9,
-    city: "San Antonio",
-    state: "TX",
-    amountInDollars: 220,
-    message: "Here’s to making an impact!",
-  },
-  {
-    supporterName: "Kara Black",
-    donationHoursAgo: 11,
-    city: "Dallas",
-    state: "TX",
-    amountInDollars: 95,
-    message: "Keep up the good work!",
-  },
-  {
-    supporterName: "Liam Harris",
-    donationHoursAgo: 10,
-    city: "San Diego",
-    state: "CA",
-    amountInDollars: 135,
-    message: "Proud to be part of this!",
-  },
-  {
-    supporterName: "Mia Clark",
-    donationHoursAgo: 15,
-    city: "San Jose",
-    state: "CA",
-    amountInDollars: 300,
-    message: "Happy to support this initiative!",
-  },
-  {
-    supporterName: "Noah Lewis",
-    donationHoursAgo: 14,
-    city: "Austin",
-    state: "TX",
-    amountInDollars: 140,
-    message: "Glad to contribute!",
-  },
-  {
-    supporterName: "Olivia King",
-    donationHoursAgo: 13,
-    city: "Jacksonville",
-    state: "FL",
-    amountInDollars: 70,
-    message: "Happy to help!",
-  },
-  {
-    supporterName: "Paul Young",
-    donationHoursAgo: 16,
-    city: "Columbus",
-    state: "OH",
-    amountInDollars: 80,
-    message: "Every little bit helps!",
-  },
-  {
-    supporterName: "Quinn Scott",
-    donationHoursAgo: 18,
-    city: "Indianapolis",
-    state: "IN",
-    amountInDollars: 65,
-    message: "Glad to be of assistance!",
-  },
-];
+// const supportersListData = [
+//   {
+//     supporterName: "Alice Johnson",
+//     donationHoursAgo: 5,
+//     city: "New York",
+//     state: "NY",
+//     amountInDollars: 100,
+//     message: "Keep up the great work!",
+//   },
+//   {
+//     supporterName: "Bob Smith",
+//     donationHoursAgo: 2,
+//     city: "Los Angeles",
+//     state: "CA",
+//     amountInDollars: 250,
+//     // No message provided
+//   },
+//   {
+//     supporterName: "Carol Davis",
+//     donationHoursAgo: 8,
+//     city: "Chicago",
+//     state: "IL",
+//     amountInDollars: 150,
+//     message: "Proud to support this cause!",
+//   },
+//   {
+//     supporterName: "David Lee",
+//     donationHoursAgo: 12,
+//     city: "Houston",
+//     state: "TX",
+//     amountInDollars: 200,
+//     // No message provided
+//   },
+//   {
+//     supporterName: "Eva Martinez",
+//     donationHoursAgo: 1,
+//     city: "San Francisco",
+//     state: "CA",
+//     amountInDollars: 75,
+//     message: "Happy to contribute!",
+//   },
+//   {
+//     supporterName: "Frank Wilson",
+//     donationHoursAgo: 3,
+//     city: "Seattle",
+//     state: "WA",
+//     amountInDollars: 125,
+//     message: "Glad to help out!",
+//   },
+//   {
+//     supporterName: "Grace Taylor",
+//     donationHoursAgo: 7,
+//     city: "Denver",
+//     state: "CO",
+//     amountInDollars: 90,
+//     message: "Supporting a great cause!",
+//   },
+//   {
+//     supporterName: "Hank Green",
+//     donationHoursAgo: 6,
+//     city: "Phoenix",
+//     state: "AZ",
+//     amountInDollars: 110,
+//     message: "Keep making a difference!",
+//   },
+//   {
+//     supporterName: "Ivy Brown",
+//     donationHoursAgo: 4,
+//     city: "Philadelphia",
+//     state: "PA",
+//     amountInDollars: 180,
+//     message: "Thank you for all you do!",
+//   },
+//   {
+//     supporterName: "Jack White",
+//     donationHoursAgo: 9,
+//     city: "San Antonio",
+//     state: "TX",
+//     amountInDollars: 220,
+//     message: "Here’s to making an impact!",
+//   },
+//   {
+//     supporterName: "Kara Black",
+//     donationHoursAgo: 11,
+//     city: "Dallas",
+//     state: "TX",
+//     amountInDollars: 95,
+//     message: "Keep up the good work!",
+//   },
+//   {
+//     supporterName: "Liam Harris",
+//     donationHoursAgo: 10,
+//     city: "San Diego",
+//     state: "CA",
+//     amountInDollars: 135,
+//     message: "Proud to be part of this!",
+//   },
+//   {
+//     supporterName: "Mia Clark",
+//     donationHoursAgo: 15,
+//     city: "San Jose",
+//     state: "CA",
+//     amountInDollars: 300,
+//     message: "Happy to support this initiative!",
+//   },
+//   {
+//     supporterName: "Noah Lewis",
+//     donationHoursAgo: 14,
+//     city: "Austin",
+//     state: "TX",
+//     amountInDollars: 140,
+//     message: "Glad to contribute!",
+//   },
+//   {
+//     supporterName: "Olivia King",
+//     donationHoursAgo: 13,
+//     city: "Jacksonville",
+//     state: "FL",
+//     amountInDollars: 70,
+//     message: "Happy to help!",
+//   },
+//   {
+//     supporterName: "Paul Young",
+//     donationHoursAgo: 16,
+//     city: "Columbus",
+//     state: "OH",
+//     amountInDollars: 80,
+//     message: "Every little bit helps!",
+//   },
+//   {
+//     supporterName: "Quinn Scott",
+//     donationHoursAgo: 18,
+//     city: "Indianapolis",
+//     state: "IN",
+//     amountInDollars: 65,
+//     message: "Glad to be of assistance!",
+//   },
+// ];
 
 const leaderboardListData = [
   { rank: 1, teamMemberName: "Bob Smith", donation: 1500 },
@@ -392,7 +392,7 @@ const EventDetails = () => {
           </div>
           <div className="flex mt-10">
             <div className="w-1/2">
-              <SupportersList />
+              <SupportersList supportersList={eventData?.supporters} />
             </div>
             <div className="w-1/2">
               {/* <LeaderboardList /> */}
@@ -701,7 +701,7 @@ const SupporterCard = ({ supporter }) => {
       <div>
         <img
           alt="name placeholder"
-          src={`https://ui-avatars.com/api/?name=${supporter.supporterName.replace(
+          src={`https://ui-avatars.com/api/?name=${supporter.name.replace(
             " ",
             "+"
           )}&font-size=0.33&size=40&color=fff`}
@@ -710,22 +710,20 @@ const SupporterCard = ({ supporter }) => {
       </div>
       <div>
         <div>
-          <div className="text-lg">{supporter.supporterName}</div>
+          <div className="text-lg">{supporter.name}</div>
           <div>{supporter.message || ""}</div>
-          <div className="text-gray-400">
+          {/* <div className="text-gray-400">
             {supporter.donationHoursAgo + " hours ago - "} {supporter.city},{" "}
             {supporter.state}
-          </div>
+          </div> */}
         </div>
       </div>
-      <div className="ms-auto text-xl font-semibold">
-        ${supporter.amountInDollars}
-      </div>
+      <div className="ms-auto text-xl font-semibold">${supporter.total}</div>
     </div>
   );
 };
 
-const SupportersList = () => {
+const SupportersList = ({ supportersList }) => {
   return (
     <div>
       <div className="text-xl font-semibold">Your Supporters</div>
@@ -735,10 +733,10 @@ const SupportersList = () => {
       />
       <div className="px-4 h-[500px] overflow-scroll">
         <List
-          dataSource={supportersListData}
-          renderItem={(item) => (
+          dataSource={supportersList}
+          renderItem={(supporter) => (
             <List.Item>
-              <SupporterCard supporter={item} />
+              <SupporterCard supporter={supporter} />
             </List.Item>
           )}
         />
