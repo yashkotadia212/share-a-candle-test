@@ -10,6 +10,7 @@ import PageNotFound from "../pages/PageNotFound";
 import JoinTeam from "../pages/JoinTeam";
 import PrivateRoutes from "./PrivateRoutes";
 import TeamMemberDetails from "../pages/TeamMemberDetails";
+import SupporterStore from "../pages/SupporterStore";
 
 const AppRoutes = () => {
   return (
@@ -18,7 +19,7 @@ const AppRoutes = () => {
 
       <Route path="/login" element={<Login />} />
       <Route path="*" element={<PageNotFound />} />
-      <Route path="/team-member-details" element={<TeamMemberDetails />} />
+      <Route path="/store" element={<SupporterStore />} />
 
       <Route element={<PrivateRoutes />}>
         <Route path="/events" element={<Event />} />
@@ -26,6 +27,7 @@ const AppRoutes = () => {
         <Route path="/join-team" element={<JoinTeam />} />
         <Route path="/event-details" element={<EventDetails />} />
         <Route path="/admin" element={<Admin />} />
+        <Route path="/team-member-details" element={<TeamMemberDetails />} />
       </Route>
     </Routes>
   );

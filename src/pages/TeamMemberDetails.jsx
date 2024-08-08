@@ -3,9 +3,8 @@ import Loader from "../components/Loader";
 import TopHeader from "../components/TopHeader";
 import useAxios from "../hooks/useAxios";
 import { Button, message, Modal } from "antd";
-import { useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { MdOutlineModeEdit } from "react-icons/md";
-import normaliseWorddCase from "../utils/normaliseWordsCase";
 import { BiStore } from "react-icons/bi";
 import { GrShareOption } from "react-icons/gr";
 import HorizontalSeparator from "../components/HorizontalSeparator";
@@ -14,12 +13,10 @@ import dayjs from "dayjs";
 import calculateMinutesToTargetDate from "../utils/calculateMinutesToTargetDate";
 import ShareLink from "../components/ShareLink";
 import { Divider, List } from "antd";
+import replacePathInUrl from "../utils/replacePathInUrl.js";
 
 const teamMemberDetailsBaseUrl =
   "https://ixmiyncibu2bfpr4wt64zbsz2y0rtczr.lambda-url.us-east-2.on.aws/";
-
-const productCheckoutUrl =
-  "https://3z5hdsxs6q62srcolcwfvmvnje0mpiip.lambda-url.us-east-2.on.aws/";
 
 function convertMinutes(totalMinutes) {
   if (typeof totalMinutes !== "number") {
@@ -61,25 +58,21 @@ const leaderboardListData = [
 ];
 
 const TeamMemberDetails = () => {
-  const [searchParams] = useSearchParams();
+  const { state } = useLocation();
+  const navigate = useNavigate();
   const [isShareModalVisible, setIsShareModalVisible] = React.useState(false);
-  const eventCode = searchParams.get("eventCode");
-  const teamMemberId = searchParams.get("teamMemberId");
-
   const teamMemberDetails = useAxios(teamMemberDetailsBaseUrl);
 
   useEffect(() => {
     teamMemberDetails.getData({
-      eventCode: eventCode,
-      teamMemberId: teamMemberId,
+      eventCode: state?.eventCode,
+      teamMemberId: state?.teamMemberId,
     });
-  }, [searchParams]);
+  }, [state]);
 
   useEffect(() => {
     if (teamMemberDetails.error) {
       message.error("Error fetching team member details");
-    } else if (teamMemberDetails.data) {
-      console.log("teamMemberDetails", teamMemberDetails?.data);
     }
   }, [teamMemberDetails]);
 
@@ -116,7 +109,17 @@ const TeamMemberDetails = () => {
               />
             </div>
             <div className="flex gap-2 ms-auto">
-              <Button size="large" type="primary">
+              <Button
+                size="large"
+                type="primary"
+                onClick={() => {
+                  const queryParams = new URLSearchParams({
+                    eventCode: state?.eventCode,
+                    teamMemberId: state?.teamMemberId,
+                  }).toString();
+                  navigate(`/store?${queryParams}`);
+                }}
+              >
                 <div>
                   <BiStore className="text-2xl" />
                 </div>
@@ -172,7 +175,7 @@ const TeamMemberDetails = () => {
             />
             <Earnings />
           </div>
-          <div className="flex my-16">
+          <div className="flex my-16 pb-12">
             <div className="w-1/2">
               <SupportersList
                 supportersList={teamMemberDetails?.data?.supporters}
@@ -180,19 +183,6 @@ const TeamMemberDetails = () => {
             </div>
             <div className="w-1/2">
               <LeaderboardList />
-            </div>
-          </div>
-          <div className="pb-16">
-            <div className="text-2xl font-semibold my-4">Products</div>
-            <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 mt-3 max-w-[3500px] gap-5">
-              {[teamMemberDetails?.data?.products].map((product, index) => (
-                <ProductCard
-                  key={index}
-                  product={product}
-                  event={teamMemberDetails?.data?.event}
-                  teamMember={teamMemberDetails?.data?.teamMember}
-                />
-              ))}
             </div>
           </div>
           <Modal
@@ -203,7 +193,16 @@ const TeamMemberDetails = () => {
             onCancel={handleCancelShareModal}
             footer={null} // Hide the footer
           >
-            <ShareLink link={window.location.href} />
+            <ShareLink
+              link={replacePathInUrl(
+                window.location.href +
+                  "?eventCode=" +
+                  state?.eventCode +
+                  "&teamMemberId=" +
+                  state?.teamMemberId,
+                "store"
+              )}
+            />
           </Modal>
         </div>
       )}
@@ -212,8 +211,6 @@ const TeamMemberDetails = () => {
 };
 
 const TeamMemberBasicDetails = ({ showModal, teamMemberBasicDetails }) => {
-  console.log("teamMemberBasicDetails", teamMemberBasicDetails);
-
   return (
     <div className="flex items-center gap-4">
       <div>
@@ -239,73 +236,6 @@ const TeamMemberBasicDetails = ({ showModal, teamMemberBasicDetails }) => {
         </div>
         <div className="text-gray-800">
           {teamMemberBasicDetails.organizationName}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const ProductCard = ({ product, event, teamMember }) => {
-  const productCheckout = useAxios(productCheckoutUrl);
-
-  useEffect(() => {
-    if (productCheckout.error) {
-      message.error("Error fetching product details");
-    } else if (productCheckout.data) {
-      window.location.href = productCheckout.data.checkout.webUrl;
-    }
-  }, [productCheckout]);
-
-  return (
-    <div className="w-full h-[450px] rounded-xl border border-gray-200 shadow-xl p-3 bg-gray-50">
-      <div
-        className="w-full h-52 rounded-lg"
-        style={{
-          backgroundImage: `url(${product?.image?.src})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      ></div>
-      <div className="m-1 flex flex-col h-[210px]">
-        <div className="text-2xl font-semibold">
-          {product?.title?.replace(/-/g, " ")}
-        </div>
-        <div className="text-xl">
-          ${Math.floor(Math.random() * (20 - 10 + 1)) + 10}
-        </div>
-
-        <div className="mt-auto">
-          <div>
-            <span className="text-sm normal-case font-semibold">
-              <span>product by </span>
-              <span className="font-jua">
-                {normaliseWorddCase(product?.vendor || "vendor")}
-              </span>
-            </span>
-          </div>
-          <div className="text-xs text-gray-400">
-            {product?.body_html
-              ?.replace(/<\/?[^>]+(>|$)/g, "")
-              .substring(0, 100)}
-          </div>
-          <div className="my-2">
-            <Button
-              loading={productCheckout.loading}
-              onClick={() => {
-                productCheckout.postData({
-                  variantId: "gid://shopify/ProductVariant/50070182691047",
-                  quantity: 1,
-                  eventName: event?.eventName,
-                  eventCode: event?.eventCode,
-                  teamName: teamMember?.name,
-                  teamMemberId: teamMember?.id,
-                });
-              }}
-              type="primary"
-            >
-              Buy Now
-            </Button>
-          </div>
         </div>
       </div>
     </div>

@@ -851,13 +851,11 @@ const TeamMembersList = ({
           renderItem={(teamMember) => (
             <List.Item
               className="cursor-pointer mb-1 hover:shadow-md transition"
-              onClick={() => {
-                const queryParams = new URLSearchParams({
-                  eventCode: eventCode,
-                  teamMemberId: teamMember.id,
-                }).toString();
-                navigate(`/team-member-details?${queryParams}`);
-              }}
+              onClick={() =>
+                navigate("/team-member-details", {
+                  state: { eventCode: eventCode, teamMemberId: teamMember.id },
+                })
+              }
             >
               <TeamMemberCard
                 teamMember={teamMember}

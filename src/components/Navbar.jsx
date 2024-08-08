@@ -8,29 +8,14 @@ const navData = [
     url: "/",
   },
   {
-    id: 2,
-    title: "Fundraising",
-    url: "/fundraising",
-  },
-  {
     id: 3,
     title: "Events",
     url: "/events",
   },
   {
-    id: 4,
-    title: "Blog",
-    url: "/blog",
-  },
-  {
     id: 5,
     title: "About Us",
     url: "/about-us",
-  },
-  {
-    id: 6,
-    title: "Careers",
-    url: "/careers",
   },
   {
     id: 7,
@@ -44,6 +29,11 @@ const navData = [
   },
   {
     id: 9,
+    title: "Store",
+    url: "/store",
+  },
+  {
+    id: 10,
     title: "Admin",
     url: "/admin",
   },
