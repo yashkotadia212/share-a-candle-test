@@ -13,6 +13,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             // Seed Token
             colorPrimary: "#000000",
             borderRadius: 3,
+            fontFamily: "Poppins-Regular",
 
             // Alias Token
             colorBgContainer: "#ffffff",

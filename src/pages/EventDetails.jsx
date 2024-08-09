@@ -413,7 +413,7 @@ const EventDetails = () => {
               ))}
             </div>
           </div>
-          <div className="w-full border py-10 flex justify-center">
+          <div className="w-full py-10 flex justify-center">
             <Popconfirm
               title="Delete Event"
               description="Are you sure to delete this event?"
@@ -795,7 +795,7 @@ const LeaderboardList = () => {
 
 const ProductCard = ({ product }) => {
   return (
-    <div className="w-full h-[400px] rounded-xl border border-gray-200 shadow-xl p-3 bg-gray-50">
+    <div className="w-full h-[380px] rounded-xl border border-gray-200 shadow-xl p-3 bg-gray-50">
       <div
         className="w-full h-52 rounded-lg"
         style={{
@@ -820,12 +820,12 @@ const ProductCard = ({ product }) => {
             </span>
           </span>
         </div>
-        <div className="text-xs text-gray-400">
+        <div className="text-xs text-gray-400 mt-1">
           {product.body_html.replace(/<\/?[^>]+(>|$)/g, "").substring(0, 100)}
         </div>
-        <div className="my-2">
+        {/* <div className="my-2">
           <Button type="primary">Buy Now</Button>
-        </div>
+        </div> */}
       </div>
     </div>
   );

@@ -68,7 +68,7 @@ const SupporterStore = () => {
               eventName: storeDetails?.data?.event?.eventName,
               teamMemberName: storeDetails?.data?.teamMember?.name,
               description: storeDetails?.data?.teamMember?.description,
-              fundsRaised: "1200",
+              fundsRaised: "1000",
               fundraisingGoal: storeDetails?.data?.teamMember?.fundraisingGoal,
               eventStartDate: storeDetails?.data?.event?.startDate,
               eventEndDate: storeDetails?.data?.event?.endDate,
@@ -188,6 +188,7 @@ const FundraisingProgress = ({ fundsRaised, targetGoal }) => {
           "0%": "#000000",
           "100%": "#000000",
         }}
+        showInfo={false}
       >
         <div className="absolute left-0">$0</div>
       </Progress>
@@ -195,6 +196,16 @@ const FundraisingProgress = ({ fundsRaised, targetGoal }) => {
         <span className="text-gray-500 text-sm">${0}</span>
         <span className="text-gray-500 text-sm">
           ${targetGoal?.toLocaleString()}
+        </span>
+      </div>
+      <div>
+        <span
+          style={{
+            left: `calc(${progressPercentage}% - 20px)`,
+          }}
+          className="text-lg font-semibold absolute"
+        >
+          ${fundsRaised.toLocaleString()}
         </span>
       </div>
     </div>

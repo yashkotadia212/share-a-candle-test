@@ -4,7 +4,12 @@
 
 @font-face {
   font-family: "Jua";
-  src: url("../src//assets//fonts/jua/Jua-Regular.ttf");
+  src: url("../src//assets/fonts/jua/Jua-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Poppins-Regular";
+  src: url("../src/assets/fonts/poppins/Poppins-Regular.ttf");
 }
 
 #root {
@@ -18,7 +23,7 @@
 }
 
 body {
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Poppins-Regular', sans-serif;
 }
 
 *::-webkit-scrollbar-track

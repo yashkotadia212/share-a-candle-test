@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import Loader from "../components/Loader";
 import TopHeader from "../components/TopHeader";
 import useAxios from "../hooks/useAxios";
-import { Button, message, Modal } from "antd";
+import { Button, message, Modal, Popconfirm } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
 import { MdOutlineModeEdit } from "react-icons/md";
 import { BiStore } from "react-icons/bi";
@@ -175,7 +175,7 @@ const TeamMemberDetails = () => {
             />
             <Earnings />
           </div>
-          <div className="flex my-16 pb-12">
+          <div className="flex my-10 pb-5">
             <div className="w-1/2">
               <SupportersList
                 supportersList={teamMemberDetails?.data?.supporters}
@@ -184,6 +184,19 @@ const TeamMemberDetails = () => {
             <div className="w-1/2">
               <LeaderboardList />
             </div>
+          </div>
+          <div className="w-full py-10 flex justify-center">
+            <Popconfirm
+              title="Delete Event"
+              description="Are you sure to delete this event?"
+              onConfirm={() => handleDeleteEventById()}
+              okText="Delete"
+              cancelText="Cancel"
+            >
+              <Button danger size="large" type="primary">
+                Delete Store{" "}
+              </Button>{" "}
+            </Popconfirm>
           </div>
           <Modal
             width={700}
