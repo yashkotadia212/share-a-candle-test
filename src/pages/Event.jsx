@@ -7,21 +7,6 @@ import dayjs from "dayjs";
 import useAxios from "../hooks/useAxios";
 import Loader from "../components/Loader";
 
-// {
-//   "id": "018d48b0-25e0-460e-911a-3f09e59a17cc",
-//   "eventName": "Share Candle2",
-//   "organizationType": "Non-Profit",
-//   "category": "Candle",
-//   "organizationName": "PLC",
-//   "zipcode": "12345",
-//   "minTeamSize": null,
-//   "maxTeamSize": null,
-//   "productType": "Software",
-//   "startDate": "2024-08-01",
-//   "endDate": "2024-08-05",
-//   "eventCode": "CLS1H7"
-// }
-
 const getAllEventsUrl =
   "https://nbg6jhqi7scugaz3mhtxcscbdy0msbuv.lambda-url.us-east-2.on.aws/";
 
@@ -59,7 +44,7 @@ const Event = () => {
           <div className="flex justify-start flex-wrap gap-4 pt-2 pb-10">
             <EventCard
               ev={{
-                eventName: "Organize an Event",
+                eventName: "Organize Event",
                 url: "/organize-event",
               }}
             />

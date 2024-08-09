@@ -20,6 +20,8 @@ import Loader from "../components/Loader";
 import calculateMinutesToTargetDate from "../utils/calculateMinutesToTargetDate";
 import dayjs from "dayjs";
 import normaliseWorddCase from "../utils/normaliseWordsCase";
+import useAuthStore from "../zustand/authStore";
+import areEmailsSame from "../utils/areEmailsSame";
 
 function convertMinutes(totalMinutes) {
   if (typeof totalMinutes !== "number") {
@@ -241,6 +243,7 @@ const EventDetails = () => {
   const [eventData, setEventData] = useState({});
   const [isTimeModalVisible, setIsTimeModalVisible] = useState(false);
   const [selectedRange, setSelectedRange] = useState(null);
+  const { auth } = useAuthStore();
 
   const showModal = () => {
     eventBasicDetailsForm.setFieldsValue({
@@ -291,9 +294,13 @@ const EventDetails = () => {
         "An error occurred. Please try again later. " + getEventById.error
       );
     } else if (getEventById.data) {
+      console.log("Event data:", getEventById.data);
+
       setEventData(getEventById.data);
     }
   }, [getEventById]);
+
+  console.log("Event data:", eventData?.event?.email, auth?.email);
 
   const showTimeModal = () => {
     setSelectedRange([
@@ -380,7 +387,9 @@ const EventDetails = () => {
               }}
               showModal={showModal}
             />
-            <ShareCode eventCode={eventData?.event?.eventCode} />
+            {eventData?.event?.email === auth?.email && (
+              <ShareCode eventCode={eventData?.event?.eventCode} />
+            )}
           </div>
           <div className="mt-10 flex justify-between">
             <EventStartsIn
@@ -400,6 +409,10 @@ const EventDetails = () => {
                 teamMembersList={eventData?.teamMembers}
                 handleApproveTeamMember={handleApproveTeamMember}
                 eventCode={eventData?.event?.eventCode}
+                isApproveVisible={areEmailsSame(
+                  eventData?.event?.email,
+                  auth?.email
+                )}
               />
             </div>
           </div>
@@ -835,8 +848,10 @@ const TeamMembersList = ({
   teamMembersList,
   handleApproveTeamMember,
   eventCode,
+  isApproveVisible,
 }) => {
   const navigate = useNavigate();
+  console.log("teamMembersList isApproveVisible", isApproveVisible);
 
   return (
     <div>
@@ -860,6 +875,7 @@ const TeamMembersList = ({
               <TeamMemberCard
                 teamMember={teamMember}
                 handleApproveTeamMember={handleApproveTeamMember}
+                isApproveVisible={isApproveVisible}
               />
             </List.Item>
           )}
@@ -869,7 +885,11 @@ const TeamMembersList = ({
   );
 };
 
-const TeamMemberCard = ({ teamMember, handleApproveTeamMember }) => {
+const TeamMemberCard = ({
+  teamMember,
+  handleApproveTeamMember,
+  isApproveVisible,
+}) => {
   return (
     <div
       className="flex gap-4 w-full items-center px-2"
@@ -891,7 +911,7 @@ const TeamMemberCard = ({ teamMember, handleApproveTeamMember }) => {
           <span className="font-semibold">${teamMember.fundraisingGoal}</span>
         </div>
       </div>
-      {teamMember.status !== "approved" && (
+      {isApproveVisible && teamMember.status !== "approved" && (
         <div className="ms-auto">
           <button
             className="bg-green-100 hover:bg-green-800 text-green-800 hover:text-white px-2 py-1 rounded-md transition"
@@ -915,13 +935,3 @@ const TeamMemberCard = ({ teamMember, handleApproveTeamMember }) => {
 };
 
 export default EventDetails;
-
-// {
-//   "id": "45658d2f-82f0-425d-b5cf-90b955eeca05",
-//   "eventCode": "NJUNNX",
-//   "fundraisingGoal": 15000,
-//   "email": "yashk@hexacoder.com",
-//   "status": "not-approved",
-//   "description": "In this example, handleDelete calls deleteData with an id and optional parameters, triggering the DELETE request. The component renders the loading state, data, or error message based on the request's outcome.",
-//   "name": "Yash Kotadia"
-// }

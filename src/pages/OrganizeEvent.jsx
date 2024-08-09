@@ -5,6 +5,7 @@ import useAxios from "../hooks/useAxios";
 import TopHeader from "../components/TopHeader";
 import { useNavigate } from "react-router-dom";
 import Loader from "../components/Loader";
+import useAuthStore from "../zustand/authStore";
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -16,6 +17,7 @@ const getProductTypeCollectionsUrl =
   "https://nbg6jhqi7scugaz3mhtxcscbdy0msbuv.lambda-url.us-east-2.on.aws/?collection=true";
 
 const OrganizeEvent = () => {
+  const { auth } = useAuthStore();
   const [organizeEventForm] = Form.useForm();
   const navigate = useNavigate();
   const postOrganizeEventData = useAxios(postOrganizeEventDataUrl);
@@ -39,6 +41,7 @@ const OrganizeEvent = () => {
       productType: values.productType.toString(),
       startDate: dayjs(values.dateRange[0]).format("YYYY-MM-DD"),
       endDate: dayjs(values.dateRange[1]).format("YYYY-MM-DD"),
+      email: auth?.email,
     };
     console.log("Form Values:", organizeEventDetails);
 

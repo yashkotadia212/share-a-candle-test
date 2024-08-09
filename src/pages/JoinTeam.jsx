@@ -17,7 +17,6 @@ const JoinTeam = () => {
   const joinTeam = useAxios(joinTeamUrl);
 
   const onFinish = (values) => {
-    console.log("Form Values:", values);
     joinTeam.postData({
       eventCode: values.teamCode.replace(/\s/g, ""),
       fundraisingGoal: values.fundraisingGoal,
@@ -106,7 +105,7 @@ const JoinTeam = () => {
               },
             ]}
           >
-            <Input size="large" />
+            <Input size="large" placeholder="e.g.: Amit Kumar" />
           </Form.Item>
 
           <Form.Item
@@ -119,7 +118,10 @@ const JoinTeam = () => {
               },
             ]}
           >
-            <Input.TextArea rows={4} />
+            <Input.TextArea
+              rows={4}
+              placeholder="e.g., Raising funds for a medical emergency"
+            />
           </Form.Item>
 
           <Form.Item
