@@ -866,11 +866,18 @@ const TeamMembersList = ({
           renderItem={(teamMember) => (
             <List.Item
               className="cursor-pointer mb-1 hover:shadow-md transition"
-              onClick={() =>
-                navigate("/team-member-details", {
-                  state: { eventCode: eventCode, teamMemberId: teamMember.id },
-                })
-              }
+              onClick={() => {
+                teamMember.status === "approved"
+                  ? navigate("/team-member-details", {
+                      state: {
+                        eventCode: eventCode,
+                        teamMemberId: teamMember.id,
+                      },
+                    })
+                  : message.error(
+                      "You are not authorized to view this page until approved!"
+                    );
+              }}
             >
               <TeamMemberCard
                 teamMember={teamMember}
