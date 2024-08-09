@@ -68,7 +68,8 @@ const SupporterStore = () => {
               eventName: storeDetails?.data?.event?.eventName,
               teamMemberName: storeDetails?.data?.teamMember?.name,
               description: storeDetails?.data?.teamMember?.description,
-              fundsRaised: "1400",
+              fundsRaised:
+                storeDetails?.data?.teamMember?.fundraisingGoal * 0.55,
               fundraisingGoal: storeDetails?.data?.teamMember?.fundraisingGoal,
               eventStartDate: storeDetails?.data?.event?.startDate,
               eventEndDate: storeDetails?.data?.event?.endDate,
@@ -264,9 +265,7 @@ const ProductCard = ({ product, event, teamMember }) => {
         <div className="text-2xl font-semibold">
           {product?.title?.replace(/-/g, " ")}
         </div>
-        <div className="text-xl">
-          ${Math.floor(Math.random() * (20 - 10 + 1)) + 10}
-        </div>
+        <div className="text-xl">${5}</div>
 
         <div className="mt-auto">
           <div>

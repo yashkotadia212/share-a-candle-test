@@ -18,6 +18,9 @@ import replacePathInUrl from "../utils/replacePathInUrl.js";
 const teamMemberDetailsBaseUrl =
   "https://ixmiyncibu2bfpr4wt64zbsz2y0rtczr.lambda-url.us-east-2.on.aws/";
 
+const leaderBoardListUrl =
+  "https://nbg6jhqi7scugaz3mhtxcscbdy0msbuv.lambda-url.us-east-2.on.aws/?id=b494b73e-0bb3-40c9-977a-1352fd1e19b0&leaderboard=true";
+
 function convertMinutes(totalMinutes) {
   if (typeof totalMinutes !== "number") {
     throw new Error("Input must be a non-negative number");
@@ -57,11 +60,31 @@ const leaderboardListData = [
   { rank: 20, teamMemberName: "Ursula White", donation: 150 },
 ];
 
+function sortByTotalSupportersPrice(arr) {
+  return arr?.sort((a, b) => b.totalSupportersPrice - a.totalSupportersPrice);
+}
+
 const TeamMemberDetails = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
   const [isShareModalVisible, setIsShareModalVisible] = React.useState(false);
   const teamMemberDetails = useAxios(teamMemberDetailsBaseUrl);
+  const leaderBoardListData = useAxios(leaderBoardListUrl);
+
+  useEffect(() => {
+    leaderBoardListData.getData();
+  }, []);
+
+  useEffect(() => {
+    if (leaderBoardListData.error) {
+      message.error("Error fetching leaderboard details");
+    } else {
+      console.log(
+        "leaderBoardListData?.data?.teamMembers",
+        leaderBoardListData?.data?.teamMembers
+      );
+    }
+  }, [leaderBoardListData]);
 
   useEffect(() => {
     teamMemberDetails.getData({
@@ -92,7 +115,7 @@ const TeamMemberDetails = () => {
 
   return (
     <>
-      {teamMemberDetails.loading ? (
+      {teamMemberDetails?.loading && leaderBoardListData?.loading ? (
         <Loader />
       ) : (
         <div>
@@ -182,7 +205,11 @@ const TeamMemberDetails = () => {
               />
             </div>
             <div className="w-1/2">
-              <LeaderboardList />
+              <LeaderboardList
+                leaderBoardListData={sortByTotalSupportersPrice(
+                  leaderBoardListData?.data?.teamMembers
+                )}
+              />
             </div>
           </div>
           <div className="w-full py-10 flex justify-center">
@@ -414,16 +441,16 @@ const SupportersList = ({ supportersList }) => {
   );
 };
 
-const LeaderboardCard = ({ supporter }) => {
+const LeaderboardCard = ({ teamMember, rank }) => {
   return (
     <div className="flex gap-4 w-full items-center">
       <div>
-        <div className="text-xl">{supporter.rank}</div>
+        <div className="text-xl">{rank}</div>
       </div>
       <div>
         <img
           alt="name placeholder"
-          src={`https://ui-avatars.com/api/?name=${supporter.teamMemberName.replace(
+          src={`https://ui-avatars.com/api/?name=${teamMember.name.replace(
             " ",
             "+"
           )}&font-size=0.33&size=40&color=fff`}
@@ -432,15 +459,17 @@ const LeaderboardCard = ({ supporter }) => {
       </div>
       <div>
         <div>
-          <div className="text-lg">{supporter.teamMemberName}</div>
+          <div className="text-lg">{teamMember.name}</div>
         </div>
       </div>
-      <div className="ms-auto text-xl font-semibold">${supporter.donation}</div>
+      <div className="ms-auto text-xl font-semibold">
+        ${teamMember.totalSupportersPrice}
+      </div>
     </div>
   );
 };
 
-const LeaderboardList = () => {
+const LeaderboardList = ({ leaderBoardListData }) => {
   return (
     <div>
       <div className="text-xl font-semibold">Leaderboard</div>
@@ -450,10 +479,10 @@ const LeaderboardList = () => {
       />
       <div className="px-4 h-[500px] overflow-scroll">
         <List
-          dataSource={leaderboardListData}
-          renderItem={(item) => (
+          dataSource={leaderBoardListData}
+          renderItem={(item, index) => (
             <List.Item>
-              <LeaderboardCard supporter={item} />
+              <LeaderboardCard teamMember={item} rank={index + 1} />
             </List.Item>
           )}
         />
