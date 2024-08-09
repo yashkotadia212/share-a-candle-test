@@ -68,7 +68,7 @@ const SupporterStore = () => {
               eventName: storeDetails?.data?.event?.eventName,
               teamMemberName: storeDetails?.data?.teamMember?.name,
               description: storeDetails?.data?.teamMember?.description,
-              fundsRaised: "1000",
+              fundsRaised: "1400",
               fundraisingGoal: storeDetails?.data?.teamMember?.fundraisingGoal,
               eventStartDate: storeDetails?.data?.event?.startDate,
               eventEndDate: storeDetails?.data?.event?.endDate,
@@ -141,7 +141,7 @@ const StoreBanner = ({ storeBannerData }) => {
               fundsRaised={storeBannerData?.fundsRaised}
               targetGoal={storeBannerData?.fundraisingGoal}
             />
-            <div className="w-full text-center text-gray-400">
+            <div className="w-full mt-10 text-center text-gray-400">
               Remaining Days - {remainingDays} / {totalDays} Days
             </div>
           </div>
@@ -189,21 +189,28 @@ const FundraisingProgress = ({ fundsRaised, targetGoal }) => {
           "100%": "#000000",
         }}
         showInfo={false}
-      >
-        <div className="absolute left-0">$0</div>
-      </Progress>
+      />
       <div className="flex justify-between absolute top-5 w-full">
-        <span className="text-gray-500 text-sm">${0}</span>
-        <span className="text-gray-500 text-sm">
-          ${targetGoal?.toLocaleString()}
-        </span>
+        {progressPercentage >= 0 && progressPercentage <= 9 ? (
+          <span className="text-gray-500 text-sm"></span>
+        ) : (
+          <span className="text-gray-500 text-sm">${0}</span>
+        )}
+
+        {progressPercentage >= 85 && progressPercentage <= 100 ? (
+          <span className="text-gray-500 text-sm"></span>
+        ) : (
+          <span className="text-gray-500 text-sm">
+            ${targetGoal?.toLocaleString()}
+          </span>
+        )}
       </div>
       <div>
         <span
           style={{
-            left: `calc(${progressPercentage}% - 20px)`,
+            left: `calc(${progressPercentage}% - 25px)`,
           }}
-          className="text-lg font-semibold absolute"
+          className="text-lg font-semibold absolute bg-gray-200 z-10"
         >
           ${fundsRaised.toLocaleString()}
         </span>
