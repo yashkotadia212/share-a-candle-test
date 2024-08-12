@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import copy from "copy-text-to-clipboard";
+import getEventStatus from "../utils/getEventStatus";
 import { BsCopy } from "react-icons/bs";
 import TopHeader from "../components/TopHeader";
 import {
@@ -34,149 +35,10 @@ function convertMinutes(totalMinutes) {
 
   const days = Math.floor(totalMinutes / (60 * 24));
   const hours = Math.floor((totalMinutes % (60 * 24)) / 60);
-  const minutes = totalMinutes % 60;
+  const minutes = (totalMinutes % 60) + 1;
 
   return { days, hours, minutes };
 }
-
-// const supportersListData = [
-//   {
-//     supporterName: "Alice Johnson",
-//     donationHoursAgo: 5,
-//     city: "New York",
-//     state: "NY",
-//     amountInDollars: 100,
-//     message: "Keep up the great work!",
-//   },
-//   {
-//     supporterName: "Bob Smith",
-//     donationHoursAgo: 2,
-//     city: "Los Angeles",
-//     state: "CA",
-//     amountInDollars: 250,
-//     // No message provided
-//   },
-//   {
-//     supporterName: "Carol Davis",
-//     donationHoursAgo: 8,
-//     city: "Chicago",
-//     state: "IL",
-//     amountInDollars: 150,
-//     message: "Proud to support this cause!",
-//   },
-//   {
-//     supporterName: "David Lee",
-//     donationHoursAgo: 12,
-//     city: "Houston",
-//     state: "TX",
-//     amountInDollars: 200,
-//     // No message provided
-//   },
-//   {
-//     supporterName: "Eva Martinez",
-//     donationHoursAgo: 1,
-//     city: "San Francisco",
-//     state: "CA",
-//     amountInDollars: 75,
-//     message: "Happy to contribute!",
-//   },
-//   {
-//     supporterName: "Frank Wilson",
-//     donationHoursAgo: 3,
-//     city: "Seattle",
-//     state: "WA",
-//     amountInDollars: 125,
-//     message: "Glad to help out!",
-//   },
-//   {
-//     supporterName: "Grace Taylor",
-//     donationHoursAgo: 7,
-//     city: "Denver",
-//     state: "CO",
-//     amountInDollars: 90,
-//     message: "Supporting a great cause!",
-//   },
-//   {
-//     supporterName: "Hank Green",
-//     donationHoursAgo: 6,
-//     city: "Phoenix",
-//     state: "AZ",
-//     amountInDollars: 110,
-//     message: "Keep making a difference!",
-//   },
-//   {
-//     supporterName: "Ivy Brown",
-//     donationHoursAgo: 4,
-//     city: "Philadelphia",
-//     state: "PA",
-//     amountInDollars: 180,
-//     message: "Thank you for all you do!",
-//   },
-//   {
-//     supporterName: "Jack White",
-//     donationHoursAgo: 9,
-//     city: "San Antonio",
-//     state: "TX",
-//     amountInDollars: 220,
-//     message: "Here’s to making an impact!",
-//   },
-//   {
-//     supporterName: "Kara Black",
-//     donationHoursAgo: 11,
-//     city: "Dallas",
-//     state: "TX",
-//     amountInDollars: 95,
-//     message: "Keep up the good work!",
-//   },
-//   {
-//     supporterName: "Liam Harris",
-//     donationHoursAgo: 10,
-//     city: "San Diego",
-//     state: "CA",
-//     amountInDollars: 135,
-//     message: "Proud to be part of this!",
-//   },
-//   {
-//     supporterName: "Mia Clark",
-//     donationHoursAgo: 15,
-//     city: "San Jose",
-//     state: "CA",
-//     amountInDollars: 300,
-//     message: "Happy to support this initiative!",
-//   },
-//   {
-//     supporterName: "Noah Lewis",
-//     donationHoursAgo: 14,
-//     city: "Austin",
-//     state: "TX",
-//     amountInDollars: 140,
-//     message: "Glad to contribute!",
-//   },
-//   {
-//     supporterName: "Olivia King",
-//     donationHoursAgo: 13,
-//     city: "Jacksonville",
-//     state: "FL",
-//     amountInDollars: 70,
-//     message: "Happy to help!",
-//   },
-//   {
-//     supporterName: "Paul Young",
-//     donationHoursAgo: 16,
-//     city: "Columbus",
-//     state: "OH",
-//     amountInDollars: 80,
-//     message: "Every little bit helps!",
-//   },
-//   {
-//     supporterName: "Quinn Scott",
-//     donationHoursAgo: 18,
-//     city: "Indianapolis",
-//     state: "IN",
-//     amountInDollars: 65,
-//     message: "Glad to be of assistance!",
-//   },
-// ];
 
 const leaderboardListData = [
   { rank: 1, teamMemberName: "Bob Smith", donation: 1500 },
@@ -266,7 +128,7 @@ const EventDetails = () => {
 
   const onFinish = (values) => {
     // console.log("Form values:", values);
-    values.id = state.eventId;
+    values.id = state?.eventId;
     editEventDetail.putData(values);
     setIsModalOpen(false);
   };
@@ -607,16 +469,7 @@ const EventStartsIn = ({ startDate, endDate, showTimeModal }) => {
 
   const endsInMinutes = convertMinutes(calculateMinutesToTargetDate(endDate));
 
-  const status =
-    startsInMinutes.days > 0 &&
-    startsInMinutes.hours > 0 &&
-    startsInMinutes.minutes > 0
-      ? "Upcoming"
-      : endsInMinutes.days == 0 &&
-        endsInMinutes.hours == 0 &&
-        endsInMinutes.minutes == 0
-      ? "Ended"
-      : "Ongoing";
+  const status = getEventStatus(startsInMinutes, endsInMinutes);
 
   return (
     <>
@@ -929,7 +782,7 @@ const TeamMemberCard = ({
               handleApproveTeamMember(
                 {
                   id: teamMember.id,
-                  status: "approved",
+                  memberStatus: "approved",
                 },
                 evnt
               )

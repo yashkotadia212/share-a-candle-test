@@ -9,6 +9,7 @@ import normaliseWorddCase from "../utils/normaliseWordsCase";
 import Loader from "../components/Loader";
 import dayjs from "dayjs";
 import ShareLink from "../components/ShareLink";
+import ThreeDCarousel from "../components/ThreeDCarousel";
 
 const storeDetailsBaseUrl =
   "https://ixmiyncibu2bfpr4wt64zbsz2y0rtczr.lambda-url.us-east-2.on.aws/";
@@ -77,6 +78,7 @@ const SupporterStore = () => {
           />
           <StoreItem storeDetails={storeDetails} />
           <RecentSupporters supportersList={storeDetails?.data?.supporters} />
+          <ThreeDCarousel />
         </div>
       )}
     </>

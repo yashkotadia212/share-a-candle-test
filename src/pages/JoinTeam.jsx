@@ -4,6 +4,7 @@ import { Form, Input, InputNumber, Button, message, Checkbox } from "antd";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import useAuthStore from "../zustand/authStore";
 import useAxios from "../hooks/useAxios";
+import { useNavigate } from "react-router-dom";
 
 const INITIAL_FUNDRAISING_GOAL = 2000;
 const STEP_AMOUNT = 100;
@@ -11,6 +12,7 @@ const joinTeamUrl =
   "https://ixmiyncibu2bfpr4wt64zbsz2y0rtczr.lambda-url.us-east-2.on.aws/";
 
 const JoinTeam = () => {
+  const navigate = useNavigate();
   const [joinTeamFormRef] = Form.useForm();
   const [internalValue, setInternalValue] = useState(INITIAL_FUNDRAISING_GOAL);
   const { auth } = useAuthStore();
@@ -20,10 +22,10 @@ const JoinTeam = () => {
     joinTeam.postData({
       eventCode: values.teamCode.replace(/\s/g, ""),
       fundraisingGoal: values.fundraisingGoal,
-      email: auth.email,
-      name: values.name,
-      description: values.description,
-      isDiscoverable: values.isDiscoverable.toString(),
+      email: auth?.email,
+      name: values?.name,
+      description: values?.description,
+      isDiscoverable: values?.isDiscoverable.toString(),
     });
   };
 
@@ -33,7 +35,9 @@ const JoinTeam = () => {
     }
     if (joinTeam?.data) {
       message.success("Successfully joined team!");
-      console.log("Join Team Response:", joinTeam.data);
+      setTimeout(() => {
+        navigate("/events");
+      }, 1200);
     }
   }, [joinTeam]);
 
@@ -66,7 +70,11 @@ const JoinTeam = () => {
           form={joinTeamFormRef}
           name="joinTeamForm"
           onFinish={onFinish}
-          initialValues={{ teamCode: "", fundraisingGoal: internalValue }}
+          initialValues={{
+            teamCode: "",
+            fundraisingGoal: internalValue,
+            isDiscoverable: false,
+          }}
           layout="vertical"
         >
           <Form.Item
