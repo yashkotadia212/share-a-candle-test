@@ -4,7 +4,7 @@ import TopHeader from "../components/TopHeader";
 import { Button, message, Modal, Divider, List } from "antd";
 import storeImage from "../assets/images/store/store-placeholder.jpg.jpg";
 import { Progress } from "antd";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import normaliseWorddCase from "../utils/normaliseWordsCase";
 import Loader from "../components/Loader";
 import dayjs from "dayjs";
@@ -36,6 +36,7 @@ function calculateDays(startDate, endDate) {
 }
 
 const SupporterStore = () => {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const eventCode = searchParams?.get("eventCode");
   const teamMemberId = searchParams?.get("teamMemberId");
@@ -51,7 +52,11 @@ const SupporterStore = () => {
 
   useEffect(() => {
     if (storeDetails.error) {
-      message.error("Error fetching team member details");
+      message.error("Error fetching store details");
+      if (!eventCode || !teamMemberId) {
+        message.error("Invalid Store Link!");
+        navigate("/");
+      }
     } else if (storeDetails.data) {
       console.log("storeDetails", storeDetails?.data);
     }
@@ -78,7 +83,7 @@ const SupporterStore = () => {
           />
           <StoreItem storeDetails={storeDetails} />
           <RecentSupporters supportersList={storeDetails?.data?.supporters} />
-          <ThreeDCarousel />
+          {/* <ThreeDCarousel /> */}
         </div>
       )}
     </>
