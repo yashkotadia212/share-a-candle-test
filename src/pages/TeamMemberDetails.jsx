@@ -19,7 +19,7 @@ const teamMemberDetailsBaseUrl =
   "https://ixmiyncibu2bfpr4wt64zbsz2y0rtczr.lambda-url.us-east-2.on.aws/";
 
 const leaderBoardListUrl =
-  "https://nbg6jhqi7scugaz3mhtxcscbdy0msbuv.lambda-url.us-east-2.on.aws/?id=b494b73e-0bb3-40c9-977a-1352fd1e19b0&leaderboard=true";
+  "https://nbg6jhqi7scugaz3mhtxcscbdy0msbuv.lambda-url.us-east-2.on.aws/";
 
 function convertMinutes(totalMinutes) {
   if (typeof totalMinutes !== "number") {
@@ -37,29 +37,6 @@ function convertMinutes(totalMinutes) {
   return { days, hours, minutes };
 }
 
-const leaderboardListData = [
-  { rank: 1, teamMemberName: "Bob Smith", donation: 1500 },
-  { rank: 2, teamMemberName: "Ivy Brown", donation: 1000 },
-  { rank: 3, teamMemberName: "Grace Taylor", donation: 950 },
-  { rank: 4, teamMemberName: "Eva Martinez", donation: 800 },
-  { rank: 5, teamMemberName: "Carol Davis", donation: 700 },
-  { rank: 6, teamMemberName: "Jack White", donation: 650 },
-  { rank: 7, teamMemberName: "Alice Johnson", donation: 500 },
-  { rank: 8, teamMemberName: "Frank Wilson", donation: 450 },
-  { rank: 9, teamMemberName: "Hank Green", donation: 300 },
-  { rank: 10, teamMemberName: "David Lee", donation: 1200 },
-  { rank: 11, teamMemberName: "Liam Harris", donation: 550 },
-  { rank: 12, teamMemberName: "Mia Clark", donation: 400 },
-  { rank: 13, teamMemberName: "Noah Lewis", donation: 350 },
-  { rank: 14, teamMemberName: "Olivia King", donation: 300 },
-  { rank: 15, teamMemberName: "Paul Young", donation: 275 },
-  { rank: 16, teamMemberName: "Quinn Scott", donation: 250 },
-  { rank: 17, teamMemberName: "Riley Adams", donation: 225 },
-  { rank: 18, teamMemberName: "Sophia Brown", donation: 200 },
-  { rank: 19, teamMemberName: "Thomas Green", donation: 175 },
-  { rank: 20, teamMemberName: "Ursula White", donation: 150 },
-];
-
 function sortByTotalSupportersPrice(arr) {
   return arr?.sort((a, b) => b.totalSupportersPrice - a.totalSupportersPrice);
 }
@@ -71,18 +48,13 @@ const TeamMemberDetails = () => {
   const teamMemberDetails = useAxios(teamMemberDetailsBaseUrl);
   const leaderBoardListData = useAxios(leaderBoardListUrl);
 
-  useEffect(() => {
-    leaderBoardListData.getData();
-  }, []);
+  // useEffect(() => {
+  //   leaderBoardListData.getData();
+  // }, []);
 
   useEffect(() => {
     if (leaderBoardListData.error) {
       message.error("Error fetching leaderboard details");
-    } else {
-      console.log(
-        "leaderBoardListData?.data?.teamMembers",
-        leaderBoardListData?.data?.teamMembers
-      );
     }
   }, [leaderBoardListData]);
 
@@ -91,6 +63,10 @@ const TeamMemberDetails = () => {
       eventCode: state?.eventCode,
       teamMemberId: state?.teamMemberId,
     });
+    leaderBoardListData.getData({
+      id: state?.eventId,
+      leaderboard: true,
+    });
   }, [state]);
 
   useEffect(() => {
@@ -98,8 +74,6 @@ const TeamMemberDetails = () => {
       message.error("Error fetching team member details");
     }
   }, [teamMemberDetails]);
-
-  console.log("teamMemberDetails?.data?.products?", teamMemberDetails?.data);
 
   const handleOkShareModal = () => {
     setIsShareModalVisible(false);
@@ -115,7 +89,7 @@ const TeamMemberDetails = () => {
 
   return (
     <>
-      {teamMemberDetails?.loading && leaderBoardListData?.loading ? (
+      {teamMemberDetails?.loading || leaderBoardListData?.loading ? (
         <Loader />
       ) : (
         <div>

@@ -349,7 +349,7 @@ const SupporterCard = ({ supporter }) => {
 const SupportersList = ({ supportersList }) => {
   return (
     <div>
-      <div className="text-xl font-semibold">Your Supporters</div>
+      {/* <div className="text-xl font-semibold">Your Supporters</div>  */}
       <Divider
         orientation="left"
         style={{ color: "#333", fontWeight: "normal" }}

@@ -408,6 +408,7 @@ const EventDetails = () => {
               <TeamMembersList
                 teamMembersList={eventData?.teamMembers}
                 handleApproveTeamMember={handleApproveTeamMember}
+                eventId={eventData?.event?.id}
                 eventCode={eventData?.event?.eventCode}
                 isApproveVisible={areEmailsSame(
                   eventData?.event?.email,
@@ -847,11 +848,11 @@ const ProductCard = ({ product }) => {
 const TeamMembersList = ({
   teamMembersList,
   handleApproveTeamMember,
+  eventId,
   eventCode,
   isApproveVisible,
 }) => {
   const navigate = useNavigate();
-  console.log("teamMembersList isApproveVisible", isApproveVisible);
 
   return (
     <div>
@@ -870,6 +871,7 @@ const TeamMembersList = ({
                 teamMember.status === "approved"
                   ? navigate("/team-member-details", {
                       state: {
+                        eventId: eventId,
                         eventCode: eventCode,
                         teamMemberId: teamMember.id,
                       },
