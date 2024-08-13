@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+      display: none;
+  }
+ /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;  /* Firefox */
+}
+}
+
+
 @font-face {
   font-family: "Jua";
   src: url("../src//assets/fonts/jua/Jua-Regular.ttf");
@@ -56,4 +69,23 @@ body {
 .fundraining-custom-number-input > .ant-input-number-wrapper > .ant-input-number-in-form-item > .ant-input-number-input-wrap > input {
   font-size: 25px !important;
   text-align: center;
+}
+
+
+/* removeswiper navigation button default icon */
+.swiper-button-prev:after, 
+.swiper-button-next:after {
+  content: '' !important;
+}
+
+/* Remove arrows in Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* Remove arrows in Chrome, Safari, Edge, and Opera */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }

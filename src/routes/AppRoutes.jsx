@@ -11,6 +11,7 @@ import JoinTeam from "../pages/JoinTeam";
 import PrivateRoutes from "./PrivateRoutes";
 import TeamMemberDetails from "../pages/TeamMemberDetails";
 import SupporterStore from "../pages/SupporterStore";
+import ProductDetails from "../pages/ProductDetails";
 
 const AppRoutes = () => {
   return (
@@ -20,6 +21,7 @@ const AppRoutes = () => {
       <Route path="/login" element={<Login />} />
       <Route path="*" element={<PageNotFound />} />
       <Route path="/store" element={<SupporterStore />} />
+      <Route path="/product-details" element={<ProductDetails />} />
 
       <Route element={<PrivateRoutes />}>
         <Route path="/events" element={<Event />} />

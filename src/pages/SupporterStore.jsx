@@ -9,13 +9,305 @@ import normaliseWorddCase from "../utils/normaliseWordsCase";
 import Loader from "../components/Loader";
 import dayjs from "dayjs";
 import ShareLink from "../components/ShareLink";
-import ThreeDCarousel from "../components/ThreeDCarousel";
+import ScrollResponsiveProducts from "../components/ScrollResponsiveProducts";
+import StoreProductsSlider from "../components/StoreProductsSlider";
 
 const storeDetailsBaseUrl =
   "https://ixmiyncibu2bfpr4wt64zbsz2y0rtczr.lambda-url.us-east-2.on.aws/";
 
 const productCheckoutUrl =
   "https://3z5hdsxs6q62srcolcwfvmvnje0mpiip.lambda-url.us-east-2.on.aws/";
+
+const dummyProducts = [
+  {
+    id: 8977677189351,
+    title: "OZ. MASON JAR",
+    body_html:
+      "<p><span>*Price includes Standard Jar + Candle Wax Fill* Choose from one of our in-house fragrances. Premium fragrances are available at an additional cost. Check the Pick your scent tab for a full list of fragrances.</span></p>\n<!---->",
+    image: {
+      id: 42795851546855,
+      alt: null,
+      position: 1,
+      product_id: 8977677189351,
+      created_at: "2024-08-01T08:11:05-04:00",
+      updated_at: "2024-08-01T08:11:17-04:00",
+      admin_graphql_api_id: "gid://shopify/ProductImage/42795851546855",
+      width: 298,
+      height: 298,
+      src: "https://cdn.shopify.com/s/files/1/0699/7403/2615/files/OZ.MASONJAR.jpg?v=1722514266",
+    },
+  },
+  {
+    id: 8977677189352,
+    title: "SILVER CANDLE HOLDER",
+    body_html:
+      "<p><span>*Elegant silver candle holder for all occasions. Fits standard candles and adds a touch of sophistication to any room.*</span></p>\n<!---->",
+    image: {
+      id: 42795851546856,
+      alt: null,
+      position: 1,
+      product_id: 8977677189352,
+      created_at: "2024-08-02T08:11:05-04:00",
+      updated_at: "2024-08-02T08:11:17-04:00",
+      admin_graphql_api_id: "gid://shopify/ProductImage/42795851546856",
+      width: 300,
+      height: 300,
+      src: "https://cdn.shopify.com/s/files/1/0699/7403/2615/files/OZ.MASONJAR.jpg?v=1722514266",
+    },
+  },
+  {
+    id: 8977677189353,
+    title: "LUXURY SCENTED CANDLE",
+    body_html:
+      "<p><span>*Infused with premium fragrances, this candle creates a relaxing atmosphere. Choose from a variety of scents to suit your mood.*</span></p>\n<!---->",
+    image: {
+      id: 42795851546857,
+      alt: null,
+      position: 1,
+      product_id: 8977677189353,
+      created_at: "2024-08-03T08:11:05-04:00",
+      updated_at: "2024-08-03T08:11:17-04:00",
+      admin_graphql_api_id: "gid://shopify/ProductImage/42795851546857",
+      width: 302,
+      height: 302,
+      src: "https://cdn.shopify.com/s/files/1/0699/7403/2615/files/OZ.MASONJAR.jpg?v=1722514266",
+    },
+  },
+  {
+    id: 8977677189354,
+    title: "WAX MELTS SET",
+    body_html:
+      "<p><span>*Enjoy a variety of scents with this set of wax melts. Perfect for any wax warmer and creates a delightful aroma.*</span></p>\n<!---->",
+    image: {
+      id: 42795851546858,
+      alt: null,
+      position: 1,
+      product_id: 8977677189354,
+      created_at: "2024-08-04T08:11:05-04:00",
+      updated_at: "2024-08-04T08:11:17-04:00",
+      admin_graphql_api_id: "gid://shopify/ProductImage/42795851546858",
+      width: 304,
+      height: 304,
+      src: "https://cdn.shopify.com/s/files/1/0699/7403/2615/files/OZ.MASONJAR.jpg?v=1722514266",
+    },
+  },
+  {
+    id: 8977677189355,
+    title: "HANDMADE SOAP BAR",
+    body_html:
+      "<p><span>*Made with natural ingredients, this soap bar is gentle on the skin and provides a luxurious lather.*</span></p>\n<!---->",
+    image: {
+      id: 42795851546859,
+      alt: null,
+      position: 1,
+      product_id: 8977677189355,
+      created_at: "2024-08-05T08:11:05-04:00",
+      updated_at: "2024-08-05T08:11:17-04:00",
+      admin_graphql_api_id: "gid://shopify/ProductImage/42795851546859",
+      width: 306,
+      height: 306,
+      src: "https://cdn.shopify.com/s/files/1/0699/7403/2615/files/OZ.MASONJAR.jpg?v=1722514266",
+    },
+  },
+  {
+    id: 8977677189356,
+    title: "AROMATIC OIL SET",
+    body_html:
+      "<p><span>*Experience the benefits of aromatherapy with this set of essential oils. Perfect for diffusing or topical application.*</span></p>\n<!---->",
+    image: {
+      id: 42795851546860,
+      alt: null,
+      position: 1,
+      product_id: 8977677189356,
+      created_at: "2024-08-06T08:11:05-04:00",
+      updated_at: "2024-08-06T08:11:17-04:00",
+      admin_graphql_api_id: "gid://shopify/ProductImage/42795851546860",
+      width: 308,
+      height: 308,
+      src: "https://cdn.shopify.com/s/files/1/0699/7403/2615/files/OZ.MASONJAR.jpg?v=1722514266",
+    },
+  },
+  {
+    id: 8977677189357,
+    title: "DECORATIVE TRAY",
+    body_html:
+      "<p><span>*Stylish tray perfect for organizing candles and other small items. Adds a touch of elegance to any space.*</span></p>\n<!---->",
+    image: {
+      id: 42795851546861,
+      alt: null,
+      position: 1,
+      product_id: 8977677189357,
+      created_at: "2024-08-07T08:11:05-04:00",
+      updated_at: "2024-08-07T08:11:17-04:00",
+      admin_graphql_api_id: "gid://shopify/ProductImage/42795851546861",
+      width: 310,
+      height: 310,
+      src: "https://cdn.shopify.com/s/files/1/0699/7403/2615/files/OZ.MASONJAR.jpg?v=1722514266",
+    },
+  },
+  {
+    id: 8977677189358,
+    title: "SCENTED CANDLE TIN",
+    body_html:
+      "<p><span>*Compact and portable scented candle in a tin. Ideal for travel or small spaces.*</span></p>\n<!---->",
+    image: {
+      id: 42795851546862,
+      alt: null,
+      position: 1,
+      product_id: 8977677189358,
+      created_at: "2024-08-08T08:11:05-04:00",
+      updated_at: "2024-08-08T08:11:17-04:00",
+      admin_graphql_api_id: "gid://shopify/ProductImage/42795851546862",
+      width: 312,
+      height: 312,
+      src: "https://cdn.shopify.com/s/files/1/0699/7403/2615/files/OZ.MASONJAR.jpg?v=1722514266",
+    },
+  },
+  {
+    id: 8977677189359,
+    title: "CANDLE WARMER",
+    body_html:
+      "<p><span>*Electric candle warmer to safely melt your favorite candles without a flame.*</span></p>\n<!---->",
+    image: {
+      id: 42795851546863,
+      alt: null,
+      position: 1,
+      product_id: 8977677189359,
+      created_at: "2024-08-09T08:11:05-04:00",
+      updated_at: "2024-08-09T08:11:17-04:00",
+      admin_graphql_api_id: "gid://shopify/ProductImage/42795851546863",
+      width: 314,
+      height: 314,
+      src: "https://cdn.shopify.com/s/files/1/0699/7403/2615/files/OZ.MASONJAR.jpg?v=1722514266",
+    },
+  },
+  {
+    id: 8977677189360,
+    title: "WICK TRIMMER",
+    body_html:
+      "<p><span>*Essential tool for maintaining your candles. Keeps wicks trimmed for a cleaner burn.*</span></p>\n<!---->",
+    image: {
+      id: 42795851546864,
+      alt: null,
+      position: 1,
+      product_id: 8977677189360,
+      created_at: "2024-08-10T08:11:05-04:00",
+      updated_at: "2024-08-10T08:11:17-04:00",
+      admin_graphql_api_id: "gid://shopify/ProductImage/42795851546864",
+      width: 316,
+      height: 316,
+      src: "https://cdn.shopify.com/s/files/1/0699/7403/2615/files/OZ.MASONJAR.jpg?v=1722514266",
+    },
+  },
+  {
+    id: 8977677189361,
+    title: "CANDLE REFILL",
+    body_html:
+      "<p><span>*Refill for your candle jar. Available in a variety of scents.*</span></p>\n<!---->",
+    image: {
+      id: 42795851546865,
+      alt: null,
+      position: 1,
+      product_id: 8977677189361,
+      created_at: "2024-08-11T08:11:05-04:00",
+      updated_at: "2024-08-11T08:11:17-04:00",
+      admin_graphql_api_id: "gid://shopify/ProductImage/42795851546865",
+      width: 318,
+      height: 318,
+      src: "https://cdn.shopify.com/s/files/1/0699/7403/2615/files/OZ.MASONJAR.jpg?v=1722514266",
+    },
+  },
+  {
+    id: 8977677189362,
+    title: "CANDLE MAKING KIT",
+    body_html:
+      "<p><span>*Everything you need to make your own candles at home. Includes wax, wicks, and scents.*</span></p>\n<!---->",
+    image: {
+      id: 42795851546866,
+      alt: null,
+      position: 1,
+      product_id: 8977677189362,
+      created_at: "2024-08-12T08:11:05-04:00",
+      updated_at: "2024-08-12T08:11:17-04:00",
+      admin_graphql_api_id: "gid://shopify/ProductImage/42795851546866",
+      width: 320,
+      height: 320,
+      src: "https://cdn.shopify.com/s/files/1/0699/7403/2615/files/OZ.MASONJAR.jpg?v=1722514266",
+    },
+  },
+  {
+    id: 8977677189363,
+    title: "CANDLE SCENTED SPRAY",
+    body_html:
+      "<p><span>*Spray to add a burst of fragrance to any room. Long-lasting and refreshing.*</span></p>\n<!---->",
+    image: {
+      id: 42795851546867,
+      alt: null,
+      position: 1,
+      product_id: 8977677189363,
+      created_at: "2024-08-13T08:11:05-04:00",
+      updated_at: "2024-08-13T08:11:17-04:00",
+      admin_graphql_api_id: "gid://shopify/ProductImage/42795851546867",
+      width: 322,
+      height: 322,
+      src: "https://cdn.shopify.com/s/files/1/0699/7403/2615/files/OZ.MASONJAR.jpg?v=1722514266",
+    },
+  },
+  {
+    id: 8977677189364,
+    title: "WICK DIPPER",
+    body_html:
+      "<p><span>*Tool for extinguishing candles and preventing soot. Essential for candle care.*</span></p>\n<!---->",
+    image: {
+      id: 42795851546868,
+      alt: null,
+      position: 1,
+      product_id: 8977677189364,
+      created_at: "2024-08-14T08:11:05-04:00",
+      updated_at: "2024-08-14T08:11:17-04:00",
+      admin_graphql_api_id: "gid://shopify/ProductImage/42795851546868",
+      width: 324,
+      height: 324,
+      src: "https://cdn.shopify.com/s/files/1/0699/7403/2615/files/OZ.MASONJAR.jpg?v=1722514266",
+    },
+  },
+  {
+    id: 8977677189365,
+    title: "CANDLE STORAGE BOX",
+    body_html:
+      "<p><span>*Keep your candles organized and protected with this stylish storage box.*</span></p>\n<!---->",
+    image: {
+      id: 42795851546869,
+      alt: null,
+      position: 1,
+      product_id: 8977677189365,
+      created_at: "2024-08-15T08:11:05-04:00",
+      updated_at: "2024-08-15T08:11:17-04:00",
+      admin_graphql_api_id: "gid://shopify/ProductImage/42795851546869",
+      width: 326,
+      height: 326,
+      src: "https://cdn.shopify.com/s/files/1/0699/7403/2615/files/OZ.MASONJAR.jpg?v=1722514266",
+    },
+  },
+  {
+    id: 8977677189366,
+    title: "GIFT SET",
+    body_html:
+      "<p><span>*Perfect for any occasion. Includes a selection of our best-selling candles and accessories.*</span></p>\n<!---->",
+    image: {
+      id: 42795851546870,
+      alt: null,
+      position: 1,
+      product_id: 8977677189366,
+      created_at: "2024-08-16T08:11:05-04:00",
+      updated_at: "2024-08-16T08:11:17-04:00",
+      admin_graphql_api_id: "gid://shopify/ProductImage/42795851546870",
+      width: 328,
+      height: 328,
+      src: "https://cdn.shopify.com/s/files/1/0699/7403/2615/files/OZ.MASONJAR.jpg?v=1722514266",
+    },
+  },
+];
 
 function calculateDays(startDate, endDate) {
   const start = dayjs(startDate);
@@ -82,8 +374,8 @@ const SupporterStore = () => {
             }}
           />
           <StoreItem storeDetails={storeDetails} />
+          <ScrollResponsiveProducts />
           <RecentSupporters supportersList={storeDetails?.data?.supporters} />
-          {/* <ThreeDCarousel /> */}
         </div>
       )}
     </>
@@ -233,62 +525,57 @@ const StoreItem = ({ storeDetails }) => {
       <div className="w-full text-center text-4xl font-semibold">
         Buy to support
       </div>
-      <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 mt-7 max-w-[3500px] gap-5">
-        {[storeDetails?.data?.products].map((product, index) => (
-          <ProductCard
-            key={index}
-            product={product}
-            event={storeDetails?.data?.event}
-            teamMember={storeDetails?.data?.teamMember}
-          />
-        ))}
-      </div>
+      <StoreProductsSlider totalProducts={dummyProducts} chunkSize={8} />
     </div>
   );
 };
 
 const ProductCard = ({ product, event, teamMember }) => {
-  const productCheckout = useAxios(productCheckoutUrl);
+  const navigate = useNavigate();
+  // const productCheckout = useAxios(productCheckoutUrl);
 
-  useEffect(() => {
-    if (productCheckout.error) {
-      message.error("Error Buying Product");
-    } else if (productCheckout.data) {
-      window.location.href = productCheckout.data.checkout.webUrl;
-    }
-  }, [productCheckout]);
+  // useEffect(() => {
+  //   if (productCheckout.error) {
+  //     message.error("Error Buying Product");
+  //   } else if (productCheckout.data) {
+  //     window.location.href = productCheckout.data.checkout.webUrl;
+  //   }
+  // }, [productCheckout]);
 
   return (
-    <div className="w-full h-[450px] rounded-xl border border-gray-200 shadow-xl p-3 bg-gray-50">
+    <div
+      className="relative w-full h-[420px] rounded-xl border border-gray-200 shadow-lg bg-gray-50 hover:shadow-xl cursor-pointer transition"
+      onClick={() => navigate("/product-details")}
+    >
       <div
-        className="w-full h-52 rounded-lg"
+        className="w-full h-72 rounded-lg"
         style={{
           backgroundImage: `url(${product?.image?.src})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
       ></div>
-      <div className="m-1 flex flex-col h-[210px]">
-        <div className="text-2xl font-semibold">
+      <div className="m-1 flex flex-col h-[210px] p-2">
+        <div className="text-xl font-semibold underline">
           {product?.title?.replace(/-/g, " ")}
         </div>
-        <div className="text-xl">${5}</div>
-
+        <div className="text-xl absolute right-5 top-5 text-white backdrop-blur-xl rounded-full p-1 px-2">
+          ${5}
+        </div>
+        <div className="text-xs text-gray-400 mt-2">
+          {product?.body_html?.replace(/<\/?[^>]+(>|$)/g, "").substring(0, 100)}
+        </div>
         <div className="mt-auto">
-          <div>
-            <span className="text-sm normal-case font-semibold">
-              <span>product by </span>
-              <span className="font-jua">
-                {normaliseWorddCase(product?.vendor || "vendor")}
+          {/* <div>
+              <span className="text-sm normal-case font-semibold">
+                <span>product by </span>
+                <span className="font-jua">
+                  {normaliseWorddCase(product?.vendor || "vendor")}
+                </span>
               </span>
-            </span>
-          </div>
-          <div className="text-xs text-gray-400">
-            {product?.body_html
-              ?.replace(/<\/?[^>]+(>|$)/g, "")
-              .substring(0, 100)}
-          </div>
-          <div className="my-2">
+            </div> */}
+
+          {/* <div className="my-2">
             <Button
               loading={productCheckout.loading}
               onClick={() => {
@@ -305,7 +592,7 @@ const ProductCard = ({ product, event, teamMember }) => {
             >
               Buy Now
             </Button>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
