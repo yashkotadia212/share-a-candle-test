@@ -57,7 +57,7 @@ const Event = () => {
           </div>
 
           <div className="text-3xl font-semibold mt-10">My Events</div>
-          <div className="flex justify-center flex-wrap gap-4 pt-2 pb-10">
+          <div className="flex justify-start flex-wrap gap-4 pt-2 pb-10">
             {getAllEventsData?.data?.map((event) => (
               <EventCard ev={event} key={event.id} />
             ))}

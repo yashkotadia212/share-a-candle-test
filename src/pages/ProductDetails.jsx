@@ -10,6 +10,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { GoChevronLeft, GoChevronRight } from "react-icons/go";
+
 const productdetailsData = [
   {
     title: "Jar color",

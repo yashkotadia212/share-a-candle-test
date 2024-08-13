@@ -601,7 +601,7 @@ const ProductCard = ({ product, event, teamMember }) => {
 
 const RecentSupporters = ({ supportersList }) => {
   return (
-    <div className="mt-10">
+    <div className="mt-24">
       <div className="w-full text-center text-4xl font-semibold">
         Recent Supporters
       </div>
