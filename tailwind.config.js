@@ -7,7 +7,11 @@ export default {
     fontFamily: {
       jua: ["Jua", "sans-serif"],
     },
-    extend: {},
+    extend: {
+      screens: {
+        xs: '320px', // Add the xs breakpoint
+      },
+    },
   },
   plugins: [],
 }

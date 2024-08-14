@@ -2,10 +2,10 @@ import React, { useEffect } from "react";
 import { Form, Input, Select, DatePicker, Radio, Button, message } from "antd";
 import dayjs from "dayjs"; // For date formatting and parsing
 import useAxios from "../hooks/useAxios";
-import TopHeader from "../components/TopHeader";
 import { useNavigate } from "react-router-dom";
 import Loader from "../components/Loader";
 import useAuthStore from "../zustand/authStore";
+import TopHeaderResponsive from "../components/TopHeaderResponsive";
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -97,7 +97,7 @@ const OrganizeEvent = () => {
         <Loader />
       ) : (
         <div>
-          <TopHeader />
+          <TopHeaderResponsive />
           <div className="w-full h-full flex mt-[25px]">
             <Form
               form={organizeEventForm}

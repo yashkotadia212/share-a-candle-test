@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import TopHeader from "../components/TopHeader";
+import TopHeaderResponsive from "../components/TopHeaderResponsive";
 import { Form, Input, InputNumber, Button, message, Checkbox } from "antd";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import useAuthStore from "../zustand/authStore";
@@ -64,7 +64,7 @@ const JoinTeam = () => {
 
   return (
     <div>
-      <TopHeader />
+      <TopHeaderResponsive />
       <div className="max-w-96 m-auto p-4 h-[80vh] flex items-center">
         <Form
           form={joinTeamFormRef}

@@ -1,6 +1,6 @@
 import React from "react";
 import Navbar from "./Navbar";
-import { LuUser2, LuShoppingCart } from "react-icons/lu";
+import { LuShoppingCart } from "react-icons/lu";
 import { IoLocationOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import VerticalSeparator from "../components/VerticalSeparator";

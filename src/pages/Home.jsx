@@ -1,11 +1,11 @@
 import React from "react";
-import TopHeader from "../components/TopHeader";
+import TopHeaderResponsive from "../components/TopHeaderResponsive";
 import SamplePageName from "../components/SamplePageName";
 
 const Home = () => {
   return (
     <div>
-      <TopHeader />
+      <TopHeaderResponsive />
       <SamplePageName text="Home" />
     </div>
   );

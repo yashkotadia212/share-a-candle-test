@@ -1,7 +1,7 @@
 // StoreProductsSlider.js
 import React, { useEffect } from "react";
 import { Pagination, Navigation } from "swiper/modules";
-import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
+import { Swiper, SwiperSlide } from "swiper/react";
 import { useNavigate } from "react-router-dom";
 import { LuMoveRight, LuMoveLeft } from "react-icons/lu"; // Import Swiper styles
 import "swiper/css";
@@ -10,7 +10,6 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 
 const StoreProductsSlider = ({ totalProducts, chunkSize = 8 }) => {
-  const swiper = useSwiper();
   const [chunkedProducts, setChunkedProducts] = React.useState([]);
   // Split products into chunks of 8 for each slide
 
@@ -36,9 +35,9 @@ const StoreProductsSlider = ({ totalProducts, chunkSize = 8 }) => {
       >
         {chunkedProducts?.map((productChunk, index) => (
           <SwiperSlide className="w-full" key={index}>
-            <div className="grid grid-cols-4 gap-5">
+            <div className="grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-5 gap-5">
               {productChunk?.map((product) => (
-                <ProductCard key={product.id} product={product} />
+                <ProductCard key={product?.id} product={product} />
               ))}
             </div>
           </SwiperSlide>
@@ -77,7 +76,7 @@ const ProductCard = ({ product, event, teamMember }) => {
         <div className="text-xl font-semibold underline">
           {product?.title?.replace(/-/g, " ")}
         </div>
-        <div className="text-xl absolute right-5 top-5 text-white backdrop-blur-xl rounded-full p-1 px-2">
+        <div className="text-xl absolute right-5 top-5 text-black font-semobold backdrop-blur-xl rounded-full p-1 px-2">
           ${5}
         </div>
         <div className="text-xs text-gray-400 mt-2">

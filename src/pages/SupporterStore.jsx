@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
+import TopHeaderResponsive from "../components/TopHeaderResponsive";
 import useAxios from "../hooks/useAxios";
-import TopHeader from "../components/TopHeader";
 import { Button, message, Modal, Divider, List } from "antd";
 import storeImage from "../assets/images/store/store-placeholder.jpg.jpg";
 import { Progress } from "antd";
@@ -11,12 +11,13 @@ import dayjs from "dayjs";
 import ShareLink from "../components/ShareLink";
 import ScrollResponsiveProducts from "../components/ScrollResponsiveProducts";
 import StoreProductsSlider from "../components/StoreProductsSlider";
+import useBreakpoint from "../hooks/useBreakpoint";
+import ProductParentGrid from "../components/ProductParentGrid";
+import LeaderboardCarousel from "../components/LeaderboardCarousel";
+import { LeaderboardList } from "../pages/TeamMemberDetails";
 
 const storeDetailsBaseUrl =
   "https://ixmiyncibu2bfpr4wt64zbsz2y0rtczr.lambda-url.us-east-2.on.aws/";
-
-const productCheckoutUrl =
-  "https://3z5hdsxs6q62srcolcwfvmvnje0mpiip.lambda-url.us-east-2.on.aws/";
 
 const dummyProducts = [
   {
@@ -309,6 +310,31 @@ const dummyProducts = [
   },
 ];
 
+const dummyLeaderboard = [
+  { id: 1, name: "John Doe", totalSupportersPrice: 500 },
+  { id: 2, name: "Jane Doe", totalSupportersPrice: 480 },
+  { id: 3, name: "Michael Smith", totalSupportersPrice: 460 },
+  { id: 4, name: "Emily Johnson", totalSupportersPrice: 440 },
+  { id: 5, name: "David Brown", totalSupportersPrice: 420 },
+  { id: 6, name: "Sarah Davis", totalSupportersPrice: 400 },
+  { id: 7, name: "James Wilson", totalSupportersPrice: 380 },
+  { id: 8, name: "Patricia Miller", totalSupportersPrice: 360 },
+  { id: 9, name: "Robert Moore", totalSupportersPrice: 340 },
+  { id: 10, name: "Linda Taylor", totalSupportersPrice: 320 },
+  { id: 11, name: "Charles Anderson", totalSupportersPrice: 300 },
+  { id: 12, name: "Barbara Thomas", totalSupportersPrice: 280 },
+  { id: 13, name: "Joseph Jackson", totalSupportersPrice: 260 },
+  { id: 14, name: "Jennifer White", totalSupportersPrice: 240 },
+  { id: 15, name: "Thomas Harris", totalSupportersPrice: 220 },
+  { id: 16, name: "Elizabeth Martin", totalSupportersPrice: 200 },
+  { id: 17, name: "Christopher Thompson", totalSupportersPrice: 180 },
+  { id: 18, name: "Mary Garcia", totalSupportersPrice: 160 },
+  { id: 19, name: "Daniel Martinez", totalSupportersPrice: 140 },
+  { id: 20, name: "Nancy Robinson", totalSupportersPrice: 120 },
+  { id: 21, name: "Matthew Clark", totalSupportersPrice: 100 },
+  { id: 22, name: "Karen Rodriguez", totalSupportersPrice: 80 },
+];
+
 function calculateDays(startDate, endDate) {
   const start = dayjs(startDate);
   const end = dayjs(endDate);
@@ -327,11 +353,25 @@ function calculateDays(startDate, endDate) {
   };
 }
 
+const getChunkSizeBasedOnScreenWidth = (breakpoint) => {
+  const chunkSizes = {
+    xs: 1,
+    sm: 2,
+    md: 3,
+    lg: 4,
+    xl: 5,
+    "2xl": 5, // Same as 'xl' for 2xl and above
+  };
+
+  return chunkSizes[breakpoint] * 2 || 2; // Default to 2 if no match is found
+};
+
 const SupporterStore = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const eventCode = searchParams?.get("eventCode");
   const teamMemberId = searchParams?.get("teamMemberId");
+  const currentBreakpoint = useBreakpoint();
 
   const storeDetails = useAxios(storeDetailsBaseUrl);
 
@@ -360,7 +400,8 @@ const SupporterStore = () => {
         <Loader />
       ) : (
         <div>
-          <TopHeader />
+          {/* <TopHeader /> */}
+          <TopHeaderResponsive />
           <StoreBanner
             storeBannerData={{
               eventName: storeDetails?.data?.event?.eventName,
@@ -373,9 +414,14 @@ const SupporterStore = () => {
               eventEndDate: storeDetails?.data?.event?.endDate,
             }}
           />
-          <StoreItem storeDetails={storeDetails} />
+          <StoreItem
+            storeDetails={storeDetails}
+            currentBreakpoint={currentBreakpoint}
+          />
           <ScrollResponsiveProducts />
           <RecentSupporters supportersList={storeDetails?.data?.supporters} />
+          <ProductParentGrid />
+          <Leaderboard />
         </div>
       )}
     </>
@@ -404,8 +450,8 @@ const StoreBanner = ({ storeBannerData }) => {
 
   return (
     <>
-      <div className="flex items-center gap-1.5">
-        <div className="w-1/2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 items-center gap-1.5">
+        <div className="sm:text-start text-center mb-5 sm:mb-0">
           <div>{storeBannerData?.eventName}</div>
           <div className="text-3xl font-semibold mt-3">
             {storeBannerData?.teamMemberName} live store
@@ -423,8 +469,8 @@ const StoreBanner = ({ storeBannerData }) => {
             </Button>
           </div>
         </div>
-        <div className="w-1/2 p-2 grid place-items-end">
-          <div className="w-7/12 p-5 aspect-[4/5] bg-gray-200 rounded-xl">
+        <div className="p-2 grid place-items-center sm:place-items-end">
+          <div className="w-full max-w-[380px] p-5 aspect-[4/5] bg-gray-200 rounded-xl">
             <div
               style={{
                 backgroundImage: `url(${storeImage})`,
@@ -519,82 +565,20 @@ const FundraisingProgress = ({ fundsRaised, targetGoal }) => {
   );
 };
 
-const StoreItem = ({ storeDetails }) => {
+const StoreItem = ({ storeDetails, currentBreakpoint }) => {
   return (
     <div className="pb-16 my-16">
       <div className="w-full text-center text-4xl font-semibold">
         Buy to support
       </div>
-      <StoreProductsSlider totalProducts={dummyProducts} chunkSize={8} />
-    </div>
-  );
-};
-
-const ProductCard = ({ product, event, teamMember }) => {
-  const navigate = useNavigate();
-  // const productCheckout = useAxios(productCheckoutUrl);
-
-  // useEffect(() => {
-  //   if (productCheckout.error) {
-  //     message.error("Error Buying Product");
-  //   } else if (productCheckout.data) {
-  //     window.location.href = productCheckout.data.checkout.webUrl;
-  //   }
-  // }, [productCheckout]);
-
-  return (
-    <div
-      className="relative w-full h-[420px] rounded-xl border border-gray-200 shadow-lg bg-gray-50 hover:shadow-xl cursor-pointer transition"
-      onClick={() => navigate("/product-details")}
-    >
-      <div
-        className="w-full h-72 rounded-lg"
-        style={{
-          backgroundImage: `url(${product?.image?.src})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      ></div>
-      <div className="m-1 flex flex-col h-[210px] p-2">
-        <div className="text-xl font-semibold underline">
-          {product?.title?.replace(/-/g, " ")}
-        </div>
-        <div className="text-xl absolute right-5 top-5 text-white backdrop-blur-xl rounded-full p-1 px-2">
-          ${5}
-        </div>
-        <div className="text-xs text-gray-400 mt-2">
-          {product?.body_html?.replace(/<\/?[^>]+(>|$)/g, "").substring(0, 100)}
-        </div>
-        <div className="mt-auto">
-          {/* <div>
-              <span className="text-sm normal-case font-semibold">
-                <span>product by </span>
-                <span className="font-jua">
-                  {normaliseWorddCase(product?.vendor || "vendor")}
-                </span>
-              </span>
-            </div> */}
-
-          {/* <div className="my-2">
-            <Button
-              loading={productCheckout.loading}
-              onClick={() => {
-                productCheckout.postData({
-                  variantId: "gid://shopify/ProductVariant/50070182691047",
-                  quantity: 1,
-                  eventName: event?.eventName,
-                  eventCode: event?.eventCode,
-                  teamName: teamMember?.name,
-                  teamMemberId: teamMember?.id,
-                });
-              }}
-              type="primary"
-            >
-              Buy Now
-            </Button>
-          </div> */}
-        </div>
-      </div>
+      <StoreProductsSlider
+        totalProducts={
+          Array.isArray(storeDetails?.data?.products)
+            ? storeDetails?.data?.products
+            : [storeDetails?.data?.products]
+        }
+        chunkSize={getChunkSizeBasedOnScreenWidth(currentBreakpoint)}
+      />
     </div>
   );
 };
@@ -659,6 +643,55 @@ const SupportersList = ({ supportersList }) => {
         />
       </div>
     </div>
+  );
+};
+
+const Leaderboard = () => {
+  const [isLeaderBoardModalVisible, setIsLeaderBoardModalVisible] =
+    React.useState(false);
+
+  const handleOkLeaderBoardModal = () => {
+    setIsLeaderBoardModalVisible(false);
+  };
+
+  const handleCancelLeaderBoardModal = () => {
+    setIsLeaderBoardModalVisible(false);
+  };
+
+  return (
+    <>
+      <div className="flex flex-col items-center">
+        <div className="text-4xl font-semibold text-center">Leaderboard</div>
+        <div className="text-center max-w-[1000px] my-6">
+          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut error
+          voluptatum est, fugiat ipsum similique ducimus unde asperiores
+          cupiditate dolore sed explicabo animi doloremque modi saepe, placeat
+          autem, nulla qui.
+        </div>
+        <div className="-mt-10 overflow-hidden w-screen">
+          <LeaderboardCarousel />
+        </div>
+        <div>
+          <Button
+            className="text-black hover:!text-black underline underline-offset-4 font-semibold mt-5"
+            type="link"
+            onClick={() => setIsLeaderBoardModalVisible(true)}
+          >
+            View full leader board
+          </Button>
+        </div>
+      </div>
+      <Modal
+        centered
+        open={isLeaderBoardModalVisible}
+        onOk={handleOkLeaderBoardModal}
+        onCancel={handleCancelLeaderBoardModal}
+        footer={null}
+        className="!w-full max-w-2xl !h-fit !rounded-xl overflow-hidden"
+      >
+        <LeaderboardList leaderBoardListData={dummyLeaderboard} />
+      </Modal>
+    </>
   );
 };
 

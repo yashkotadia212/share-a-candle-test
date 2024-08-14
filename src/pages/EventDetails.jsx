@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
+import TopHeaderResponsive from "../components/TopHeaderResponsive";
 import copy from "copy-text-to-clipboard";
 import getEventStatus from "../utils/getEventStatus";
 import { BsCopy } from "react-icons/bs";
-import TopHeader from "../components/TopHeader";
 import {
   message,
   Modal,
@@ -238,7 +238,7 @@ const EventDetails = () => {
         <Loader />
       ) : (
         <div>
-          <TopHeader />
+          <TopHeaderResponsive />
           <div className="flex justify-between mt-10">
             <EventBasicDetails
               eventBasicDetails={{

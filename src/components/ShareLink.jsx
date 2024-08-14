@@ -41,7 +41,7 @@ const ShareLink = ({ link }) => {
           className="flex-1 p-2 border border-gray-300 rounded-lg pe-10"
         />
 
-        <button className="absolute right-3">
+        <button className="absolute xs:right-2 md:right-3">
           <BsCopy
             className="text-xl hover:text-gray-400 transition"
             onClick={() => {
@@ -51,7 +51,7 @@ const ShareLink = ({ link }) => {
           />
         </button>
       </div>
-      <div className="flex justify-around w-8/12 mt-5 mb-8">
+      <div className="flex justify-around w-full max-w-[400px] mt-5 mb-8">
         <CopySocialButton name="Facebook" link={link}>
           <SlSocialFacebook className="text-xl" />
         </CopySocialButton>

@@ -1,5 +1,5 @@
 import React from "react";
-import TopHeader from "../components/TopHeader";
+import TopHeaderResponsive from "../components/TopHeaderResponsive";
 import HorizontalSeparator from "../components/HorizontalSeparator";
 import { Button, Select } from "antd";
 import { GrCart } from "react-icons/gr";
@@ -66,7 +66,7 @@ const ProductDetails = () => {
 
   return (
     <div>
-      <TopHeader />
+      <TopHeaderResponsive />
       <div className="grid grid-cols-2 mt-10 max-w-[1400px] m-auto">
         <div className="flex flex-col justify-center items-center">
           <ProductDetailImagesSlider images={productImages} />

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
+import TopHeaderResponsive from "../components/TopHeaderResponsive";
 import { Form, Input, Button, message } from "antd";
 import "antd/dist/reset.css";
 import { useNavigate } from "react-router-dom";
-import TopHeader from "../components/TopHeader";
 import useAxios from "../hooks/useAxios";
 import useAuthStore from "../zustand/authStore";
 
@@ -93,7 +93,7 @@ const Login = () => {
 
   return (
     <>
-      <TopHeader />
+      <TopHeaderResponsive />
       <div className="p-5 h-[85vh]">
         {/* {step === 1 && (
           <Form

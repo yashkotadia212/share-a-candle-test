@@ -1,7 +1,7 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-const navData = [
+export const navData = [
   {
     id: 1,
     title: "Home",

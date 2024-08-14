@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import TopHeader from "../components/TopHeader";
+import TopHeaderResponsive from "../components/TopHeaderResponsive";
 import { FaArrowRight } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { message } from "antd";
@@ -34,7 +34,7 @@ const Event = () => {
         </div>
       ) : (
         <div>
-          <TopHeader />
+          <TopHeaderResponsive />
 
           <div className="text-4xl font-semibold">Fundraising</div>
 

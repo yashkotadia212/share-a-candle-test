@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Loader from "../components/Loader";
-import TopHeader from "../components/TopHeader";
+import TopHeaderResponsive from "../components/TopHeaderResponsive.jsx";
 import useAxios from "../hooks/useAxios";
 import { Button, message, Modal, Popconfirm } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -48,9 +48,9 @@ const TeamMemberDetails = () => {
   const teamMemberDetails = useAxios(teamMemberDetailsBaseUrl);
   const leaderBoardListData = useAxios(leaderBoardListUrl);
 
-  // useEffect(() => {
-  //   leaderBoardListData.getData();
-  // }, []);
+  useEffect(() => {
+    leaderBoardListData.getData();
+  }, []);
 
   useEffect(() => {
     if (leaderBoardListData.error) {
@@ -93,7 +93,7 @@ const TeamMemberDetails = () => {
         <Loader />
       ) : (
         <div>
-          <TopHeader />
+          <TopHeaderResponsive />
           <div className="flex items-center">
             <div>
               <TeamMemberBasicDetails
@@ -415,7 +415,7 @@ const SupportersList = ({ supportersList }) => {
   );
 };
 
-const LeaderboardCard = ({ teamMember, rank }) => {
+export const LeaderboardCard = ({ teamMember, rank }) => {
   return (
     <div className="flex gap-4 w-full items-center">
       <div>
@@ -443,7 +443,7 @@ const LeaderboardCard = ({ teamMember, rank }) => {
   );
 };
 
-const LeaderboardList = ({ leaderBoardListData }) => {
+export const LeaderboardList = ({ leaderBoardListData }) => {
   return (
     <div>
       <div className="text-xl font-semibold">Leaderboard</div>
@@ -466,11 +466,3 @@ const LeaderboardList = ({ leaderBoardListData }) => {
 };
 
 export default TeamMemberDetails;
-
-// SUPPORTERS
-// {
-//   "id": 6018029781223,
-//   "email": "yash@hexacoder.com",
-//   "name": "yash shah",
-//   "total": "0.00"
-// }
