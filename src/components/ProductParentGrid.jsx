@@ -194,7 +194,10 @@ const ProductParentGrid = () => {
   const y = useTransform(scrollYProgress, [0, 1], [350, isInView ? -550 : 0]);
 
   return (
-    <div ref={ref} className="h-[350px] overflow-hidden my-24">
+    <div
+      ref={ref}
+      className="h-[350px] overflow-hidden my-24 bg-theme-background"
+    >
       <motion.div style={{ y }}>
         {divideArrayIntoChunks(productGridData, 7).map((chunk, index) => (
           <ProductGrid key={chunk[0]?.id} products={chunk} index={index} />

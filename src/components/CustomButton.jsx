@@ -1,7 +1,6 @@
 import React from "react";
 import { Button } from "antd";
 import { GoArrowRight } from "react-icons/go";
-import { motion } from "framer-motion";
 
 const CustomButton = ({
   type = "primary",

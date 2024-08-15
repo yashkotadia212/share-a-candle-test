@@ -16,7 +16,7 @@ import ProductParentGrid from "../components/ProductParentGrid";
 import LeaderboardCarousel from "../components/LeaderboardCarousel";
 import { LeaderboardList } from "../pages/TeamMemberDetails";
 import Footer from "../components/Footer";
-
+import { createAbsolutePath } from "../utils/createAbsolutePath";
 const storeDetailsBaseUrl =
   "https://ixmiyncibu2bfpr4wt64zbsz2y0rtczr.lambda-url.us-east-2.on.aws/";
 
@@ -474,7 +474,9 @@ const StoreBanner = ({ storeBannerData }) => {
           <div className="w-full max-w-[380px] p-5 aspect-[4/5] bg-gray-200 rounded-xl">
             <div
               style={{
-                backgroundImage: `url(${storeImage})`,
+                backgroundImage: `url(${createAbsolutePath(
+                  "/assets/images/store/store-placeholder.jpg"
+                )})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
               }}

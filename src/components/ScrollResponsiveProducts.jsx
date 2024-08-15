@@ -23,7 +23,7 @@ const ScrollResponsiveProducts = () => {
   return (
     <div
       ref={ref}
-      className="relative h-fit bg-gray-200 py-10 px-8 overflow-hidden"
+      className="relative h-fit bg-theme-background py-10 px-8 overflow-hidden"
     >
       <motion.div
         style={{ x }}
