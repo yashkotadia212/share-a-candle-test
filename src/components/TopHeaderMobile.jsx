@@ -45,15 +45,15 @@ function TopHeaderMobile() {
       zIndex: 100,
       transition: {
         type: "tween", // Set transition type to 'tween'
-        duration: 0.3, // Specify duration
+        duration: 0.2, // Specify duration
       },
     },
     exit: {
       y: "-100vh",
       transition: {
         type: "tween",
-        duration: 0.3,
-        delay: 0.3,
+        duration: 0.2,
+        delay: 0.4,
       },
     },
   };
@@ -82,7 +82,7 @@ function TopHeaderMobile() {
     hidden: {},
     visible: {
       transition: {
-        staggerChildren: 0.1,
+        staggerChildren: 0.05,
         delayChildren: 0.3,
       },
     },
@@ -107,14 +107,12 @@ function TopHeaderMobile() {
         <div className="flex items-center">
           <div className="flex gap-2 items-center cursor-pointer">
             {iconList.map((item, index) => (
-              <>
-                <div key={index} className="text-xl">
-                  {item.icon}
-                </div>
+              <div key={index}>
+                <div className="text-xl">{item.icon}</div>
                 {index + 1 !== iconList.length && (
                   <VerticalSeparator height="35px" margin={1} />
                 )}
-              </>
+              </div>
             ))}
           </div>
           <div className="ms-5">
@@ -132,7 +130,7 @@ function TopHeaderMobile() {
             exit="exit"
           >
             <FaTimes
-              className="absolute top-10 right-10 text-white cursor-pointer text-3xl"
+              className="absolute top-[6%] right-[8%] text-white cursor-pointer text-3xl"
               onClick={toggleModal}
             />
             <motion.div

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import TopHeaderResponsive from "../components/TopHeaderResponsive";
 import HorizontalSeparator from "../components/HorizontalSeparator";
 import { Button, Select } from "antd";
@@ -10,6 +10,12 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { GoChevronLeft, GoChevronRight } from "react-icons/go";
+import ScrollResponsiveProducts from "../components/ScrollResponsiveProducts";
+import { HiArrowLongLeft, HiArrowLongRight } from "react-icons/hi2";
+import { ProductCard } from "../components/StoreProductsSlider";
+import { dummyProducts } from "../pages/SupporterStore";
+import useBreakpoint from "../hooks/useBreakpoint";
+import Footer from "../components/Footer";
 
 const productdetailsData = [
   {
@@ -67,7 +73,7 @@ const ProductDetails = () => {
   return (
     <div>
       <TopHeaderResponsive />
-      <div className="grid grid-cols-2 mt-10 max-w-[1400px] m-auto">
+      <div className="grid grid-cols-1 md:grid-cols-2 mt-10 max-w-[1400px] m-auto">
         <div className="flex flex-col justify-center items-center">
           <ProductDetailImagesSlider images={productImages} />
         </div>
@@ -155,6 +161,13 @@ const ProductDetails = () => {
           </div>
         </div>
       </div>
+      <div className="my-10">
+        <ScrollResponsiveProducts />
+      </div>
+      <div className="py-10">
+        <MoreProductsSlider />
+      </div>
+      <Footer />
     </div>
   );
 };
@@ -188,7 +201,7 @@ const QuantitySelectorButton = ({ value = "+", onClick }) => {
 
 const ProductDetailImagesSlider = ({ images }) => {
   return (
-    <div className="relative w-full max-w-xl">
+    <div className="relative w-full max-w-xl overflow-hidden">
       <Swiper
         modules={[Navigation, Pagination]}
         navigation={{
@@ -199,7 +212,7 @@ const ProductDetailImagesSlider = ({ images }) => {
           clickable: true,
           el: ".custom-pagination",
         }}
-        spaceBetween={10}
+        // spaceBetween={10}
         slidesPerView={1}
         loop
       >
@@ -208,7 +221,7 @@ const ProductDetailImagesSlider = ({ images }) => {
             <img
               src={image.src}
               alt={`Product Image ${index + 1}`}
-              className="w-full max-w-md h-auto min-h-[450px] object-cover rounded-lg m-auto"
+              className="w-9/12 max-w-md h-auto aspect-[3/3.5] object-cover rounded-lg m-auto"
             />
           </SwiperSlide>
         ))}
@@ -225,6 +238,66 @@ const ProductDetailImagesSlider = ({ images }) => {
 
       {/* Custom Pagination Element */}
       <div className="custom-pagination absolute !left-[46%] !top-[105%]"></div>
+    </div>
+  );
+};
+
+const MoreProductsSlider = () => {
+  const currentBreakpoint = useBreakpoint();
+  const [slidesPerView, setSlidesPerView] = useState();
+
+  useEffect(() => {
+    if (currentBreakpoint === "xs") {
+      setSlidesPerView(1);
+    } else if (currentBreakpoint === "sm") {
+      setSlidesPerView(1);
+    } else if (currentBreakpoint === "md") {
+      setSlidesPerView(2);
+    } else {
+      setSlidesPerView(3);
+    }
+  }, [currentBreakpoint]);
+
+  return (
+    <div className="flex flex-col items-center justify-center">
+      <div className="text-4xl font-semibold">Supporters also viewed</div>
+      <div className="relative mt-12 border-black w-full max-w-[1100px] min-h-[500px]">
+        <Swiper
+          modules={[Navigation, Pagination]}
+          navigation={{
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+          }}
+          spaceBetween={1}
+          slidesPerView={slidesPerView}
+          loop
+        >
+          {dummyProducts.map((product, index) => (
+            <SwiperSlide key={index} className="!flex justify-center">
+              <ProductCard product={product} />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+        <div className="absolute left-0 right-0 bottom-0 h-16">
+          <div
+            style={{
+              left: "calc(48% - 2.5rem)",
+            }}
+            className="swiper-button-prev !h-10 !w-10 rounded-full border border-black p-2 flex justify-center items-center"
+          >
+            <HiArrowLongLeft className="text-2xl text-black" />
+          </div>
+
+          <div
+            style={{
+              right: "calc(48% - 2.5rem)",
+            }}
+            className="swiper-button-next !h-10 !w-10 rounded-full border border-black p-2 flex justify-center items-center"
+          >
+            <HiArrowLongRight className="text-2xl text-black" />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

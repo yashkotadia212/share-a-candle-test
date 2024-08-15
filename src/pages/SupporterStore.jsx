@@ -19,7 +19,7 @@ import { LeaderboardList } from "../pages/TeamMemberDetails";
 const storeDetailsBaseUrl =
   "https://ixmiyncibu2bfpr4wt64zbsz2y0rtczr.lambda-url.us-east-2.on.aws/";
 
-const dummyProducts = [
+export const dummyProducts = [
   {
     id: 8977677189351,
     title: "OZ. MASON JAR",
@@ -400,7 +400,6 @@ const SupporterStore = () => {
         <Loader />
       ) : (
         <div>
-          {/* <TopHeader /> */}
           <TopHeaderResponsive />
           <StoreBanner
             storeBannerData={{

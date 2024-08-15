@@ -56,12 +56,12 @@ const StoreProductsSlider = ({ totalProducts, chunkSize = 8 }) => {
   );
 };
 
-const ProductCard = ({ product, event, teamMember }) => {
+export const ProductCard = ({ product, event, teamMember }) => {
   const navigate = useNavigate();
 
   return (
     <div
-      className="relative w-full h-[420px] rounded-xl border border-gray-200 shadow-lg bg-gray-50 hover:shadow-xl cursor-pointer transition"
+      className="relative w-full max-w-[350px] h-[420px] rounded-xl border border-gray-200 shadow-lg bg-gray-50 hover:shadow-xl cursor-pointer transition"
       onClick={() => navigate("/product-details")}
     >
       <div

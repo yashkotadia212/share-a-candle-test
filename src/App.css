@@ -73,10 +73,10 @@ body {
 
 
 /* removeswiper navigation button default icon */
-/* .swiper-button-prev:after, 
+.swiper-button-prev:after, 
 .swiper-button-next:after {
   content: '' !important;
-} */
+}
 
 /* Remove arrows in Firefox */
 input[type="number"] {
