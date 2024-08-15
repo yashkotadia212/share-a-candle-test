@@ -15,6 +15,7 @@ import useBreakpoint from "../hooks/useBreakpoint";
 import ProductParentGrid from "../components/ProductParentGrid";
 import LeaderboardCarousel from "../components/LeaderboardCarousel";
 import { LeaderboardList } from "../pages/TeamMemberDetails";
+import Footer from "../components/Footer";
 
 const storeDetailsBaseUrl =
   "https://ixmiyncibu2bfpr4wt64zbsz2y0rtczr.lambda-url.us-east-2.on.aws/";
@@ -421,6 +422,7 @@ const SupporterStore = () => {
           <RecentSupporters supportersList={storeDetails?.data?.supporters} />
           <ProductParentGrid />
           <Leaderboard />
+          <Footer />
         </div>
       )}
     </>

@@ -23,6 +23,7 @@ import dayjs from "dayjs";
 import normaliseWorddCase from "../utils/normaliseWordsCase";
 import useAuthStore from "../zustand/authStore";
 import areEmailsSame from "../utils/areEmailsSame";
+import Footer from "../components/Footer";
 
 function convertMinutes(totalMinutes) {
   if (typeof totalMinutes !== "number") {
@@ -302,6 +303,7 @@ const EventDetails = () => {
               </Button>{" "}
             </Popconfirm>
           </div>
+          <Footer />
           <Modal
             centered
             title="Event Details"

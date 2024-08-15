@@ -6,6 +6,7 @@ import { message } from "antd";
 import dayjs from "dayjs";
 import useAxios from "../hooks/useAxios";
 import Loader from "../components/Loader";
+import Footer from "../components/Footer";
 
 const getAllEventsUrl =
   "https://nbg6jhqi7scugaz3mhtxcscbdy0msbuv.lambda-url.us-east-2.on.aws/";
@@ -62,6 +63,7 @@ const Event = () => {
               <EventCard ev={event} key={event.id} />
             ))}
           </div>
+          <Footer />
         </div>
       )}
     </>
@@ -74,7 +76,7 @@ const EventCard = ({ ev }) => {
   return (
     <>
       <div
-        className="border p-4 mt-4 w-64 h-80 rounded-xl flex justify-start bg-gray-200 cursor-pointer hover:shadow-xl hover:scale-[101%] transition"
+        className="border p-4 mt-4 w-64 h-80 rounded-xl flex justify-start bg-theme-background cursor-pointer hover:shadow-xl hover:scale-[101%] transition"
         onClick={() =>
           navigate(ev.url || `/event-details`, {
             state: { eventId: ev.id },

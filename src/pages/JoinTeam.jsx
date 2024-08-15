@@ -5,6 +5,7 @@ import { FaMinus, FaPlus } from "react-icons/fa";
 import useAuthStore from "../zustand/authStore";
 import useAxios from "../hooks/useAxios";
 import { useNavigate } from "react-router-dom";
+import Footer from "../components/Footer";
 
 const INITIAL_FUNDRAISING_GOAL = 2000;
 const STEP_AMOUNT = 100;
@@ -189,6 +190,7 @@ const JoinTeam = () => {
           </Form.Item>
         </Form>
       </div>
+      <Footer />
     </div>
   );
 };

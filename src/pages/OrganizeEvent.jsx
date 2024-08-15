@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import Loader from "../components/Loader";
 import useAuthStore from "../zustand/authStore";
 import TopHeaderResponsive from "../components/TopHeaderResponsive";
+import Footer from "../components/Footer";
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -250,6 +251,7 @@ const OrganizeEvent = () => {
               </Form.Item>
             </Form>
           </div>
+          <Footer />
         </div>
       )}
     </>

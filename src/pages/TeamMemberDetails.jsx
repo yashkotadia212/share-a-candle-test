@@ -14,6 +14,7 @@ import calculateMinutesToTargetDate from "../utils/calculateMinutesToTargetDate"
 import ShareLink from "../components/ShareLink";
 import { Divider, List } from "antd";
 import replacePathInUrl from "../utils/replacePathInUrl.js";
+import Footer from "../components/Footer.jsx";
 
 const teamMemberDetailsBaseUrl =
   "https://ixmiyncibu2bfpr4wt64zbsz2y0rtczr.lambda-url.us-east-2.on.aws/";
@@ -199,6 +200,7 @@ const TeamMemberDetails = () => {
               </Button>{" "}
             </Popconfirm>
           </div>
+          <Footer />
           <Modal
             width={700}
             centered
