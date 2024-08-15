@@ -11,6 +11,9 @@ export default {
       screens: {
         xs: '320px', // Add the xs breakpoint
       },
+      colors: {
+        "theme-background": "#E4E4E4",
+      },
     },
   },
   plugins: [],
