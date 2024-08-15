@@ -107,12 +107,12 @@ function TopHeaderMobile() {
         <div className="flex items-center">
           <div className="flex gap-2 items-center cursor-pointer">
             {iconList.map((item, index) => (
-              <div key={index}>
+              <React.Fragment key={index}>
                 <div className="text-xl">{item.icon}</div>
                 {index + 1 !== iconList.length && (
                   <VerticalSeparator height="35px" margin={1} />
                 )}
-              </div>
+              </React.Fragment>
             ))}
           </div>
           <div className="ms-5">
