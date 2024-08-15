@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import TopHeaderResponsive from "../components/TopHeaderResponsive";
 import useAxios from "../hooks/useAxios";
 import { Button, message, Modal, Divider, List } from "antd";
-import storeImage from "../assets/images/store/store-placeholder.jpg.jpg";
 import { Progress } from "antd";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import normaliseWorddCase from "../utils/normaliseWordsCase";
@@ -16,7 +15,7 @@ import ProductParentGrid from "../components/ProductParentGrid";
 import LeaderboardCarousel from "../components/LeaderboardCarousel";
 import { LeaderboardList } from "../pages/TeamMemberDetails";
 import Footer from "../components/Footer";
-import { createAbsolutePath } from "../utils/createAbsolutePath";
+import createAbsolutePath from "../utils/createAbsolutePath";
 const storeDetailsBaseUrl =
   "https://ixmiyncibu2bfpr4wt64zbsz2y0rtczr.lambda-url.us-east-2.on.aws/";
 

@@ -1,24 +1,25 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import city1 from "../assets/images/store/store-placeholder.jpg.jpg";
-import city2 from "../assets/images/store/store-placeholder.jpg.jpg";
-import city3 from "../assets/images/store/store-placeholder.jpg.jpg";
-import planet1 from "../assets/images/store/store-placeholder.jpg.jpg";
-import planet2 from "../assets/images/store/store-placeholder.jpg.jpg";
+import createAbsolutePath from "../utils/createAbsolutePath";
 
 //button icons
 import { HiArrowLongLeft, HiArrowLongRight } from "react-icons/hi2";
 
 const topThreeLeaderData = [
-  { image: city1, rank: 1, name: "John Doe", fundraised: 750 },
   {
-    image: city2,
+    image: "/assets/images/store/store-placeholder.jpg",
+    rank: 1,
+    name: "John Doe",
+    fundraised: 750,
+  },
+  {
+    image: "/assets/images/store/store-placeholder.jpg",
     rank: 2,
     name: "Jane Doe",
     fundraised: 500,
   },
   {
-    image: city3,
+    image: "/assets/images/store/store-placeholder.jpg",
     rank: 3,
     name: "John Doe",
     fundraised: 250,
@@ -46,8 +47,6 @@ const LeaderboardCarousel = () => {
       return updatedIndexes;
     });
   };
-
-  const images = [city1, city2, city3, planet1, planet2];
 
   const positions = ["center", "left", "right"];
 
@@ -101,7 +100,7 @@ const LeaderCard = ({ image, rank, name, fundraised }) => {
     <div className="w-80 sm:w-96 max-w-[380px] p-5 aspect-[4/5] bg-gray-200 rounded-xl">
       <div
         style={{
-          backgroundImage: `url(${image})`,
+          backgroundImage: `url(${createAbsolutePath(image)})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
