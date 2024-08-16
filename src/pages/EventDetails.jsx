@@ -240,7 +240,7 @@ const EventDetails = () => {
       ) : (
         <div>
           <TopHeaderResponsive />
-          <div className="flex justify-between mt-10">
+          <div className="flex xs:justify-center md:justify-between xs:max-md:flex-wrap xs:max-md:gap-5 mt-10">
             <EventBasicDetails
               eventBasicDetails={{
                 eventName: eventData?.event?.eventName,
@@ -254,7 +254,7 @@ const EventDetails = () => {
               <ShareCode eventCode={eventData?.event?.eventCode} />
             )}
           </div>
-          <div className="mt-10 flex justify-between">
+          <div className="mt-10 flex xs:justify-center md:justify-between xs:max-md:flex-wrap xs:max-md:gap-5">
             <EventStartsIn
               startDate={eventData?.event?.startDate}
               endDate={eventData?.event?.endDate}
@@ -262,11 +262,11 @@ const EventDetails = () => {
             />
             <Earnings />
           </div>
-          <div className="flex mt-10">
-            <div className="w-1/2">
+          <div className="flex xs:max-md:flex-wrap xs:max-md:gap-10 mt-10">
+            <div className="w-1/2 xs:max-md:w-full">
               <SupportersList supportersList={eventData?.supporters} />
             </div>
-            <div className="w-1/2">
+            <div className="w-1/2 xs:max-md:w-full">
               {/* <LeaderboardList /> */}
               <TeamMembersList
                 teamMembersList={eventData?.teamMembers}

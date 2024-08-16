@@ -95,7 +95,7 @@ const TeamMemberDetails = () => {
       ) : (
         <div>
           <TopHeaderResponsive />
-          <div className="flex items-center">
+          <div className="flex items-center xs:max-md:justify-center justify-between xs:max-md:flex-wrap xs:max-md:gap-5">
             <div>
               <TeamMemberBasicDetails
                 teamMemberBasicDetails={{
@@ -106,7 +106,7 @@ const TeamMemberDetails = () => {
                 }}
               />
             </div>
-            <div className="flex gap-2 ms-auto">
+            <div className="flex xs:max-sm:flex-wrap xs:max-sm:justify-center gap-2 md:ms-auto">
               <Button
                 size="large"
                 type="primary"
@@ -135,22 +135,22 @@ const TeamMemberDetails = () => {
               </Button>
             </div>
           </div>
-          <div className="mt-12 w-full flex">
-            <div className="w-1/2 pe-16">
-              <div className="text-2xl font-semibold my-4">
+          <div className="mt-12 w-full flex xs:max-md:justify-center justify-between xs:max-md:flex-wrap xs:max-md:gap-5">
+            <div className="w-1/2 xs:max-md:w-full md:pe-16">
+              <div className="text-2xl font-semibold my-4 xs:max-md:text-center">
                 Why are you raising funds?
               </div>
               <HorizontalSeparator />
-              <div className="text-lg">
+              <div className="text-lg xs:max-md:text-center">
                 {teamMemberDetails?.data?.teamMember?.description}
               </div>
             </div>
-            <div className="w-1/2">
-              <div className="text-2xl font-semibold my-4">
+            <div className="w-1/2 xs:max-md:w-full">
+              <div className="text-2xl font-semibold my-4 xs:max-md:text-center">
                 Feature my store
               </div>
               <HorizontalSeparator />
-              <div className="flex gap-2 items-center">
+              <div className="flex gap-2 items-center xs:max-md:justify-center">
                 <div>
                   <CustomCheckbox
                     disabled={true}
@@ -166,20 +166,20 @@ const TeamMemberDetails = () => {
               </div>
             </div>
           </div>
-          <div className="my-10 flex justify-between items-center">
+          <div className="my-10 flex items-center xs:justify-center md:justify-between xs:max-md:flex-wrap xs:max-md:gap-5">
             <EventStartsIn
               startDate={teamMemberDetails?.data?.event?.startDate}
               endDate={teamMemberDetails?.data?.event?.endDate}
             />
             <Earnings />
           </div>
-          <div className="flex my-10 pb-5">
-            <div className="w-1/2">
+          <div className="flex my-10 pb-5 xs:max-md:flex-wrap xs:max-md:gap-10">
+            <div className="w-1/2 xs:max-md:w-full">
               <SupportersList
                 supportersList={teamMemberDetails?.data?.supporters}
               />
             </div>
-            <div className="w-1/2">
+            <div className="w-1/2 xs:max-md:w-full">
               <LeaderboardList
                 leaderBoardListData={sortByTotalSupportersPrice(
                   leaderBoardListData?.data?.teamMembers

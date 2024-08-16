@@ -19,6 +19,11 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             // Alias Token
             colorBgContainer: "#ffffff",
           },
+          components: {
+            Steps: {
+              navArrowColor: "#FFFFFF",
+            },
+          },
         }}
       >
         <App />

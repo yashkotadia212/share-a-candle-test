@@ -7,19 +7,19 @@ import { HiArrowLongLeft, HiArrowLongRight } from "react-icons/hi2";
 
 const topThreeLeaderData = [
   {
-    image: "/assets/images/store/store-placeholder.jpg",
+    image: `https://placebeard.it/250/350?${Date.now() * Math.random()}`,
     rank: 1,
     name: "John Doe",
     fundraised: 750,
   },
   {
-    image: "/assets/images/store/store-placeholder.jpg",
+    image: `https://placebeard.it/250/350?${Date.now() * Math.random()}`,
     rank: 2,
     name: "Jane Doe",
     fundraised: 500,
   },
   {
-    image: "/assets/images/store/store-placeholder.jpg",
+    image: `https://placebeard.it/250/350?${Date.now() * Math.random()}`,
     rank: 3,
     name: "John Doe",
     fundraised: 250,
@@ -97,10 +97,10 @@ const LeaderboardCarousel = () => {
 
 const LeaderCard = ({ image, rank, name, fundraised }) => {
   return (
-    <div className="w-80 sm:w-96 max-w-[380px] p-5 aspect-[4/5] bg-gray-200 rounded-xl">
+    <div className="w-80 sm:w-96 max-w-[380px] p-5 aspect-[4/5] bg-theme-background rounded-xl">
       <div
         style={{
-          backgroundImage: `url(${createAbsolutePath(image)})`,
+          backgroundImage: `url(${image})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}

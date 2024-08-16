@@ -89,3 +89,7 @@ input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+.create-form-with-steps-label-bold > div > div > div > label {
+  font-weight: bold;
+}

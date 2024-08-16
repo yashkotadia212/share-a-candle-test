@@ -470,12 +470,10 @@ const StoreBanner = ({ storeBannerData }) => {
           </div>
         </div>
         <div className="p-2 grid place-items-center sm:place-items-end">
-          <div className="w-full max-w-[380px] p-5 aspect-[4/5] bg-gray-200 rounded-xl">
+          <div className="w-full max-w-[380px] p-5 aspect-[4/5] bg-theme-background rounded-xl">
             <div
               style={{
-                backgroundImage: `url(${createAbsolutePath(
-                  "/assets/images/store/store-placeholder.jpg"
-                )})`,
+                backgroundImage: `url("https://placebeard.it/250/350")`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
               }}

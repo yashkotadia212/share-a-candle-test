@@ -61,7 +61,7 @@ export const ProductCard = ({ product, event, teamMember }) => {
 
   return (
     <div
-      className="relative w-full max-w-[350px] h-[420px] rounded-xl border border-gray-200 shadow-lg bg-gray-50 hover:shadow-xl cursor-pointer transition"
+      className="relative w-full max-w-[350px] h-[420px] rounded-xl border border-gray-200 shadow-lg bg-theme-background hover:shadow-xl cursor-pointer transition"
       onClick={() => navigate("/product-details")}
     >
       <div
