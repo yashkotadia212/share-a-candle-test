@@ -1,11 +1,22 @@
 import React, { useEffect, useState } from "react";
 import TopHeaderResponsive from "../components/TopHeaderResponsive";
-import { Form, Input, InputNumber, Button, message, Checkbox } from "antd";
+import {
+  Form,
+  Input,
+  InputNumber,
+  Button,
+  message,
+  Checkbox,
+  Select,
+} from "antd";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import useAuthStore from "../zustand/authStore";
 import useAxios from "../hooks/useAxios";
 import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
+import CreateFormWithSteps from "../components/CreateFormWithSteps";
+import { FaArrowRight } from "react-icons/fa6";
+import { motion } from "framer-motion";
 
 const INITIAL_FUNDRAISING_GOAL = 2000;
 const STEP_AMOUNT = 100;
@@ -63,9 +74,165 @@ const JoinTeam = () => {
     joinTeamFormRef.setFieldValue("fundraisingGoal", internalValue);
   }, [internalValue]);
 
+  const Sidebar1 = () => (
+    <div className="w-full h-full flex justify-center items-center bg-theme-background text-3xl font-semibold">
+      Guide
+    </div>
+  );
+  const Sidebar2 = () => (
+    <div className="w-full h-full flex justify-center items-center bg-theme-background text-3xl font-semibold">
+      Guide
+    </div>
+  );
+  const Sidebar3 = () => (
+    <div className="w-full h-full flex justify-center items-center bg-theme-background text-3xl font-semibold">
+      Guide
+    </div>
+  );
+
+  const Form1 = ({ form }) => {
+    const [eventDetails, setEventDetails] = React.useState(null);
+    const handleEventCodeClick = () => {
+      if (form.getFieldValue("teamCode")?.length !== 7) {
+        message.error("Enter valid team Code!");
+        return;
+      }
+      // Call API to get event details based on the event code
+
+      setEventDetails({
+        eventname: "Event Name",
+        startDateTime: "2022-12-12T12:00:00",
+        endDateTime: "2022-12-20T12:00:00",
+      });
+    };
+    return (
+      <Form
+        form={form}
+        layout="vertical"
+        requiredMark={false} // This hides the required asterisk
+        className="max-w-[300px] create-form-with-steps-label-bold"
+        size="large"
+      >
+        <Form.Item
+          label="Team Code"
+          name="teamCode"
+          rules={[
+            {
+              required: true,
+              message: "Please input the team code!",
+            },
+            {
+              validator: (_, value) => {
+                const rawValue = value.replace(/\s/g, "");
+                if (rawValue.length !== 6) {
+                  return Promise.reject(
+                    new Error(
+                      "Team code must be exactly 6 characters (excluding spaces)!"
+                    )
+                  );
+                }
+                return Promise.resolve();
+              },
+            },
+          ]}
+        >
+          <CustomInput handleEventCodeClick={handleEventCodeClick} />
+        </Form.Item>
+
+        <motion.div
+          initial={{ opacity: 0, height: 0 }}
+          animate={
+            eventDetails
+              ? { opacity: 1, height: "auto" }
+              : { opacity: 0, height: 0 }
+          }
+          transition={{
+            duration: 0.3,
+            type: "tween ",
+          }}
+        >
+          {eventDetails ? (
+            <div className="w-full">
+              <div className="font-semibold">Event Details</div>
+              <EventDetailsWithUnderline
+                title="Event Name"
+                value={eventDetails.eventname}
+              />
+
+              <EventDetailsWithUnderline
+                title="Start Date"
+                value={eventDetails.startDateTime}
+              />
+
+              <EventDetailsWithUnderline
+                title="End Date"
+                value={eventDetails.endDateTime}
+              />
+            </div>
+          ) : (
+            ""
+          )}
+        </motion.div>
+      </Form>
+    );
+  };
+
+  const Form2 = ({ form }) => (
+    <>
+      <div className="font-semibold">Your virtual live store</div>
+      <div className="text-gray-400 mt-1">
+        You will have a unique link to share with your friends and family
+      </div>
+
+      <div className="font-semibold mt-5">It's a sprint not a marathon</div>
+      <div className="text-gray-400 mt-1 mb-8">
+        Our fundraising window is tried, true and evidence-based
+      </div>
+    </>
+  );
+  const Form3 = ({ form }) => {
+    return (
+      <Form
+        form={form}
+        layout="vertical"
+        requiredMark={false} // This hides the required asterisk
+        className="max-w-[300px] create-form-with-steps-label-bold"
+        size="large"
+        initialValues={{ is_customizable: false }}
+      ></Form>
+    );
+  };
+
+  const joinTeamPropsData = [
+    {
+      sidebar: <Sidebar1 />,
+      title: "Enter team code",
+      subtitle:
+        "The team name will be displayed in each participant's live store",
+      form: <Form1 />,
+      nextButtonText: "Join Now",
+    },
+    {
+      sidebar: <Sidebar2 />,
+      title: "Few things to consider",
+      subtitle: "Your store goes live once the event window starts",
+      form: <Form2 />,
+      nextButtonText: "Next: Store Details",
+    },
+    {
+      sidebar: <Sidebar3 />,
+      title: "Store Details",
+      subtitle: "The details you share here will be displayed in your store",
+      form: <Form3 />,
+      nextButtonText: "Create my store",
+    },
+  ];
+
   return (
     <div>
       <TopHeaderResponsive />
+      <CreateFormWithSteps stepsArray={joinTeamPropsData} />
+
       <div className="max-w-96 m-auto p-4 h-[80vh] flex items-center">
         <Form
           form={joinTeamFormRef}
@@ -195,7 +362,7 @@ const JoinTeam = () => {
   );
 };
 
-const CustomInput = ({ value = "", onChange }) => {
+const CustomInput = ({ value = "", onChange, handleEventCodeClick }) => {
   const handleChange = (e) => {
     let inputValue = e.target.value.toUpperCase().replace(/\s/g, "");
     // Limit input length to 6 characters
@@ -209,13 +376,27 @@ const CustomInput = ({ value = "", onChange }) => {
   };
 
   return (
-    <Input
-      size="large"
-      placeholder="Example: DAC B2D"
-      value={value}
-      onChange={handleChange}
-    />
+    <>
+      <Input
+        size="large"
+        placeholder="Example: DAC B2D"
+        value={value}
+        onChange={handleChange}
+        className="relative"
+      />
+      <FaArrowRight
+        onClick={handleEventCodeClick}
+        className="w-6 h-6 cursor-pointer absolute right-3 top-1/2 transform -translate-y-1/2 text-lg text-gray-300"
+      />
+    </>
   );
 };
+
+const EventDetailsWithUnderline = ({ title, value }) => (
+  <div className="flex flex-col w-full my-3">
+    <div className="text-gray-400">{title}</div>
+    <div className="border-b border-black w-full mt-1">{value}</div>
+  </div>
+);
 
 export default JoinTeam;

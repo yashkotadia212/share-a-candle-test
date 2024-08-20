@@ -15,23 +15,8 @@ import { Steps, Button, Form } from "antd";
 
 const CreateFormWithSteps = ({ stepsArray }) => {
   const [form] = Form.useForm();
-  const [currentStep, setCurrentStep] = useState(2);
-  const [stepsItems, setStepsItems] = useState([]);
+  const [currentStep, setCurrentStep] = useState(0);
   const [allStepsFormValue, setAllStepsFormValue] = useState({});
-
-  function createStepsItems(stepsArray) {
-    return stepsArray.map((step, index) => {
-      return {
-        title: "Step " + parseInt(index + 1),
-        status: currentStep === index ? "process" : "wait",
-        icon: <div></div>,
-      };
-    });
-  }
-
-  useEffect(() => {
-    setStepsItems(createStepsItems(stepsArray));
-  }, [stepsArray]);
 
   const onStepChange = (value) => {
     setCurrentStep(value);
@@ -61,7 +46,7 @@ const CreateFormWithSteps = ({ stepsArray }) => {
   }, [allStepsFormValue]);
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center mb-5">
       <div className="w-full h-40">
         <img
           src="https://placebeard.it/2000/150?random"
@@ -76,7 +61,15 @@ const CreateFormWithSteps = ({ stepsArray }) => {
           current={currentStep}
           onChange={onStepChange}
           className="w-full"
-          items={stepsItems}
+          items={
+            stepsArray?.map((step, index) => {
+              return {
+                title: "Step " + parseInt(index + 1),
+                status: currentStep === index ? "process" : "wait",
+                icon: <div></div>,
+              };
+            }) || []
+          }
         />
       </div>
       <div className="mt-10 flex w-full max-w-[800px]">

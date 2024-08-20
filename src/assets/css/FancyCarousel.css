@@ -1,0 +1,57 @@
+/* html, body, #dragger, #ring, .img, .vignette {
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    user-select: none;
+  }
+  
+  html, body {
+    overflow: hidden;
+    background: #000;
+  } */
+  
+  div {
+    position: relative;
+    transform-style: preserve-3d;
+    user-select: none;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .container {
+
+    perspective: 2000px;
+    width: 300px;
+    height: 300px;  
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  .vignette {
+    width: 1400px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(to left, rgba(0,0,0,1) 12%, rgba(0,0,0,0) 40%, rgba(0,0,0,0) 60%, rgba(0,0,0,1) 88%);
+  }
+  
+  #ring {
+    transform-style: preserve-3d;
+  }
+  
+  .img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    transform-origin: 50% 50% 500px;
+    backface-visibility: hidden;
+  }
+  
+  #dragger {
+    width: 100%;
+    height: 100%;
+    cursor: grab;
+  }
+  

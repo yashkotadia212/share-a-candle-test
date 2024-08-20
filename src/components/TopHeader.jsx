@@ -14,7 +14,7 @@ const TopHeader = () => {
 
   const handleLogout = () => {
     removeAuth();
-    navigate("/login");
+    navigate("/sign-in");
   };
 
   return (

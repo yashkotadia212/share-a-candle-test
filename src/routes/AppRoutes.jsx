@@ -12,6 +12,8 @@ import PrivateRoutes from "./PrivateRoutes";
 import TeamMemberDetails from "../pages/TeamMemberDetails";
 import SupporterStore from "../pages/SupporterStore";
 import ProductDetails from "../pages/ProductDetails";
+import Signup from "../pages/Signup";
+import Signin from "../pages/Signin";
 
 const AppRoutes = () => {
   return (
@@ -22,6 +24,8 @@ const AppRoutes = () => {
       <Route path="*" element={<PageNotFound />} />
       <Route path="/store" element={<SupporterStore />} />
       <Route path="/product-details" element={<ProductDetails />} />
+      <Route path="/sign-up" element={<Signup />} />
+      <Route path="/sign-in" element={<Signin />} />
 
       <Route element={<PrivateRoutes />}>
         <Route path="/events" element={<Event />} />

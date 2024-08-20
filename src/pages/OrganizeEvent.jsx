@@ -23,10 +23,12 @@ import nonCustomisableIcon from "../assets/icons/nonCustomisableIcon.svg";
 import { IoCheckmarkOutline } from "react-icons/io5";
 import { TbFileUpload } from "react-icons/tb";
 import { GoArrowUpLeft } from "react-icons/go";
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 const { Dragger } = Upload;
+dayjs.extend(isSameOrAfter);
 
 const postOrganizeEventDataUrl =
   "https://nbg6jhqi7scugaz3mhtxcscbdy0msbuv.lambda-url.us-east-2.on.aws/";
@@ -220,26 +222,26 @@ const OrganizeEvent = () => {
 
     const handleUploadChange = ({ fileList }) => {
       console.log("File List:", fileList);
-
       setFileList(fileList);
     };
 
-    // const handleSubmit = () => {
-    //   form
-    //     .validateFields()
-    //     .then((values) => {
-    //       if (fileList.length === 0) {
-    //         message.error("Please upload a logo file!");
-    //       } else {
-    //         console.log("Form values:", values);
-    //         console.log("Uploaded file:", fileList[0]);
-    //         message.success("Form submitted successfully!");
-    //       }
-    //     })
-    //     .catch((errorInfo) => {
-    //       console.error("Validate Failed:", errorInfo);
-    //     });
-    // };
+    const disabledStartDate = (current) => {
+      const minStartDate = dayjs().add(8, "day").startOf("day");
+      return current && current.isBefore(minStartDate);
+    };
+
+    const disabledEndDate = (current, startDate) => {
+      if (!startDate) {
+        return true; // Disable all dates if no start date is selected
+      }
+      const minEndDate = dayjs(startDate).add(1, "days");
+      const maxEndDate = dayjs(startDate).add(14, "days");
+      return (
+        current.isBefore(minEndDate.startOf("day")) ||
+        current.isAfter(maxEndDate.endOf("day"))
+      );
+    };
+
     return (
       <Form
         form={form}
@@ -325,7 +327,6 @@ const OrganizeEvent = () => {
             size="small"
             onChange={() => {
               setIsTickVisible(form.getFieldValue("is_customizable"));
-              console.log("Form3", form.getFieldValue("is_customizable"));
             }}
           >
             <IsCustomizableCard
@@ -363,14 +364,14 @@ const OrganizeEvent = () => {
           </Radio.Group>
         </Form.Item>
 
-        <div className="flex gap-3 w-[650px]">
+        <div className="flex gap-3 w-[700px]">
           <Form.Item
             name="logo"
             label="Upload a Logo"
             valuePropName="fileList"
             getValueFromEvent={(e) => e && e.fileList}
             rules={[{ required: true, message: "Please upload your logo!" }]}
-            className="w-[320px]"
+            className="w-[390px]"
           >
             <Dragger
               name="logo"
@@ -378,7 +379,7 @@ const OrganizeEvent = () => {
               fileList={fileList}
               beforeUpload={() => false} // Prevent auto-upload
               onChange={handleUploadChange}
-              className="w-[300px]"
+              className="w-[390px] organize-event-choose-custom-product-input"
             >
               <div className="flex items-center gap-3">
                 <div>
@@ -389,19 +390,9 @@ const OrganizeEvent = () => {
                   <span className="font-semibold underline">Choose File</span>
                 </div>
               </div>
-              {/* <p className="ant-upload-drag-icon">
-              <InboxOutlined />
-            </p>
-            <p className="ant-upload-text">
-              Click or drag file to this area to upload
-            </p>
-            <p className="ant-upload-hint">
-              Support for a single upload. Strictly prohibit from uploading
-              company data or other band files.
-            </p> */}
             </Dragger>
           </Form.Item>
-          <div className="w-[300px] border h-[57px] mt-[29px] rounded-sm flex justify-center items-center cursor-pointer">
+          <div className="w-[390px] border h-[57px] mt-[29px] rounded-lg flex justify-center items-center cursor-pointer">
             <div>
               <GoArrowUpLeft className="text-2xl" />
             </div>
@@ -409,18 +400,38 @@ const OrganizeEvent = () => {
           </div>
         </div>
 
-        <div className="flex items-center gap-3 w-[400px]">
+        <div className="flex items-center gap-3 w-[700px]">
           <Form.Item
             name="start_date"
             label="Start Date"
-            rules={[{ required: true, message: "Please select a start date!" }]}
+            className="w-[345px]"
+            rules={[
+              { required: true, message: "Please select a start date!" },
+              () => ({
+                validator(_, value) {
+                  const minStartDate = dayjs().add(8, "day").startOf("day");
+                  if (!value || value.isSameOrAfter(minStartDate)) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(
+                    new Error("Start date must be at least 8 days from today!")
+                  );
+                },
+              }),
+            ]}
           >
-            <DatePicker placeholder="Select start date" />
+            <DatePicker
+              placeholder="Select start date"
+              className="w-full rounded-lg p-3"
+              showTime={{ format: "HH:mm" }}
+              disabledDate={disabledStartDate}
+            />
           </Form.Item>
 
           <Form.Item
             name="end_date"
             label="End Date"
+            className="w-[345px]"
             rules={[
               { required: true, message: "Please select an end date!" },
               ({ getFieldValue }) => ({
@@ -439,8 +450,12 @@ const OrganizeEvent = () => {
             ]}
           >
             <DatePicker
-              style={{ width: "100%" }}
+              className="w-full rounded-lg p-3"
               placeholder="Select end date"
+              showTime={{ format: "HH:mm" }}
+              disabledDate={(current) =>
+                disabledEndDate(current, form?.getFieldValue("start_date"))
+              }
             />
           </Form.Item>
         </div>
@@ -483,158 +498,6 @@ const OrganizeEvent = () => {
         <div>
           <TopHeaderResponsive />
           <CreateFormWithSteps stepsArray={createEventPropsData} />
-          <div className="w-full h-full flex mt-[25px]">
-            <Form
-              form={organizeEventForm}
-              name="organization-form"
-              onFinish={onFinish}
-              initialValues={{
-                minTeamSize: 1,
-                maxTeamSize: 1,
-                organizationType: "Non-Profit",
-              }}
-              style={{ maxWidth: "600px", margin: "0 auto" }}
-              labelCol={{ span: 8 }}
-              wrapperCol={{ span: 16 }}
-            >
-              <Form.Item
-                name="eventName"
-                label="Event Name"
-                rules={[
-                  { required: true, message: "Please input the event name!" },
-                ]}
-              >
-                <Input placeholder="Enter event name" />
-              </Form.Item>
-
-              <Form.Item
-                name="organizationType"
-                label="Organization Type"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please select the organization type!",
-                  },
-                ]}
-              >
-                <Select placeholder="Select organization type">
-                  <Option value="Non-Profit">Non-Profit</Option>
-                  <Option value="Sports">Sports</Option>
-                  <Option value="Educational">Educational</Option>
-                  {/* Add more options as needed */}
-                </Select>
-              </Form.Item>
-
-              <Form.Item
-                name="category"
-                label="Category"
-                rules={[
-                  { required: true, message: "Please input the category!" },
-                ]}
-              >
-                <Input placeholder="Enter category" />
-              </Form.Item>
-
-              <Form.Item
-                name="organizationName"
-                label="Organization Name"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input the organization name!",
-                  },
-                ]}
-              >
-                <Input placeholder="Enter organization name" />
-              </Form.Item>
-
-              <Form.Item
-                name="zipcode"
-                label="Zipcode"
-                rules={[
-                  { required: true, message: "Please input the zipcode!" },
-                  {
-                    pattern: /^[0-9]{5}$/,
-                    message: "Zipcode must be 5 digits!",
-                  },
-                ]}
-              >
-                <Input placeholder="Enter zipcode" />
-              </Form.Item>
-
-              <Form.Item
-                name="team_size"
-                label="Team Size"
-                rules={[
-                  { required: true, message: "Please select the team size!" },
-                ]}
-              >
-                <Radio.Group
-                  optionType="button"
-                  buttonStyle="solid"
-                  className="flex flex-wrap gap-2"
-                  onChange={(e) => setTeamSize(e.target.value)}
-                >
-                  <Radio value="1-1">Just me</Radio>
-                  <Radio value="1-10">1 - 10</Radio>
-                  <Radio value="11-20">11 - 20</Radio>
-                  <Radio value="21-30">21 - 30</Radio>
-                  <Radio value="31-40">31 - 40</Radio>
-                  <Radio value="41-50">41 - 50</Radio>
-                  <Radio value="51-999">51+</Radio>
-                </Radio.Group>
-              </Form.Item>
-
-              <Form.Item
-                name="productType"
-                label="Product Type"
-                rules={[
-                  { required: true, message: "Please input the product type!" },
-                ]}
-              >
-                {/* <Input placeholder="Enter product type" /> */}
-                <Radio.Group optionType="button" buttonStyle="solid">
-                  {productTypeCollections.map((productType, index) => (
-                    <Radio
-                      disabled={
-                        productType?.title === "Customizable" &&
-                        (teamSize == "" ||
-                          teamSize == "1-1" ||
-                          teamSize == "1-10")
-                      }
-                      key={index}
-                      value={productType?.id}
-                    >
-                      {productType?.title}
-                    </Radio>
-                  ))}
-                </Radio.Group>
-              </Form.Item>
-
-              <Form.Item
-                name="dateRange"
-                label="Event Date Range"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please select the event date range!",
-                  },
-                ]}
-              >
-                <RangePicker
-                  format="YYYY-MM-DD"
-                  placeholder={["Start Date", "End Date"]}
-                  style={{ width: "100%" }}
-                />
-              </Form.Item>
-
-              <Form.Item className="w-full flex justify-center">
-                <Button type="primary" htmlType="submit">
-                  Submit
-                </Button>
-              </Form.Item>
-            </Form>
-          </div>
           <Footer />
         </div>
       )}

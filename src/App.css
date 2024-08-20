@@ -93,3 +93,13 @@ input[type="number"]::-webkit-inner-spin-button {
 .create-form-with-steps-label-bold > div > div > div > label {
   font-weight: bold;
 }
+
+
+.organize-event-choose-custom-product-input > div{
+ border-radius: 8px !important;
+ background: transparent !important;
+}
+
+.bold-label-antd .ant-form-item-label > label {
+  font-weight: bold;
+}

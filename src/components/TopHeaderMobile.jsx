@@ -23,7 +23,7 @@ function TopHeaderMobile() {
         <GrLogout
           onClick={() => {
             removeAuth();
-            navigate("/login");
+            navigate("/sign-in");
           }}
         />
       ) : (

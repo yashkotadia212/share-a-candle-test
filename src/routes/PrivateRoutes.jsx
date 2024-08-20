@@ -7,7 +7,7 @@ const PrivateRoutes = () => {
   const { auth } = useAuthStore();
   const isAuthorized = auth?.isAuthorized || false;
 
-  return <>{isAuthorized ? <Outlet /> : <Navigate to="/login" />}</>;
+  return <>{isAuthorized ? <Outlet /> : <Navigate to="/sign-in" />}</>;
 };
 
 export default PrivateRoutes;
