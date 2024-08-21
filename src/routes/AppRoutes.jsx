@@ -14,6 +14,7 @@ import SupporterStore from "../pages/SupporterStore";
 import ProductDetails from "../pages/ProductDetails";
 import Signup from "../pages/Signup";
 import Signin from "../pages/Signin";
+import VerifyCode from "../pages/VerifyCode";
 
 const AppRoutes = () => {
   return (
@@ -26,6 +27,7 @@ const AppRoutes = () => {
       <Route path="/product-details" element={<ProductDetails />} />
       <Route path="/sign-up" element={<Signup />} />
       <Route path="/sign-in" element={<Signin />} />
+      <Route path="/verify-code" element={<VerifyCode />} />
 
       <Route element={<PrivateRoutes />}>
         <Route path="/events" element={<Event />} />

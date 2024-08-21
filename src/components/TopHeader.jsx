@@ -7,28 +7,30 @@ import VerticalSeparator from "../components/VerticalSeparator";
 import useAuthStore from "../zustand/authStore";
 import { SlLogin } from "react-icons/sl";
 import { GrLogout } from "react-icons/gr";
+import { logOutUser } from "../utils/userManagementUtils";
 
 const TopHeader = () => {
   const navigate = useNavigate();
   const { auth, removeAuth } = useAuthStore();
 
   const handleLogout = () => {
+    logOutUser();
     removeAuth();
     navigate("/sign-in");
   };
 
   return (
-    <div className="flex justify-between items-center mt-2">
+    <div className="flex justify-between items-center mt-2 my-5">
       <div className="h-full flex items-center">
         <div className="font-jua text-3xl" onClick={() => navigate("/")}>
           <p className="cursor-pointer">Share a</p>
-          <p className="-mt-8 cursor-pointer">Candle</p>
+          <p className="-mt-1 cursor-pointer">Candle</p>
         </div>
       </div>
       <div className="h-full flex items-center">
         <Navbar />
       </div>
-      <div className="flex gap-3">
+      <div className="flex gap-3 mt-5">
         <button>
           <IoLocationOutline className="text-2xl" />
         </button>
@@ -38,13 +40,21 @@ const TopHeader = () => {
         </button>
         <VerticalSeparator height="35px" margin={1} />
 
-        {auth?.isAuthorized ? (
+        {auth && auth.token ? (
           <button>
-            <GrLogout className="text-2xl" onClick={() => handleLogout()} />
+            <GrLogout
+              title="Logout"
+              className="text-2xl"
+              onClick={() => handleLogout()}
+            />
           </button>
         ) : (
           <button>
-            <SlLogin className="text-2xl" onClick={() => navigate("/login")} />
+            <SlLogin
+              title="Login"
+              className="text-2xl"
+              onClick={() => navigate("/sign-in")}
+            />
           </button>
         )}
       </div>

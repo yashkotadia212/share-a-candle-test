@@ -15,7 +15,7 @@ const Footer = () => {
             <div className="footer-logo">
               <div className="font-jua text-3xl" onClick={() => navigate("/")}>
                 <p className="cursor-pointer">Share a</p>
-                <p className="-mt-8 cursor-pointer">Candle</p>
+                <p className="-mt-1 cursor-pointer">Candle</p>
               </div>
             </div>
           </div>

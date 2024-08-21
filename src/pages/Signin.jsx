@@ -1,14 +1,61 @@
-import React from "react";
-import { Form, Input, InputNumber, Button } from "antd";
+import React, { useState } from "react";
+import { Form, Input, Button, message } from "antd";
 import TopHeaderResponsive from "../components/TopHeaderResponsive";
 import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
+import {
+  checkLogin,
+  resendVerificationCode,
+  getCognitoSession,
+} from "../utils/userManagementUtils";
+import { useNavigate } from "react-router-dom";
+import useAuthStore from "../zustand/authStore";
 
 const Signup = () => {
   const [signInForm] = Form.useForm();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const { setAuth } = useAuthStore();
 
   const onFinish = (values) => {
-    console.log("Success:", values);
+    setLoading(true);
+    checkLogin(values.email, values.password)
+      .then((result) => {
+        if (result) {
+          setLoading(false);
+
+          getCognitoSession()
+            .then(({ idToken, email }) => {
+              setAuth({
+                email: email,
+                isAuthorized: true,
+                token: idToken,
+              });
+              navigate("/");
+            })
+            .catch((error) => {
+              console.error("Error retrieving Cognito session:", error);
+            });
+        }
+      })
+      .catch((err) => {
+        setLoading(false);
+
+        if (err.code === "UserNotConfirmedException") {
+          resendVerificationCode(values.email)
+            .then(() => {
+              message.success("Verification code sent!");
+            })
+            .catch((err) => {
+              message.error(err.message);
+            });
+          navigate("/verify-code", {
+            state: { verifyCode: true, email: values.email },
+          });
+        } else if (err.code === "NotAuthorizedException") {
+          message.error(err.message);
+        }
+      });
   };
 
   return (
@@ -54,7 +101,7 @@ const Signup = () => {
             </Form.Item>
 
             <Form.Item>
-              <Button type="primary" htmlType="submit" block>
+              <Button loading={loading} type="primary" htmlType="submit" block>
                 Log In
               </Button>
             </Form.Item>

@@ -9,6 +9,7 @@ import { SlLogin } from "react-icons/sl";
 import { GrLogout } from "react-icons/gr";
 import { motion, AnimatePresence } from "framer-motion";
 import { navData } from "./Navbar";
+import { logOutUser } from "../utils/userManagementUtils";
 
 function TopHeaderMobile() {
   const navigate = useNavigate();
@@ -19,16 +20,18 @@ function TopHeaderMobile() {
     { icon: <IoLocationOutline /> },
     { icon: <LuShoppingCart /> },
     {
-      icon: auth?.isAuthorized ? (
-        <GrLogout
-          onClick={() => {
-            removeAuth();
-            navigate("/sign-in");
-          }}
-        />
-      ) : (
-        <SlLogin onClick={() => navigate("/login")} />
-      ),
+      icon:
+        auth && auth.token ? (
+          <GrLogout
+            onClick={() => {
+              removeAuth();
+              logOutUser();
+              navigate("/sign-in");
+            }}
+          />
+        ) : (
+          <SlLogin onClick={() => navigate("/sign-in")} />
+        ),
     },
   ];
 
@@ -100,7 +103,7 @@ function TopHeaderMobile() {
         <div className="font-bold text-xl">
           <div className="font-jua text-3xl" onClick={() => navigate("/")}>
             <p className="cursor-pointer">Share a</p>
-            <p className="-mt-8 cursor-pointer">Candle</p>
+            <p className="-mt-1 cursor-pointer">Candle</p>
           </div>
         </div>
 
