@@ -360,7 +360,7 @@ const OrganizeEvent = () => {
             >
               <div className="flex items-center gap-3">
                 <div>
-                  <TbFileUpload />
+                  <TbFileUpload className="text-2xl" />
                 </div>
                 <div>
                   Drag & Drop file here or{" "}
