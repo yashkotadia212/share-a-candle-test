@@ -69,6 +69,8 @@ body {
 .fundraining-custom-number-input > .ant-input-number-wrapper > .ant-input-number-in-form-item > .ant-input-number-input-wrap > input {
   font-size: 25px !important;
   text-align: center;
+  height: 100%;
+  width: 270px;
 }
 
 

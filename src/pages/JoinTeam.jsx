@@ -7,16 +7,19 @@ import {
   Button,
   message,
   Checkbox,
-  Select,
+  Upload,
 } from "antd";
 import { FaMinus, FaPlus } from "react-icons/fa";
-import useAuthStore from "../zustand/authStore";
 import useAxios from "../hooks/useAxios";
 import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import CreateFormWithSteps from "../components/CreateFormWithSteps";
 import { FaArrowRight } from "react-icons/fa6";
 import { motion } from "framer-motion";
+import { TbFileUpload } from "react-icons/tb";
+import dayjs from "dayjs";
+
+const { Dragger } = Upload;
 
 const INITIAL_FUNDRAISING_GOAL = 2000;
 const STEP_AMOUNT = 100;
@@ -25,21 +28,7 @@ const joinTeamUrl =
 
 const JoinTeam = () => {
   const navigate = useNavigate();
-  const [joinTeamFormRef] = Form.useForm();
-  const [internalValue, setInternalValue] = useState(INITIAL_FUNDRAISING_GOAL);
-  const { auth } = useAuthStore();
   const joinTeam = useAxios(joinTeamUrl);
-
-  const onFinish = (values) => {
-    joinTeam.postData({
-      eventCode: values.teamCode.replace(/\s/g, ""),
-      fundraisingGoal: values.fundraisingGoal,
-      email: auth?.email,
-      name: values?.name,
-      description: values?.description,
-      isDiscoverable: values?.isDiscoverable.toString(),
-    });
-  };
 
   useEffect(() => {
     if (joinTeam?.error) {
@@ -52,27 +41,6 @@ const JoinTeam = () => {
       }, 1200);
     }
   }, [joinTeam]);
-
-  const increment = () => {
-    const newValue = internalValue + STEP_AMOUNT;
-    setInternalValue(newValue);
-  };
-
-  const decrement = () => {
-    const newValue = internalValue - STEP_AMOUNT;
-    setInternalValue(newValue);
-  };
-
-  const handleInputChange = (num) => {
-    const newValue = parseInt(num);
-    if (!isNaN(newValue)) {
-      setInternalValue(newValue);
-    }
-  };
-
-  useEffect(() => {
-    joinTeamFormRef.setFieldValue("fundraisingGoal", internalValue);
-  }, [internalValue]);
 
   const Sidebar1 = () => (
     <div className="w-full h-full flex justify-center items-center bg-theme-background text-3xl font-semibold">
@@ -101,8 +69,8 @@ const JoinTeam = () => {
 
       setEventDetails({
         eventname: "Event Name",
-        startDateTime: "2022-12-12T12:00:00",
-        endDateTime: "2022-12-20T12:00:00",
+        startDateTime: "2022-12-12T01:00:00",
+        endDateTime: "2022-12-20T17:00:00",
       });
     };
     return (
@@ -176,7 +144,6 @@ const JoinTeam = () => {
       </Form>
     );
   };
-
   const Form2 = ({ form }) => (
     <>
       <div className="font-semibold">Your virtual live store</div>
@@ -191,15 +158,145 @@ const JoinTeam = () => {
     </>
   );
   const Form3 = ({ form }) => {
+    const [internalValue, setInternalValue] = useState(
+      INITIAL_FUNDRAISING_GOAL
+    );
+    const [fileList, setFileList] = useState([]);
+
+    const handleUploadChange = ({ fileList }) => {
+      setFileList(fileList);
+    };
+
+    const increment = () => {
+      const newValue = internalValue + STEP_AMOUNT;
+      setInternalValue(newValue);
+    };
+
+    const decrement = () => {
+      const newValue = internalValue - STEP_AMOUNT;
+      setInternalValue(newValue);
+    };
+
+    const handleInputChange = (num) => {
+      const newValue = parseInt(num);
+      if (!isNaN(newValue)) {
+        setInternalValue(newValue);
+      }
+    };
+
+    useEffect(() => {
+      form.setFieldValue("fundraising_goal", internalValue);
+    }, [internalValue]);
+
     return (
       <Form
         form={form}
         layout="vertical"
         requiredMark={false} // This hides the required asterisk
-        className="max-w-[300px] create-form-with-steps-label-bold"
+        className="create-form-with-steps-label-bold"
         size="large"
-        initialValues={{ is_customizable: false }}
-      ></Form>
+        initialValues={{
+          fundraisingGoal: internalValue,
+          is_discoverable: false,
+        }}
+      >
+        <Form.Item
+          label="Fundraising Goal"
+          name="fundraising_goal"
+          className="w-[380px]"
+          rules={[
+            {
+              required: true,
+              message: "Please input the fundraising goal!",
+            },
+            {
+              type: "number",
+              min: 0,
+              message: "Fundraising goal cannot be negative!",
+            },
+          ]}
+        >
+          <InputNumber
+            value={internalValue}
+            onChange={(num) => handleInputChange(num)}
+            className="w-full fundraining-custom-number-input"
+            controls={false}
+            min={0}
+            addonBefore={
+              <Button
+                className="h-full"
+                type="primary"
+                onClick={decrement}
+                icon={<FaMinus />}
+              />
+            }
+            addonAfter={
+              <Button
+                className="h-full"
+                type="primary"
+                onClick={increment}
+                icon={<FaPlus />}
+              />
+            }
+          />
+        </Form.Item>
+
+        <Form.Item
+          name="upload_photo_video"
+          label="Upload your store photo or video"
+          valuePropName="fileList"
+          getValueFromEvent={(e) => e && e.fileList}
+          rules={[{ required: true, message: "Please upload your logo!" }]}
+          className="w-[380px]"
+        >
+          <Dragger
+            name="logo"
+            multiple={false}
+            fileList={fileList}
+            beforeUpload={() => false} // Prevent auto-upload
+            onChange={handleUploadChange}
+            className="w-full organize-event-choose-custom-product-input"
+          >
+            <div className="flex items-center gap-3">
+              <div>
+                <TbFileUpload />
+              </div>
+              <div>
+                Drag & Drop file here or{" "}
+                <span className="font-semibold underline">Choose File</span>
+              </div>
+            </div>
+          </Dragger>
+        </Form.Item>
+
+        <Form.Item
+          className="w-[380px]"
+          label="Why are you raising funds?"
+          name="description"
+          rules={[
+            {
+              required: true,
+              message: "Please input the description!",
+            },
+          ]}
+        >
+          <Input.TextArea
+            className="w-full"
+            rows={5}
+            placeholder="e.g., Raising funds for a medical emergency"
+          />
+        </Form.Item>
+
+        <Form.Item
+          className="w-[395px]"
+          name="is_discoverable"
+          valuePropName="checked"
+        >
+          <Checkbox className="w-full" size="large">
+            Make my store discoverable on shareacandle.com
+          </Checkbox>
+        </Form.Item>
+      </Form>
     );
   };
 
@@ -232,131 +329,6 @@ const JoinTeam = () => {
     <div>
       <TopHeaderResponsive />
       <CreateFormWithSteps stepsArray={joinTeamPropsData} />
-
-      <div className="max-w-96 m-auto p-4 h-[80vh] flex items-center">
-        <Form
-          form={joinTeamFormRef}
-          name="joinTeamForm"
-          onFinish={onFinish}
-          initialValues={{
-            teamCode: "",
-            fundraisingGoal: internalValue,
-            isDiscoverable: false,
-          }}
-          layout="vertical"
-        >
-          <Form.Item
-            label="Team Code"
-            name="teamCode"
-            rules={[
-              {
-                required: true,
-                message: "Please input the team code!",
-              },
-              {
-                validator: (_, value) => {
-                  const rawValue = value.replace(/\s/g, "");
-                  if (rawValue.length !== 6) {
-                    return Promise.reject(
-                      new Error(
-                        "Team code must be exactly 6 characters (excluding spaces)!"
-                      )
-                    );
-                  }
-                  return Promise.resolve();
-                },
-              },
-            ]}
-          >
-            <CustomInput />
-          </Form.Item>
-
-          <Form.Item
-            label="Name"
-            name="name"
-            rules={[
-              {
-                required: true,
-                message: "Please input the name!",
-              },
-            ]}
-          >
-            <Input size="large" placeholder="e.g.: Amit Kumar" />
-          </Form.Item>
-
-          <Form.Item
-            label="Why are you raising funds?"
-            name="description"
-            rules={[
-              {
-                required: true,
-                message: "Please input the description!",
-              },
-            ]}
-          >
-            <Input.TextArea
-              rows={4}
-              placeholder="e.g., Raising funds for a medical emergency"
-            />
-          </Form.Item>
-
-          <Form.Item
-            label="Fundraising Goal"
-            name="fundraisingGoal"
-            rules={[
-              {
-                required: true,
-                message: "Please input the fundraising goal!",
-              },
-              {
-                type: "number",
-                min: 0,
-                message: "Fundraising goal cannot be negative!",
-              },
-            ]}
-          >
-            <InputNumber
-              value={internalValue}
-              onChange={(num) => handleInputChange(num)}
-              className="w-full fundraining-custom-number-input"
-              controls={false}
-              min={0}
-              addonBefore={
-                <Button
-                  className="h-full"
-                  type="primary"
-                  onClick={decrement}
-                  icon={<FaMinus />}
-                />
-              }
-              addonAfter={
-                <Button
-                  className="h-full"
-                  type="primary"
-                  onClick={increment}
-                  icon={<FaPlus />}
-                />
-              }
-            />
-          </Form.Item>
-
-          <Form.Item name="isDiscoverable" valuePropName="checked">
-            <Checkbox size="large">
-              Make my store discoverable on shareacandle.com
-            </Checkbox>
-          </Form.Item>
-
-          <Form.Item className="w-full flex justify-center">
-            <Button
-              loading={joinTeam?.loading}
-              type="primary"
-              htmlType="submit"
-            >
-              Create My Store
-            </Button>
-          </Form.Item>
-        </Form>
-      </div>
       <Footer />
     </div>
   );
@@ -395,7 +367,11 @@ const CustomInput = ({ value = "", onChange, handleEventCodeClick }) => {
 const EventDetailsWithUnderline = ({ title, value }) => (
   <div className="flex flex-col w-full my-3">
     <div className="text-gray-400">{title}</div>
-    <div className="border-b border-black w-full mt-1">{value}</div>
+    <div className="border-b border-black w-full mt-1">
+      {dayjs(value).isValid()
+        ? dayjs(value).format("D MMM YYYY, dddd, [at] h:mmA")
+        : value}
+    </div>
   </div>
 );
 

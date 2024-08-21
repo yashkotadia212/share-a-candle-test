@@ -2,7 +2,6 @@ import React from "react";
 import { Routes, Route, Outlet } from "react-router-dom";
 import Home from "../pages/Home";
 import Event from "../pages/Event";
-import Login from "../pages/Login";
 import OrganizeEvent from "../pages/OrganizeEvent";
 import EventDetails from "../pages/EventDetails";
 import Admin from "../pages/Admin";
@@ -21,7 +20,6 @@ const AppRoutes = () => {
     <Routes>
       <Route path="/" element={<Home />} />
 
-      <Route path="/login" element={<Login />} />
       <Route path="*" element={<PageNotFound />} />
       <Route path="/store" element={<SupporterStore />} />
       <Route path="/product-details" element={<ProductDetails />} />

@@ -1,18 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Steps, Button, Form } from "antd";
 
-// props
-
-// Array of objects
-// where each object is a step
-// {
-//     sidebar: Component,
-//     title: string,
-//     subtitle: string,
-//     form: Component,
-//     nextButtonText: string,
-// }
-
 const CreateFormWithSteps = ({ stepsArray }) => {
   const [form] = Form.useForm();
   const [currentStep, setCurrentStep] = useState(0);
@@ -72,11 +60,11 @@ const CreateFormWithSteps = ({ stepsArray }) => {
           }
         />
       </div>
-      <div className="mt-10 flex w-full max-w-[800px]">
-        <div className="w-1/3 min-h-[600px] rounded-2xl overflow-hidden">
+      <div className="mt-10 flex xs:max-md:flex-wrap xs:max-md:gap-10 w-full max-w-[800px]">
+        <div className="xs:w-full md:w-1/3 min-h-[600px] rounded-2xl overflow-hidden">
           {stepsArray[currentStep]?.sidebar}
         </div>
-        <div className="w-2/3 min-h-[600px] px-5">
+        <div className="xs:w-full md:w-2/3 min-h-[600px] px-5">
           <div className="text-3xl font-bold">
             {stepsArray[currentStep]?.title}
           </div>

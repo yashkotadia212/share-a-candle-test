@@ -6,7 +6,6 @@ import {
   Select,
   DatePicker,
   Radio,
-  Button,
   message,
   Upload,
 } from "antd";
@@ -47,28 +46,6 @@ const OrganizeEvent = () => {
   );
   const [teamSize, setTeamSize] = React.useState("");
 
-  const onFinish = (values) => {
-    message.success("Form submitted successfully!");
-
-    let organizeEventDetails = {
-      eventName: values.eventName,
-      organizationType: values.organizationType,
-      category: values.category,
-      organizationName: values.organizationName,
-      zipcode: values.zipcode,
-      minTeamSize: parseInt(values.teamSize.split("-")[0]),
-      maxTeamSize: parseInt(values.teamSize.split("-")[1]),
-      productType: values.productType.toString(),
-      startDate: dayjs(values.dateRange[0]).format("YYYY-MM-DD"),
-      endDate: dayjs(values.dateRange[1]).format("YYYY-MM-DD"),
-      email: auth?.email,
-    };
-    console.log("Form Values:", organizeEventDetails);
-
-    postOrganizeEventData.postData(organizeEventDetails);
-    navigate("/events");
-  };
-
   useEffect(() => {
     if (postOrganizeEventData.error) {
       message.error("An error occurred. Please try again later.");
@@ -78,7 +55,7 @@ const OrganizeEvent = () => {
   }, [postOrganizeEventData]);
 
   useEffect(() => {
-    // getProductTypeCollections.getData();
+    getProductTypeCollections.getData();
   }, []);
 
   useEffect(() => {
