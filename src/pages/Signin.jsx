@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Input, Button, message } from "antd";
 import TopHeaderResponsive from "../components/TopHeaderResponsive";
 import Footer from "../components/Footer";
@@ -11,30 +11,56 @@ import {
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "../zustand/authStore";
 
-const Signup = () => {
+// for api
+import { useQuery } from "@tanstack/react-query";
+import useAxiosAPI from "../api/useAxiosAPI";
+import { apiRoutes } from "../api/apiRoutes";
+
+const Signin = () => {
+  const [email, setEmail] = useState();
   const [signInForm] = Form.useForm();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [token, setToken] = useState(null);
   const { setAuth } = useAuthStore();
+  const { getData } = useAxiosAPI();
+
+  const loginUser = useQuery({
+    queryKey: ["loginUser"],
+    queryFn: () =>
+      getData(apiRoutes.users.login, null, {
+        email: email,
+      }),
+    enabled: email ? true : false,
+  });
+
+  useEffect(() => {
+    if (loginUser.data && token) {
+      let userData = {
+        email: loginUser.data.email,
+        token: token,
+        userId: loginUser.data.id,
+        role: loginUser.data.user_role,
+      };
+      setAuth(userData);
+      navigate("/");
+    }
+  }, [loginUser.data, token]);
 
   const onFinish = (values) => {
     setLoading(true);
+    setEmail(values.email);
     checkLogin(values.email, values.password)
       .then((result) => {
         if (result) {
-          setLoading(false);
-
           getCognitoSession()
-            .then(({ idToken, email }) => {
-              setAuth({
-                email: email,
-                isAuthorized: true,
-                token: idToken,
-              });
-              navigate("/");
+            .then(({ idToken }) => {
+              setToken(idToken);
+              setLoading(false);
             })
             .catch((error) => {
               console.error("Error retrieving Cognito session:", error);
+              setLoading(false);
             });
         }
       })
@@ -69,6 +95,16 @@ const Signup = () => {
           <div>
             <h1 className="text-3xl font-bold text-center mt-5">Sign In</h1>
           </div>
+          {/* <Button
+            onClick={() => {
+              signInForm.setFieldsValue({
+                email: "yashk@hexacoder.com",
+                password: "Yash@123",
+              });
+            }}
+          >
+            Fill up Form
+          </Button> */}
           <Form
             form={signInForm}
             name="signin"
@@ -101,7 +137,12 @@ const Signup = () => {
             </Form.Item>
 
             <Form.Item>
-              <Button loading={loading} type="primary" htmlType="submit" block>
+              <Button
+                loading={loading || loginUser.isLoading}
+                type="primary"
+                htmlType="submit"
+                block
+              >
                 Log In
               </Button>
             </Form.Item>
@@ -122,4 +163,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default Signin;

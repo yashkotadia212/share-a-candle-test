@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Steps, Button, Form } from "antd";
 
-const CreateFormWithSteps = ({ stepsArray }) => {
+const CreateFormWithSteps = ({ stepsArray, formData }) => {
   const [form] = Form.useForm();
   const [currentStep, setCurrentStep] = useState(0);
   const [allStepsFormValue, setAllStepsFormValue] = useState({});
@@ -22,16 +22,16 @@ const CreateFormWithSteps = ({ stepsArray }) => {
       .then((values) => {
         console.log("Current Form Values:", values); // Logs the current form values
         setAllStepsFormValue({ ...allStepsFormValue, ...values });
-        nextStep();
+        if (currentStep === stepsArray.length - 1) {
+          formData({ ...allStepsFormValue, ...values });
+        } else {
+          nextStep();
+        }
       })
       .catch((errorInfo) => {
         console.log("Failed:", errorInfo);
       });
   };
-
-  useEffect(() => {
-    console.log("All Steps Form Values:", allStepsFormValue); // Logs all form values
-  }, [allStepsFormValue]);
 
   return (
     <div className="flex flex-col items-center mb-5">
@@ -48,7 +48,7 @@ const CreateFormWithSteps = ({ stepsArray }) => {
           size="small"
           current={currentStep}
           onChange={onStepChange}
-          className="w-full"
+          className="w-full flex gap-8"
           items={
             stepsArray?.map((step, index) => {
               return {

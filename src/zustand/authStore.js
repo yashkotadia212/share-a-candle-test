@@ -4,10 +4,22 @@ import { persist } from "zustand/middleware";
 const useAuthStore = create(
   persist(
     (set) => ({
-      auth: { email: null, isAuthorized: true, token: null },
+      auth: {
+        email: null,
+        token: null,
+        userId: null,
+        role: null,
+      },
       setAuth: (authData) => set({ auth: authData }),
       removeAuth: () =>
-        set({ auth: { email: null, isAuthorized: true, token: null } }),
+        set({
+          auth: {
+            email: null,
+            token: null,
+            userId: null,
+            role: null,
+          },
+        }),
     }),
     {
       name: "auth-storage", // name of the item in local storage

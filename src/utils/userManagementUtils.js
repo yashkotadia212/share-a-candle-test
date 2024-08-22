@@ -48,6 +48,8 @@ export const signUpConfirmCode = (userName, code) => {
       Pool: userPool,
     });
 
+    console.log(cognitoUser, "cognitoUser---");
+
     if (!cognitoUser) {
       reject("User not found!");
       return;
@@ -58,7 +60,7 @@ export const signUpConfirmCode = (userName, code) => {
         reject(err);
         return;
       }
-      resolve(result);
+      resolve(result, cognitoUser);
     });
   });
 };

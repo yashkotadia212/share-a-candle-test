@@ -105,3 +105,9 @@ input[type="number"]::-webkit-inner-spin-button {
 .bold-label-antd .ant-form-item-label > label {
   font-weight: bold;
 }
+
+.ant-steps-item-wait{
+  @media screen and (min-width: 576px) {    
+    border-bottom: 2px solid rgba(0,0,0,.2) !important;
+  }
+}

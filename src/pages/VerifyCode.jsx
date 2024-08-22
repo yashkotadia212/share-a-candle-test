@@ -4,10 +4,7 @@ import Footer from "../components/Footer";
 import { signUpConfirmCode } from "../utils/userManagementUtils";
 import { Form, Input, Button, message } from "antd";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import {
-  checkLogin,
-  resendVerificationCode,
-} from "../utils/userManagementUtils";
+import { resendVerificationCode } from "../utils/userManagementUtils";
 
 const VerifyCode = () => {
   const { state } = useLocation();

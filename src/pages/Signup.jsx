@@ -6,22 +6,40 @@ import PasswordStrengthMeter from "../components/PasswordStrengthMeter";
 import { Link, useNavigate } from "react-router-dom";
 import { signUpWithCognito } from "../utils/userManagementUtils";
 
+// for api
+import { useMutation } from "@tanstack/react-query";
+import useAxiosAPI from "../api/useAxiosAPI";
+import { apiRoutes } from "../api/apiRoutes";
+
 const Signup = () => {
   const navigate = useNavigate();
   const [signUpForm] = Form.useForm();
   const [pass, setPass] = useState("");
   const [loading, setLoading] = useState(false);
+  const { postData } = useAxiosAPI();
+
+  const registerUser = useMutation({
+    mutationFn: (data) => postData(apiRoutes.users.register, data),
+    onSuccess: (data) => {
+      setLoading(false);
+      message.success("Verification code sent!");
+      navigate("/verify-code", {
+        state: { verifyCode: true, email: data.email },
+      });
+    },
+    onError: (error) => {
+      setLoading(false);
+      message.error(error.message);
+    },
+  });
 
   const onFinish = (values) => {
-    console.log("Successgyyfyfyu:", values);
-
     setLoading(true);
     signUpWithCognito(values)
       .then((result) => {
-        setLoading(false);
-        message.success("Verification code sent!");
-        navigate("/verify-code", {
-          state: { verifyCode: true, email: values.email },
+        registerUser.mutate({
+          phone_number: values.phone_number.toString(),
+          email: values.email,
         });
       })
       .catch((err) => {
@@ -37,6 +55,32 @@ const Signup = () => {
     return Promise.reject(new Error("The two passwords do not match!"));
   };
 
+  function generateRandomEmail(baseEmail) {
+    // Generate a random number between 60 and 100
+    const randomNumber = Math.floor(Math.random() * (100 - 60 + 1)) + 60;
+
+    // Replace the existing number or add the random number before '@'
+    const updatedEmail = baseEmail.replace(/(\d+)(@)/, `${randomNumber}$2`);
+
+    return updatedEmail;
+  }
+
+  const formBharLya = () => {
+    signUpForm.setFieldsValue({
+      phone_number: generate10DigitNumber(),
+      email: `${generateRandomEmail("yashk+1@hexacoder.com")}`,
+      password: "Yash@123",
+      confirm: "Yash@123",
+      terms: true,
+    });
+    setPass("Yash@123");
+  };
+
+  function generate10DigitNumber() {
+    // Generate a 10-digit random number
+    return Math.floor(Math.random() * 9000000000) + 1000000000;
+  }
+
   return (
     <div>
       <TopHeaderResponsive />
@@ -48,6 +92,7 @@ const Signup = () => {
           <div>
             <h1 className="text-3xl font-bold text-center mt-5">Sign Up</h1>
           </div>
+          <Button onClick={() => formBharLya()}>Form Bharo</Button>
           <Form
             form={signUpForm}
             name="signup"
