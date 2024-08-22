@@ -9,7 +9,7 @@ import useAuthStore from "../zustand/authStore";
 import { SlLogin } from "react-icons/sl";
 import { GrLogout } from "react-icons/gr";
 import { logOutUser } from "../utils/userManagementUtils";
-import { Badge, Button, Empty } from "antd";
+import { Badge, Button, Empty, Modal } from "antd";
 import { MdClose } from "react-icons/md";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -99,6 +99,29 @@ const TopHeader = () => {
     );
   };
 
+  const showConfirmLogout = () => {
+    Modal.confirm({
+      title: "Are you sure you want to logout?",
+      content: "You will be logged out of the application.",
+      centered: true,
+      okText: "Yes, Logout",
+      okType: "danger",
+      cancelText: "Cancel",
+      onOk() {
+        handleLogout();
+      },
+      okButtonProps: {
+        className: "!bg-red-500 !text-white",
+      },
+      onCancel() {
+        console.log("Logout cancelled");
+      },
+      cancelButtonProps: {
+        className: "hover:!border-black hover:!text-black",
+      },
+    });
+  };
+
   return (
     <>
       <div className="flex justify-between items-center mt-2 my-5">
@@ -136,7 +159,7 @@ const TopHeader = () => {
               <GrLogout
                 title="Logout"
                 className="text-2xl"
-                onClick={() => handleLogout()}
+                onClick={() => showConfirmLogout()}
               />
             </button>
           ) : (

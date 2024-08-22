@@ -92,7 +92,7 @@ const Signup = () => {
           <div>
             <h1 className="text-3xl font-bold text-center mt-5">Sign Up</h1>
           </div>
-          <Button onClick={() => formBharLya()}>Form Bharo</Button>
+          {/* <Button onClick={() => formBharLya()}>Form Bharo</Button> */}
           <Form
             form={signUpForm}
             name="signup"

@@ -11,7 +11,7 @@ import { GrLogout } from "react-icons/gr";
 import { motion, AnimatePresence } from "framer-motion";
 import { navData } from "./Navbar";
 import { logOutUser } from "../utils/userManagementUtils";
-import { Badge, Button } from "antd";
+import { Badge, Button, Modal } from "antd";
 import { MdClose } from "react-icons/md";
 
 const productsData = [
@@ -141,6 +141,28 @@ function TopHeaderMobile() {
     navigate("/sign-in");
   };
 
+  const showConfirmLogout = () => {
+    Modal.confirm({
+      title: "Are you sure you want to logout?",
+      content: "You will be logged out of the application.",
+      centered: true,
+      okText: "Yes, Logout",
+      okType: "danger",
+      cancelText: "Cancel",
+      onOk() {
+        handleLogout();
+      },
+      okButtonProps: {
+        className: "!bg-red-500 !text-white",
+      },
+      onCancel() {
+        console.log("Logout cancelled");
+      },
+      cancelButtonProps: {
+        className: "hover:!border-black hover:!text-black",
+      },
+    });
+  };
   return (
     <>
       <nav className="h-fit py-4 px-4">
@@ -179,7 +201,7 @@ function TopHeaderMobile() {
                   <GrLogout
                     title="Logout"
                     className="text-2xl"
-                    onClick={() => handleLogout()}
+                    onClick={() => showConfirmLogout()}
                   />
                 </button>
               ) : (
